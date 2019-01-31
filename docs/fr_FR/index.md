@@ -1,4 +1,4 @@
-Plugin AcerVP
+Plugin Optoma
 =============
 
 ![Logo plugin](../assets/images/Optoma_icon.png "Logo plugin")
