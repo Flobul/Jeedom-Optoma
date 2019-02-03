@@ -32,7 +32,7 @@ Après téléchargement du plugin, activer le plugin.
 Configuration des équipements
 =============================
 
-La configuration des équipements est accessible à partir du menu *Plugins > Multimedia > Acer Video Projecteur*.
+La configuration des équipements est accessible à partir du menu *Plugins > Multimedia > Optoma Video Projecteur*.
 
 ### Onglet Equipement:
 
