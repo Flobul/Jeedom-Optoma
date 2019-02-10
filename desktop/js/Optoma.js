@@ -13,15 +13,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-
-$("#table_cmd").delegate(".listEquipementInfo", 'click', function () {
+$("#table_info").delegate(".listEquipementInfo", 'click', function () {
     var el = $(this);
     jeedom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
         var calcul = el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=' + el.data('input') + ']');
         calcul.atCaret('insert', result.human);
     });
 });
-	
+
 $("#table_cmd").delegate(".listEquipementAction", 'click', function () {
     var el = $(this);
     var subtype = $(this).closest('.cmd').find('.cmdAttr[data-l1key=subType]').value();
@@ -32,11 +31,138 @@ $("#table_cmd").delegate(".listEquipementAction", 'click', function () {
 });
 
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+$("#table_info").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+
+
+$('.eqLogicAttr[data-l2key=askWebParsing]').on('click',function(){
+  $('#option_cgi').css({visibility: "visible"});
+});
+
+$('.eqLogicAttr[data-l2key=askCGI]').on('click',function(){
+  $('#option_cgi').css({visibility: "visible"});
+});
+
+$('.eqLogicAttr[data-l2key=askTelnet]').on('click',function(){
+  $('#option_cgi').css({visibility: "hidden"});
+});
+
+$('.eqLogicAttr[data-l2key=askPJLink]').on('click',function(){
+  $('#option_cgi').css({visibility: "hidden"});
+});
+
+
+$('#bt_amxDeviceDiscovery').on('click', function () {
+  			$('#div_alert').showAlert({message: '{{Recherche de l\'équipement en cours. (environ 1 minute)}}', level: 'warning'});
+            $.ajax({
+                type: "POST",
+                url: "plugins/Optoma/core/ajax/Optoma.ajax.php", 
+                data: {
+                    action: "amxDeviceDiscovery",
+                },
+                dataType: 'json',
+                global: false,
+                error: function (request, status, error) {
+                    handleAjaxError(request, status, error);
+                },
+                success: function (data) {
+                    if (data.state != 'ok') {
+                        $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                        return;
+                    }
+					if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value() != '') {
+                          bootbox.confirm('{{Voulez-vous écraser l\'adresse IP actuelle ?}}', function (result) {
+                                  if (result) {
+										$('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value(data.result);
+                                        $('#div_alert').showAlert({message: 'Vidéoprojecteur trouvé ! Veuillez sauvegarger.', level: 'success'});
+                                  }
+                          });
+                    }
+                  	else {
+                        $('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value(data.result);
+                        $('#div_alert').showAlert({message: 'Vidéoprojecteur trouvé ! Veuillez sauvegarder.', level: 'success'});
+                        }
+					}
+	});
+});
+
+
+$('#bt_weboptoma').on('click', function () {
+  var nodeId = $('#idipoptoma').value();
+  $('#md_modal').dialog({title: "{{Interface Optoma}}"});
+  $('#md_modal').load('index.php?v=d&plugin=Optoma&modal=web&ip=' + nodeId).dialog('open');
+});
+
+$('#bt_searchCGILink').on('click', function () {
+	searchCGILink();
+});
+
+function webOptoma() {
+  		if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value() != '') {
+			$('#div_alert').showAlert({message: '{{Recherche du lien CGI en cours. (environ 15 secondes)}}', level: 'warning'});
+			$url = $('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value();
+            $.ajax({
+                type: "POST",
+                url: "plugins/Optoma/core/ajax/Optoma.ajax.php", 
+                data: {
+                    action: "webOptoma",
+                },
+                dataType: 'json',
+                global: false,
+                error: function (request, status, error) {
+                    handleAjaxError(request, status, error);
+                },
+                success: function (data) {
+                   }
+            });
+        }
+}
+
+function searchCGILink() {
+  		if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value() != '') {
+			$('#div_alert').showAlert({message: '{{Recherche du lien CGI en cours. (environ 15 secondes)}}', level: 'warning'});
+            $.ajax({
+                type: "POST",
+                url: "plugins/Optoma/core/ajax/Optoma.ajax.php", 
+                data: {
+                    action: "searchCGILink",
+                },
+                dataType: 'json',
+                global: false,
+                error: function (request, status, error) {
+                    handleAjaxError(request, status, error);
+                },
+                success: function (data) {
+                    if (data.state != 'ok') {
+                        $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                        return;
+                    }
+					if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=ControlCGI]').value() != '' && $('.eqLogicAttr[data-l1key=configuration][data-l2key=ControlCGI]').value() != data.result) {
+                         bootbox.confirm('{{Voulez-vous écraser le lien actuel ?}}', function (result) {
+                               if (result) {
+                                    $('.eqLogicAttr[data-l1key=configuration][data-l2key=ControlCGI]').value(data.result);
+                                    $('#div_alert').showAlert({message: 'Lien CGI écrasé ! Veuillez sauvegarder.', level: 'success'});
+                               }
+                          });
+                    }
+					if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=ControlCGI]').value() == data.result) {
+						$('#div_alert').showAlert({message: '{{Lien identique.}}', level: 'warning'});
+                    }
+                  	else {
+                        $('.eqLogicAttr[data-l1key=configuration][data-l2key=ControlCGI]').value(data.result);
+                        $('#div_alert').showAlert({message: 'Lien CGI trouvé ! Veuillez sauvegarder.', level: 'success'});
+                    }
+                }
+            });
+        }
+  		else {
+          $('#div_alert').showAlert({message: 'Merci de remplir l\'adresse IP.', level: 'danger'});
+        }
+}
 
 /*
  * Fonction pour l'ajout de commande, appellé automatiquement par plugin.Optoma
  */
-
+ 
  function addCmdToTable(_cmd) {
     if (!isset(_cmd)) {
         var _cmd = {configuration: {}};
@@ -50,22 +176,38 @@ $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder:
 	
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
     if(!isset(_cmd.type) || _cmd.type == 'info' ){
-		tr += '<td>';
-		tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
-		tr += '</td>';
+      tr += '<td width="200px">';
+  		tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
+  		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 180px;" placeholder="{{Nom}}">';
+  		tr += '<select class="cmdAttr form-control tooltips input-sm" data-l1key="value" style="display : none;margin-top : 5px;margin-right : 10px;" title="La valeur de la commande vaut par défaut la commande">';
+  		tr += '<option value="">Aucune</option>';
+  		tr += '</select>';
+  		tr += '</td>';
 		
-		tr += '<td>';
-		tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
-		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
-		tr += '</td>';
+      tr += '<td width="150px">';
+      tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="action" disabled style="margin-bottom : 5px;" />';
+      tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
+  		tr += '</td>';
 
-		tr += '<td></td>';
-		
+      tr += '<td>';
+  		tr += '<input class="cmdAttr form-control input-sm" disabled style="margin-bottom : 5px; display : inline-block;" />';
+  		tr += '</td>';
+    
 		tr += '<td>';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" unchecked/>{{Historiser}}</label><br/></span> ';
-		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isVisible" unchecked/>{{Afficher}}</label></span> '; 
+		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isVisible" checked/>{{Afficher}}</label></span> '; 
 		tr += '</td>';
+
+    tr += '<td>';
+    if (is_numeric(_cmd.id)) {
+        tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible tooltips" title="Configuration de la commade" data-action="configure"><i class="fa fa-cogs"></i></a> ';
+        tr += '<a class="btn btn-default btn-xs cmdAction tooltips" title="Test de la commande" data-action="test"><i class="fa fa-rss"></i></a>';
+        tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" title="Supprimer de la commande" data-action="remove"></i></td>';
+    }
+    tr += '</td>';
+
+    $('#table_info tbody').append(tr);
+    $('#table_info tbody tr:last').setValues(_cmd, '.cmdAttr');
     }
 	if (init(_cmd.type) == 'action') {
 		tr += '<td>';
@@ -77,7 +219,7 @@ $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder:
 		tr += '</td>';
 		
 		tr += '<td>';
-		tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
+    tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="action" disabled style="margin-bottom : 1px;" />';
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
 		tr += '</td>';
 
@@ -92,29 +234,30 @@ $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder:
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" unchecked/>{{Historiser}}</label><br/></span> ';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isVisible" checked/>{{Afficher}}</label></span> '; 
 		tr += '</td>';
-	}	
-	
+
     tr += '<td>';
     if (is_numeric(_cmd.id)) {
-        tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fa fa-cogs"></i></a> ';
-        tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
+        tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible tooltips" title="Configuration de la commade" data-action="configure"><i class="fa fa-cogs"></i></a> ';
+        tr += '<a class="btn btn-default btn-xs cmdAction tooltips" title="Test de la commande" data-action="test"><i class="fa fa-rss"></i></a>';
+        tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" title="Supprimer de la commande" data-action="remove"></i></td>';
     }
-    tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>';
     tr += '</td>';
-	
-    tr += '</tr>';
+    
     $('#table_cmd tbody').append(tr);
     $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
+
+	}	
+    tr += '</tr>';
 	
 	if (init(_cmd.type) == 'info') {
-		
+    var tr = $('#table_info tbody tr:last');
 		if (isset(_cmd.type)) {
-			$('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+			$('#table_info tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
 		}
-		jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
+		jeedom.cmd.changeType(tr, init(_cmd.subType));
 	}
 	if (init(_cmd.type) == 'action') {
-		var tr = $('#table_cmd tbody tr:last');
+    var tr = $('#table_cmd tbody tr:last');
 		jeedom.eqLogic.builSelectCmd({
 			id: $(".li_eqLogic.active").attr('data-eqLogic_id'),
 			filter: {type: 'info'},
@@ -130,3 +273,6 @@ $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder:
 		});
 	}
 }
+
+
+
