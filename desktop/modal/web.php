@@ -26,4 +26,3 @@ $ip = init('ip');
 
 <iframe src="http://<?php echo $ip; ?>" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" height="100%" width="100%">This page requires a frames-capable browser.</iframe>
 
-
