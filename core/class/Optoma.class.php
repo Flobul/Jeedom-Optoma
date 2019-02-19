@@ -17,8 +17,6 @@
  */
 
 /* * ***************************Includes********************************* */
-
-include('simple_html_dom.php');
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
 class Optoma extends eqLogic {
@@ -26,21 +24,22 @@ class Optoma extends eqLogic {
 
 
     /*     * ***********************Methode static*************************** */
+
 	public static function cron() {
 		foreach(eqLogic::byType('Optoma') as $Optoma){		
 			if($Optoma->getIsEnable()){
-				if ($Optoma->getConfiguration('RepeatCmd') == "cron"){
-                   $cmd = $Optoma->getCmd(null, 'Refresh');
-                   if (!is_object($cmd)) {
-                     continue;
-                   }
-                   $cmd->execCmd();
-				}
+				if ($Optoma->getConfiguration('RepeatCmd') == "cron") {
+					$cmd = $Optoma->getCmd(null, 'Refresh');
+					if (!is_object($cmd)) {
+						continue;
+					}
+					$cmd->execCmd();
+                }
 			}
 		}
 	}
   
-	public static function cron5() {
+  	public static function cron5() {
 		foreach(eqLogic::byType('Optoma') as $Optoma){		
 			if($Optoma->getIsEnable()){
 				if ($Optoma->getConfiguration('RepeatCmd') == "cron5"){
@@ -68,7 +67,7 @@ class Optoma extends eqLogic {
 		}
 	}
 
-	public static function cron30() {
+  	public static function cron30() {
 		foreach(eqLogic::byType('Optoma') as $Optoma){		
 			if($Optoma->getIsEnable()){
 				if ($Optoma->getConfiguration('RepeatCmd') == "cron30"){
@@ -96,23 +95,6 @@ class Optoma extends eqLogic {
 		}
 	}
 
-  	public static function cronDaily() {
-		foreach(eqLogic::byType('Optoma') as $Optoma){		
-			if($Optoma->getIsEnable()){
-				if ($Optoma->getConfiguration('RepeatCmd') == "cronDaily"){
-                   $cmd = $Optoma->getCmd(null, 'Refresh');
-                   if (!is_object($cmd)) {
-                     continue;
-                   }
-                   $cmd->execCmd();
-				}
-			}
-		}
-	}
-  
-
-    /*     * *********************Méthodes d'instance************************* */
-
     public function preInsert() {
 		$this->setCategory('multimedia', 1);
       	$this->setIsEnable(1);
@@ -124,10 +106,10 @@ class Optoma extends eqLogic {
     }
 
     public function postSave() {
-    	$cmd = $this->getCmd(null, 'Refresh');
+    /*	$cmd = $this->getCmd(null, 'Refresh');
     	if (is_object($cmd)) {
     		 $cmd->execCmd();
-    	}
+    	}*/
     }
 
     public function preSave() {
@@ -138,12 +120,8 @@ class Optoma extends eqLogic {
 		if (empty($this->getConfiguration('AdrIP'))) {
 			throw new Exception(__('L\'adresse IP ne peut pas être vide',__FILE__));
 		}
-
-		if (empty($this->getConfiguration('UserId'))) {
-			throw new Exception(__('L\'utilisateur ne peut être vide',__FILE__));
-		}
       
-		if ($this->getConfiguration('askCGI') == 0 && $this->getConfiguration('askTelnet') == 0 && $this->getConfiguration('askPJLink') == 0 && $this->getConfiguration('askWebParsing') == 0) {
+		if ($this->getConfiguration('askCGI') == 0 && $this->getConfiguration('askTelnet') == 0 && $this->getConfiguration('askPJLink') == 0) {
 			throw new Exception(__('Le protocole de contrôle ne peut pas être vide',__FILE__));
 		}
 
@@ -164,27 +142,26 @@ class Optoma extends eqLogic {
 			$info = $this->getCmd(null, 'Powerstatus');
 			if (!is_object($info)) {
 				$info = new OptomaCmd();
-                $info->setName('Powerstatus');
-                $info->setEqLogic_id($this->getId());
-                $info->setLogicalId('Powerstatus');
-                $info->setType('info');
-                $info->setSubType('binary');
-                $info->setOrder(1);
-                $info->setIsVisible(1);
-                $info->save();
+				$info->setName('Powerstatus');
+				$info->setEqLogic_id($this->getId());
+				$info->setLogicalId('Powerstatus');
+				$info->setType('info');
+				$info->setSubType('binary');
+				$info->setOrder(8);
+				$info->setIsVisible(1);
+				$info->save();
             }
-			// Commande Mise sous tension (On) 
-			$cmd = $this->getCmd(null, 'On');
+			// Commande Mise sous tension (Power On) 
+			$cmd = $this->getCmd(null, 'Power On');
 			if (!is_object($cmd)) {
 				$cmd = new OptomaCmd();
-                $cmd->setName('On');
+                $cmd->setName('Power On');
                 $cmd->setEqLogic_id($this->getId());
-                $cmd->setLogicalId('On');
+                $cmd->setLogicalId('Power On');
                 $cmd->setType('action');
                 $cmd->setSubType('other');
                 $cmd->setIsVisible(1);
                 $cmd->setOrder(2);
-                $cmd->setValue($info->getId());
                 $cmd->setTemplate('dashboard', 'PowerOnOff');
                 $cmd->setDisplay('parameters',array ( "color" => "green", "type" => "off", "size" =>30 ));
                 $cmd->setDisplay('showNameOndashboard','0');
@@ -192,18 +169,17 @@ class Optoma extends eqLogic {
                 $cmd->setDisplay('showNameOnview','0');
                 $cmd->save();
             }
-			// Commande Mise hors tension (Off) 
-			$cmd = $this->getCmd(null, 'Off');
+			// Commande Mise hors tension (Power Off) 
+			$cmd = $this->getCmd(null, 'Power Off');
 			if (!is_object($cmd)) {
 				$cmd = new OptomaCmd();
-				$cmd->setName('Off');
+				$cmd->setName('Power Off');
 				$cmd->setEqLogic_id($this->getId());
-				$cmd->setLogicalId('Off');
+				$cmd->setLogicalId('Power Off');
 				$cmd->setType('action');
 				$cmd->setSubType('other');
 				$cmd->setIsVisible(1);
 				$cmd->setOrder(3);
-				$cmd->setValue($info->getId());
 				$cmd->setTemplate('dashboard', 'PowerOnOff');
 				$cmd->setDisplay('parameters',array ( "color" => "green", "type" => "off", "size" =>30 ));
 				$cmd->setDisplay('showNameOndashboard','0');
@@ -211,90 +187,18 @@ class Optoma extends eqLogic {
 				$cmd->setDisplay('showNameOnview','0');
 				$cmd->save();
             }
-			// Information Model 
-			$info = $this->getCmd(null, 'Model');
-			if (!is_object($info)) {
-				$info = new OptomaCmd();
-				$info->setName('Modèle');
-				$info->setEqLogic_id($this->getId());
-				$info->setLogicalId('Model');
-				$info->setType('info');
-				$info->setSubType('string');
-    		    $info->setOrder(0);
-    		    $info->setIsVisible(1);
-				$info->save();
-            }
-			// Information Firmware 
-			$info = $this->getCmd(null, 'Firmware');
-			if (!is_object($info)) {
-				$info = new OptomaCmd();
-				$info->setName('Version Firmware');
-				$info->setEqLogic_id($this->getId());
-				$info->setLogicalId('Firmware');
-				$info->setType('info');
-				$info->setSubType('string');
-				$info->setIsVisible(0);
-				$info->save();
-            }
-			// Information LANVersion 
-			$info = $this->getCmd(null, 'LANVersion');
-			if (!is_object($info)) {
-				$info = new OptomaCmd();
-				$info->setName('Version LAN');
-				$info->setEqLogic_id($this->getId());
-				$info->setLogicalId('LANVersion');
-				$info->setType('info');
-				$info->setSubType('string');
-				$info->setIsVisible(0);
-				$info->save();
-            }
-			// Information IPAddress 
-			$info = $this->getCmd(null, 'IPAddress');
-			if (!is_object($info)) {
-				$info = new OptomaCmd();
-				$info->setName('Adresse IP');
-				$info->setEqLogic_id($this->getId());
-				$info->setLogicalId('IPAddress');
-				$info->setType('info');
-				$info->setSubType('string');
-				$info->setIsVisible(0);
-				$info->save();
-			}
-			// Information SubnetMask 
-			$info = $this->getCmd(null, 'SubnetMask');
-			if (!is_object($info)) {
-				$info = new OptomaCmd();
-				$info->setName('Masque de sous-réseau');
-				$info->setEqLogic_id($this->getId());
-				$info->setLogicalId('SubnetMask');
-				$info->setType('info');
-				$info->setSubType('string');
-				$info->setIsVisible(0);
-				$info->save();
-			}
-			// Information MACAddress 
-			$info = $this->getCmd(null, 'MACAddress');
-			if (!is_object($info)) {
-				$info = new OptomaCmd();
-			}
-				$info->setName('Adresse MAC');
-				$info->setEqLogic_id($this->getId());
-				$info->setLogicalId('MACAddress');
-				$info->setType('info');
-				$info->setSubType('string');
-				$info->setIsVisible(0);
-				$info->save();
-			// Information AV Mute 
-			$info = $this->getCmd(null, 'AV Mute');
-			if (!is_object($info)) {
-				$info = new OptomaCmd();
-				$info->setName('AV Mute');
-				$info->setEqLogic_id($this->getId());
-				$info->setLogicalId('AV Mute');
-				$info->setType('info');
-				$info->setSubType('string');
-        		$info->setIsVisible(0);
-				$info->save();
+			// Commande 3D Mode
+			$cmd = $this->getCmd(null, '3D Mode');
+			if (!is_object($cmd)) {
+				$cmd = new OptomaCmd();
+				$cmd->setName('3D Mode');
+				$cmd->setEqLogic_id($this->getId());
+				$cmd->setLogicalId('3D Mode');
+				$cmd->setType('action');
+				$cmd->setSubType('other');
+				$cmd->setIsVisible(1);
+				$cmd->setOrder(4);
+				$cmd->save();
             }
 			// Information Freeze
 			$info = $this->getCmd(null, 'Freeze');
@@ -304,7 +208,7 @@ class Optoma extends eqLogic {
 				$info->setEqLogic_id($this->getId());
 				$info->setLogicalId('Freeze');
 				$info->setType('info');
-				$info->setSubType('string');
+				$info->setSubType('binary');
         		$info->setIsVisible(0);
 				$info->save();
             }
@@ -316,7 +220,7 @@ class Optoma extends eqLogic {
 				$info->setEqLogic_id($this->getId());
 				$info->setLogicalId('Information Hide');
 				$info->setType('info');
-				$info->setSubType('string');
+				$info->setSubType('binary');
         		$info->setIsVisible(0);
 				$info->save();
 			}
@@ -328,7 +232,7 @@ class Optoma extends eqLogic {
 				$info->setEqLogic_id($this->getId());
 				$info->setLogicalId('High Altitude');
 				$info->setType('info');
-				$info->setSubType('string');
+				$info->setSubType('binary');
         		$info->setIsVisible(0);
 				$info->save();
                 }
@@ -340,7 +244,7 @@ class Optoma extends eqLogic {
 				$info->setEqLogic_id($this->getId());
 				$info->setLogicalId('Keypad Lock');
 				$info->setType('info');
-				$info->setSubType('string');
+				$info->setSubType('binary');
         		$info->setIsVisible(0);
 				$info->save();
                 }
@@ -352,7 +256,7 @@ class Optoma extends eqLogic {
 				$info->setEqLogic_id($this->getId());
 				$info->setLogicalId('Display Mode Lock');
 				$info->setType('info');
-				$info->setSubType('string');
+				$info->setSubType('binary');
         		$info->setIsVisible(0);
 				$info->save();
                 }
@@ -364,7 +268,7 @@ class Optoma extends eqLogic {
 				$info->setEqLogic_id($this->getId());
 				$info->setLogicalId('Direct Power On');
 				$info->setType('info');
-				$info->setSubType('string');
+				$info->setSubType('binary');
         		$info->setIsVisible(0);
 				$info->save();
             }
@@ -438,7 +342,7 @@ class Optoma extends eqLogic {
 				$info->setEqLogic_id($this->getId());
 				$info->setLogicalId('Internal Speaker');
 				$info->setType('info');
-				$info->setSubType('string');
+				$info->setSubType('binary');
         		$info->setIsVisible(0);
 				$info->save();
             }        
@@ -450,7 +354,7 @@ class Optoma extends eqLogic {
 				$info->setEqLogic_id($this->getId());
 				$info->setLogicalId('Mute');
 				$info->setType('info');
-				$info->setSubType('string');
+				$info->setSubType('binary');
         		$info->setIsVisible(0);
 				$info->save();
             }
@@ -462,7 +366,7 @@ class Optoma extends eqLogic {
 				$info->setEqLogic_id($this->getId());
 				$info->setLogicalId('Dynamic Black');
 				$info->setType('info');
-				$info->setSubType('string');
+				$info->setSubType('binary');
         		$info->setOrder(8);
         		$info->setIsVisible(1);
 				$info->save();
@@ -633,7 +537,7 @@ class Optoma extends eqLogic {
                 $info->setEqLogic_id($this->getId());
                 $info->setLogicalId('12V Trigger');
                 $info->setType('info');
-                $info->setSubType('string');
+                $info->setSubType('binary');
                 $info->setIsVisible(0);
                 $info->save();
       		}
@@ -766,7 +670,7 @@ class Optoma extends eqLogic {
                 $info->setEqLogic_id($this->getId());
                 $info->setLogicalId('Projector ID');
                 $info->setType('info');
-                $info->setSubType('numeric');
+                $info->setSubType('string');
                 $info->setIsVisible(0);
                 $info->save();
             }
@@ -866,250 +770,30 @@ class Optoma extends eqLogic {
     public function postRemove() {
         
     }
-
-    /*
-     * Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
-      public function toHtml($_version = 'dashboard') {
-
-      }
-     */
-
-    /*
-     * Non obligatoire mais ca permet de déclencher une action après modification de variable de configuration
-    public static function postConfig_<Variable>() {
-    }
-     */
-
-    /*
-     * Non obligatoire mais ca permet de déclencher une action avant modification de variable de configuration
-    public static function preConfig_<Variable>() {
-    }
-     */
-	
-
-    /*     * **********************Getteur Setteur*************************** */
-	public function login() {
-
-		log::add('Optoma', 'debug', 'Tentative d\'authentification.');
-
-		$URL_form_login = 'http://' . $this->getConfiguration('AdrIP') . '/login.asp';
-		$URL_action_login = 'http://' . $this->getConfiguration('AdrIP') . '/Info.asp';
-
-		for ($login_attemps = 1; $login_attemps <= 5; $login_attemps++) {
-
-			log::add('Optoma', 'debug', 'Connexion au vidéoprojecteur : Tentative '.$login_attemps.'/5.');
-			$postValues = array( 'login' => $this->getConfiguration('UserId'),'password' => $this->getConfiguration('MdP') );
-
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, $URL_action_login);
-			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($postValues));
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($curl, CURLOPT_REFERER, $URL_form_login);
-			$content = curl_exec($curl);
-			curl_close($curl);
-
-//			log::add('Optoma', 'debug', 'content = ' . $content );
-
-        if ( strpos($content, "formInfo") !== FALSE ) {  // si  loggué
-			log::add('Optoma', 'debug', 'Authentification réussie.' );
-            Return (TRUE);
-			} else {        // si non loggué
-			log::add('Optoma', 'debug', 'Echec d\'authentification.' );
-			}
-		}
-		log::add('Optoma', 'error', 'Erreur de connexion au vidéoprojecteur');
-		Return (FALSE);
-}
-
-    public function ParseOptoma($URL_control) {
-
-    $html = file_get_html($URL_control);
-    $rows = $html->find('tr');
-    $bloc = array();
-
-    if(count($rows)>1){
-        for($i=1; $i<count($rows); $i++){
-            if (isset($rows[$i]->find('td[class="proj"]',0)->plaintext) | !empty($rows[$i]->find('td[class="proj"]',0)->plaintext)) {
-            $infobase = $rows[$i]->find('td[class="proj"]',0)->plaintext;
-            }else { $infobase = ""; }
-            if (isset($rows[$i]->find('td[class="proj"] input',0)->value) | !empty($rows[$i]->find('td[class="proj"] input',0)->value)) {
-            $infosecond = $rows[$i]->find('td[class="proj"] input',0)->value; 
-            }else { $infosecond = ""; }
-            if (isset($rows[$i]->find('td[id] font',0)->plaintext) | !empty($rows[$i]->find('td[id] font',0)->plaintext)) {
-            $information = $rows[$i]->find('td[id] font',0)->plaintext; 
-            }else { $information = ""; }
-            if (isset($rows[$i]->find('td[style] input[type=text]',0)->value) | !empty($rows[$i]->find('td[style] input[type=text]',0)->value)) {
-            $champtext = $rows[$i]->find('td[style] input[type=text]',0)->value; 
-            }else { $champtext = ""; }
-            if (isset($rows[$i]->find('td[style] select [option*]',0)->plaintext) | !empty($rows[$i]->find('td[style] select [option*]',0)->plaintext)) {
-            $listoption = $rows[$i]->find('td[style] select [option*]',0)->plaintext; 
-            }else { $listoption = ""; }
-            if (isset($rows[$i]->find('td[style] select [option SELECTED]',0)->plaintext) | !empty($rows[$i]->find('td[style] select [option SELECTED]',0)->plaintext)) {
-            $selection = $rows[$i]->find('td[style] select [option SELECTED]',0)->plaintext;
-            }else { $selection = ""; }
-
-            $rawbloc = array("rank"=>$i, "infobase"=>trim($infobase), "infosecond"=>trim($infosecond), "information"=>trim($information), "champtext"=>trim($champtext), "listoption"=>trim($listoption), "selection"=>trim($selection));
-            array_push($bloc, $rawbloc);
-			//log::add('Optoma', 'debug', 'Bloc ' . $bloc['0'][infosecond]);
-
-        }
-    }
-    return ( $bloc ); 
-    //print $rawbloc['infosecond']['Resync'];
-    $html->clear(); 
-	}
-    public function StateOptoma($URL_control) {
-      
-    $html = file_get_html($URL_control);
-    $rows = $html->find('input[id=pwr]',0)->value;
-    if($rows>1){
-      $rows=0;
-      }
-      return $rows;
-      $html->clear(); 
-    }
     
     public function call_vdp( $cmd ) {
-		
-		static $VPcookies; 
-		static $VPdata = array(
-			Model => "",
-			Firmware => "",
-			LANVersion => "",
-			IPAddress => "",
-			SubnetMask => "",
-			MACAddress => "",
-		);
 		static $VPcontrol = array();
     	static $VPstate;
     	static $RAW;
 
-    	$URL_form_login = 'http://' . $this->getConfiguration('AdrIP') . '/login.asp';
 		$URL_action_login = 'http://' . $this->getConfiguration('AdrIP') . '/Info.asp';
 		$URL_control = 'http://' . $this->getConfiguration('AdrIP') . '/control.asp';
 		$URL_CGI = $this->getConfiguration('ControlCGI');
       
-		$VPcookies = $this->login();
-		if ( $VPcookies == FALSE ) // teste si authentification OK
-			return;
-      
 		switch ($cmd){
-		case 'On':
-			log::add('Optoma', 'debug', 'Commande On - '. $cmd );
-   			$postValues = array( 'request_projector_info(this, 0)' => "btn_powon" );
-
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, $URL_control);
-			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($postValues));
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($curl, CURLOPT_REFERER, $URL_form_login);
-			$content = curl_exec($curl);
-			curl_close($curl);
-			
-			log::add('Optoma', 'debug', 'control.asp (btn_powon=Power On) = ' /*. $content*/ );
-			$this->checkAndUpdateCmd('Power', 1);
-			break;
-		
-		case 'Off':
-
-			log::add('Optoma', 'debug', 'Commande Refresh - '.$VPcookies[0]);
-			$postValues = array( 'login' => $this->getConfiguration('UserId'),'password' => $this->getConfiguration('MdP') );
-
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, $URL_control);
-			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($postValues));
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($curl, CURLOPT_REFERER, $URL_form_login);
-			$content = curl_exec($curl);
-			curl_close($curl);
-			
-			log::add('Optoma', 'debug', 'control.asp (pwr=off) = ' . $content );
-			$this->checkAndUpdateCmd('Power', 0);
-			break;
-		
+            
 		case 'Refresh':
 		
-			log::add('Optoma', 'debug', 'Commande Refresh');
+			log::add('Optoma', 'debug', 'Lancement commande Refresh');
             $methodCGI = $this->getConfiguration('askCGI');
-            $methodWebParsing = $this->getConfiguration('askWebParsing');
             $methodTelnet = $this->getConfiguration('askTelnet');
             $methodPJLink = $this->getConfiguration('askPJLink');
-            log::add('Optoma', 'debug', 'CGI : ' . $methodCGI . ' WebParsing : ' . $methodWebParsing . ' Telnet : ' . $methodTelnet . ' PJ Link : ' . $methodPJLink );
 
             if ($methodCGI == 1) {
                 $RAW = $this->getCGI($URL_CGI);
               	foreach ($RAW as $key => $value) {
 					$this->checkAndUpdateCmd($key, $value);
-					log::add('Optoma', 'debug', 'Key : ' . $key . ' Value : ' . $value);
 				}
-            	//$this->checkAndUpdateCmd('Power', $RAW['Powerstatus']);
-            }
-
-			if ($methodWebParsing == 1) {
-                $postValues = array( 'login' => $this->getConfiguration('UserId'),'password' => $this->getConfiguration('MdP') );
-
-                $curl = curl_init();
-                curl_setopt($curl, CURLOPT_URL, $URL_action_login);
-                curl_setopt($curl, CURLOPT_POST, true);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($postValues));
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($curl, CURLOPT_REFERER, $URL_form_login);
-                $content = curl_exec($curl);
-                curl_close($curl);
-              
-                $VPdata = $this->DecodeEtat($content);
-                $VPcontrol = $this->ParseOptoma($URL_control);
-                $VPstate = $this->StateOptoma($URL_control);
-
-            	// Page control
-            	$this->checkAndUpdateCmd('Powerstatus', $VPstate);
-                $this->checkAndUpdateCmd('AV Mute', $VPcontrol['2'][information]);
-                $this->checkAndUpdateCmd('Freeze', $VPcontrol['3'][information]);
-                $this->checkAndUpdateCmd('Information hide', $VPcontrol['4'][information]);
-                $this->checkAndUpdateCmd('High Altitude', $VPcontrol['5'][information]);
-                $this->checkAndUpdateCmd('Keypad Lock', $VPcontrol['6'][information]);
-                $this->checkAndUpdateCmd('Display Mode Lock', $VPcontrol['7'][information]);
-                $this->checkAndUpdateCmd('Direct Power On', $VPcontrol['8'][information]);
-                $this->checkAndUpdateCmd('3D Sync. Invert', $VPcontrol['9'][information]);
-               // $this->checkAndUpdateCmd('3DModeOnOffStatus', $VPcontrol['10'][information]);
-                $this->checkAndUpdateCmd('3D Mode', $VPcontrol['11'][selection]);
-                $this->checkAndUpdateCmd('3D-2D', $VPcontrol['12'][selection]);
-                $this->checkAndUpdateCmd('3D Format', $VPcontrol['13'][selection]);
-                $this->checkAndUpdateCmd('Internal Speaker', $VPcontrol['14'][information]);
-                $this->checkAndUpdateCmd('Mute', $VPcontrol['15'][information]);
-                $this->checkAndUpdateCmd('Dynamic Black', $VPcontrol['16'][information]);
-                $this->checkAndUpdateCmd('Volume(Audio)', $VPcontrol['17'][champtext]);
-                $this->checkAndUpdateCmd('Volume(Mic)', $VPcontrol['18'][champtext]);
-                $this->checkAndUpdateCmd('Audio Input', $VPcontrol['19'][selection]);
-                $this->checkAndUpdateCmd('Source', $VPcontrol['20'][selection]);
-                $this->checkAndUpdateCmd('Brightness', $VPcontrol['21'][champtext]);
-                $this->checkAndUpdateCmd('Contrast', $VPcontrol['22'][champtext]);
-                $this->checkAndUpdateCmd('Sharpness', $VPcontrol['23'][champtext]);
-                $this->checkAndUpdateCmd('Brilliant Color', $VPcontrol['25'][champtext]);
-                $this->checkAndUpdateCmd('Color Temperature', $VPcontrol['27'][selection]);
-                $this->checkAndUpdateCmd('Display Mode', $VPcontrol['28'][selection]);
-                $this->checkAndUpdateCmd('Color Space', $VPcontrol['29'][selection]);
-                $this->checkAndUpdateCmd('12V Trigger', $VPcontrol['30'][selection]);
-                $this->checkAndUpdateCmd('Aspect Ratio', $VPcontrol['31'][selection]);
-                $this->checkAndUpdateCmd('Screen Type', $VPcontrol['32'][selection]);
-                $this->checkAndUpdateCmd('Projection', $VPcontrol['33'][selection]);
-                $this->checkAndUpdateCmd('Zoom Value', $VPcontrol['34'][champtext]);
-                $this->checkAndUpdateCmd('H. Keystone', $VPcontrol['35'][champtext]);
-                $this->checkAndUpdateCmd('V. Keystone', $VPcontrol['36'][champtext]);
-                $this->checkAndUpdateCmd('H.Image Shift', $VPcontrol['37'][champtext]);
-                $this->checkAndUpdateCmd('V.Image Shift', $VPcontrol['38'][champtext]);
-               // $this->checkAndUpdateCmd('FourCornersStatus', $VPcontrol['39'][selection]);
-                $this->checkAndUpdateCmd('Sleep Timer(min.)', $VPcontrol['40'][champtext]);
-                $this->checkAndUpdateCmd('Projector ID', $VPcontrol['41'][champtext]);
-                $this->checkAndUpdateCmd('Remote Code', $VPcontrol['42'][champtext]);
-                $this->checkAndUpdateCmd('Background Color', $VPcontrol['43'][selection]);
-                $this->checkAndUpdateCmd('Wall Color', $VPcontrol['44'][selection]);
-                $this->checkAndUpdateCmd('Logo', $VPcontrol['45'][selection]);
-                $this->checkAndUpdateCmd('Power mode', $VPcontrol['46'][selection]);
-                $this->checkAndUpdateCmd('Brightness Mode', $VPcontrol['47'][selection]);
             }
             
             if ($methodTelnet == 1) {
@@ -1119,175 +803,276 @@ class Optoma extends eqLogic {
             if ($methodPJLink == 1) {
               
             }
+          default:
+            $cmd_action = self::devicesParameters('cmd_button.json');
+			foreach( $cmd_action as $idname => $command ){
+				if ($cmd == $command) {
+					$command_nospace = str_replace(" ", "%20",$command);
+					log::add('Optoma', 'debug', $URL_CGI."?".$idname."=".$command_nospace);
+					$curl = curl_init();
+					curl_setopt_array($curl, array(
+                      CURLOPT_URL => $URL_CGI."?".$idname."=".$command_nospace,
+                      CURLOPT_RETURNTRANSFER => true,
+                      CURLOPT_ENCODING => "",
+                      CURLOPT_TIMEOUT => 1,
+                      CURLOPT_CUSTOMREQUEST => "POST",
+					));
 
-            // Page index
-            $this->checkAndUpdateCmd('Model', $VPdata[Model]);
-            $this->checkAndUpdateCmd('Firmware', $VPdata[Firmware]);
-            $this->checkAndUpdateCmd('LANVersion', $VPdata[LANVersion]);
-            $this->checkAndUpdateCmd('IPAddress', $VPdata[IPAddress]);
-            $this->checkAndUpdateCmd('SubnetMask', $VPdata[SubnetMask]);
-            $this->checkAndUpdateCmd('MACAddress', $VPdata[MACAddress]);
+					$response = curl_exec($curl);
+					$err = curl_error($curl);
+					curl_close($curl);
+					if ($err) {
+						log::add('Optoma', 'debug', 'Erreur envoi commande: '.$err);
+					}
+				}
+			}
+            $regerg = self::devicesParameters('cmd_action.json');
+            foreach ($regerg as $trt => $erfef) {
+            log::add('Optoma', 'debug', $trt.' : commande1-commande2 : '.$erfef);
+            }
 		}
-
-  //  $cmd->save();
-	}
-
-	public function DecodeEtat($content) {
-		$deb = strpos($content, 'Model Name');
-		$fin = strpos($content, '</th>', $deb);
-		$data[Model] = substr($content, $deb+31, $fin-$deb);
-
-		$deb = strpos($content, 'Firmware Version');
-		$fin = strpos($content, '</td>', $deb);
-		$data[Firmware] = substr($content, $deb+36, $fin-$deb-13);
-
-		$deb = strpos($content, 'LAN Version');
-		$fin = strpos($content, '</td></tr>', $deb);
-		$data[LANVersion] = substr($content, $deb+31, $fin-$deb-31);
-
-		$deb = strpos($content, 'IP Address');
-		$fin = strpos($content, '</td></tr>', $deb);
-		$data[IPAddress] = substr($content, $deb+30, $fin-$deb-30);
-
-		$deb = strpos($content, 'Subnet Mask');
-		$fin = strpos($content, '</td></tr>', $deb);
-		$data[SubnetMask] = substr($content, $deb+31, $fin-$deb-31);
-
-		$deb = strpos($content, 'MAC Address');
-		$fin = strpos($content, '</td></tr>', $deb);
-		$data[MACAddress] = substr($content, $deb+31, $fin-$deb-31);
-
-		log::add('Optoma', 'debug', 'Parsing index.asp - ' . $data[Model] . ' Firmware=' . $data[Firmware] . ' LANVersion=' . $data[LANVersion] . ' IPAddress=' . $data[IPAddress] . ' SubnetMask=' . $data[SubnetMask] . ' MACAddress=' . $data[MACAddress]);
-		
-		return ($data);
 	}
   
-	public static function amxDeviceDiscovery() {
-		log::add('Optoma', 'debug', 'Recherche du vidéoprojecteur en cours...');
-		error_reporting(E_ALL);
-        $port = 9131;
-        $addressIP = '239.255.250.250';
-        $socketClient = socket_create(AF_INET, SOCK_DGRAM, 0);
-        if ($socketClient === false) {
-             Return FALSE;
+	public static function amxDeviceDiscovery($_state) {
+		log::add('Optoma', 'error', "Lancement du mode inclusion.");
+		if ($_state == 1) {
+		event::add('Optoma::includeDevice', null);
+		if(!($sock = socket_create(AF_INET, SOCK_DGRAM, 0))){
+			log::add('Optoma', 'error', "Couldn't create socket: " . socket_strerror(socket_last_error($sock)));
+			return false;
+		}
+		if( !socket_bind($sock, "0.0.0.0" , 9131) ){
+			log::add('Optoma', 'error', "Couldn't bind port: " . socket_strerror(socket_last_error($sock)));
+			return false;
+		}
+		if (!socket_set_option($sock, IPPROTO_IP, MCAST_JOIN_GROUP, array("group"=>"239.255.250.250","interface"=>0))) {
+			log::add('Optoma', 'error', "socket_set_option() failed: reason: " . socket_strerror(socket_last_error($sock)));
+			return false;
+		}
+		socket_set_option($socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>60, "usec"=>0));
+      		$start=time();
+		while(true){
+			$r = socket_recvfrom($sock, $buf, 512, 0, $remote_ip, $remote_port);
+			log::add('Optoma', 'debug', $remote_ip." : ".$remote_port." -- " . $buf);
+          		self::DecodeAMXMessage($remote_ip,$buf);
+          		if(time()-$start > 60)
+					break;
+		}
+		socket_close($sock);
+		event::add('Optoma::includeDevice', null);
         }
-        socket_set_option($socketClient, SOL_SOCKET, SO_REUSEADDR, 1);
-        socket_bind($socketClient, $addressIP, $port);
-        $tab_mcast = array("group" => $addressIP, "interface" => 0,);
-        socket_set_option($socketClient, IPPROTO_IP, MCAST_JOIN_GROUP, $tab_mcast);
-        if (false === ($bytes = socket_recvfrom($socketClient, $buf, 800, 0, $from, $fromPort))) {
-            Return FALSE;
+		else {
+			log::add('Optoma', 'debug', 'Fin manuelle de l\'inclusion');
         }
-        socket_close($socketClient);
-        //echo $from;
-		log::add('Optoma', 'debug', 'Vidéoprojecteur trouvé : '. $from);
-      	return $from;
 	}
   
-  	public function searchCGILink() {
-		foreach(eqLogic::byType('Optoma') as $Optoma){
-			if($Optoma->getIsEnable() && $Optoma->getConfiguration('AdrIP') != ''){
-				$AdrIP = $Optoma->getConfiguration('AdrIP');
+  	public static function DecodeAMXMessage($remote_ip,$buf){
+        foreach(explode('<-',str_replace('>','',$buf)) as $param){
+                $Make=explode('=',$param);
+                if($Make[0]=="Make") {
+                        $Type=str_replace(' ','_',$Make[1]);
+						if ($Type != "Optoma") {
+							log::add('Optoma', 'debug', 'Ce n\'est pas un Optoma: '.$Type);
+                        }
+                }
+                if($Make[0]=="Model") {
+                        $Model=str_replace(' ','_',$Make[1]);
+                }
+                if($Make[0]=="UUID") {
+                        $UUID=str_replace(' ','_',$Make[1]);
+                }
+                if($Make[0]=="SDKClass") {
+                        $SDKClass=str_replace(' ','_',$Make[1]);
+						if ($SDKClass != "VideoProjector") {
+							log::add('Optoma', 'debug', 'Ce n\'est pas un videoprojecteur: '.$SDKClass);
+                        }
+                }
+		}
+		if ($Type == 'Optoma') {
+			Optoma::AddEquipement($Type." ".$Model,$UUID,$remote_ip);
+        }
+   	}
+  
+  public static function AddEquipement($Name,$_logicalId,$AdrIP){
+		foreach(self::byLogicalId($_logicalId, 'Optoma',true) as $Equipement){
+          		if (is_object($Equipement) && $Equipement->getConfiguration('AdrIP') == $AdrIP) {
+          		return $Equipement;
+			} 
+		}
+    	$ControlCGI = Optoma::searchCGILink($AdrIP);
+		if (isset($ControlCGI)) {
+			$checkCGI = 1;
+		}
+		$Equipement = new Optoma();
+		$Equipement->setName($Name."-".$_logicalId);
+		$Equipement->setLogicalId($_logicalId);
+		$Equipement->setObject_id(null);
+		$Equipement->setEqType_name('Optoma');
+		$Equipement->setIsEnable(1);
+		$Equipement->setIsVisible(1);
+		$Equipement->setConfiguration('model',$Name);
+		$Equipement->setConfiguration('ControlCGI',$ControlCGI);
+		$Equipement->setConfiguration('askCGI',$checkCGI);
+		$Equipement->setConfiguration('mac',$_logicalId);
+		$Equipement->setConfiguration('AdrIP',$AdrIP);
+		$Equipement->save();
+		config::save('include_mode', 0, 'Optoma');
+		event::add('Optoma::includeDevice', $Equipement->getId());
+		return $Equipement;
+	}
+  
+	public static function searchCGILink($URL) {
+		if (isset($URL)) {
+			$AdrIP = $URL;
+		}
+		else {
+			foreach(eqLogic::byType('Optoma') as $Optoma){
+				if($Optoma->getIsEnable() && $Optoma->getConfiguration('AdrIP') != ''){
+					$AdrIP = $Optoma->getConfiguration('AdrIP');
+				}
 			}
 		}
-       		$URL_control = "http://" . $AdrIP . "/control.asp";
-        	log::add('Optoma', 'debug', 'Recherche du lien control CGI en cours...');
-
-			$html = file_get_html($URL_control);
-        	if (isset($html->find('script[language=javascript]',0)->src) | !empty($html->find('script[language=javascript]',0)->src)) {
-        		$js_link = $html->find('script[language=javascript]',0)->src;
-        	}
-        	else {
-				$js_link = 'js/control.js';
+		$URL_control = "http://" . $AdrIP . "/control.asp";
+		log::add('Optoma', 'debug', 'Recherche du lien control CGI en cours...');
+			$html = file_get_contents($URL_control);
+			$array = array();
+			preg_match( '/"javascript" src="(.*?)"/i', $html, $array ) ;
+			$js_link = $array[1];
+			if (!isset($js_link)) {
+				return;
 			}
-	        $URL_js_file = 'http://' . $AdrIP . '/' . $js_link;
-        	$js = file_get_html($URL_js_file);
-        	$deb = strpos($js, "POST");
-        	$fin = strpos($js, ');', $deb);
-        	$cgi_link = substr($js, $deb, $fin-$deb);
-        	preg_match_all("/(\"\/)(.*)\/(.*)(\")/", $cgi_link, $matches, PREG_PATTERN_ORDER);
-			$URL_cgi = 'http://' . $AdrIP . $matches[0][0];
-
-      	$URL_cgi = str_replace("\"", "", $URL_cgi);
-		log::add('Optoma', 'debug', 'Lien trouvé : '. $URL_cgi);
-		return $URL_cgi;
+			$URL_js_file = "http://" . $AdrIP . '/' . $js_link;
+			$js = file_get_contents($URL_js_file);
+			if (!@$js) {
+				return;
+			}
+			$arr = array();
+			preg_match( '/xmlhttp.open((.*?));/i', $js, $arr ) ;
+			$prse = str_replace('"', '', explode(',', $arr[1])[1]);
+			$URL_cgi = "http://" . $AdrIP . $prse;
+			log::add('Optoma', 'debug', 'Lien trouvé : '. $URL_cgi);
+			return $URL_cgi;
 	}
-  
-   public static function getCGI($URL_CGI) {
-        $data = file_get_html($URL_CGI);
-        $cleandata = str_replace("<html> {", "",$data);
-        $cleanerdata = str_replace("}", "",$cleandata);
+   
+	public static function getCGI($URL_CGI) {
+		static $source = array("Powerstatus" => "pw","Source" => "a","Display Mode" => "b",
+                        "Brightness" => "c","Contrast" => "d","Sharpness" => "f","Projection" => "t",
+                        "Brightness Mode" => "h","Mute" => "j","AV Mute" => "k","Power mode" => "l",
+                        "Volume Audio" => "m","Freeze" => "n","Logo" => "o","3D-2D" => "p",
+                        "Color Space" => "q","Zoom Value" => "r","3D Mode" => "w","Background Color" => "x",
+                        "Wall Color" => "y","Volume Mic" => "z","Phase" => "A","Brilliant Color" => "B",
+                        "Gamma" => "C","Color Temperature" => "D","3D Format" => "E",
+                        "Internal Speaker" => "F","12V Trigger" => "G","Sleep Timer min." => "H",
+                        "Audio Input" => "I","H. Keystone" => "J","V. Keystone" => "K","Aspect Ratio" => "L",
+                        "H.Image Shift" => "M","V.Image Shift" => "N","High Altitude" => "O",
+                        "Direct Power On" => "P","Projector ID" => "Q","Remote Code" => "R",
+                        "Screen Type" => "S","3D Sync. Invert" => "T","Power" => "U",
+                        "Information hide" => "V","Display Mode Lock" => "W","Dynamic Black" => "X",
+                        "Keypad Lock" => "Y","button_up" => "e","button_down" => "g","button_left" => "i",
+                        "button_right" => "s","locking Source" => "Z","ISF" => "isf");
+     	$option['Source'] = array("id" => "source","0" => "HDMI1","1" => "HDMI2","2" => "Component","3" => "VGA","4" => "Media");
+		$option['Display Mode'] = array("id" => "dismode0","0" => "Cinema","1" => "HDR","2" => "HDR SIM","3" => "Game","4" => "Reference","5" => "Bright","6" => "User","7" => "ISF Day","8" => "ISF Night","9" => "3D","10" => "User(3D User)");
+		$option['Projection'] = array("id" => "projection","0" => "Front-Desktop","1" => "Front-Ceiling  ","2" => "Rear-Desktop","3" => "Rear-Ceiling");
+		$option['Brightness Mode'] = array("id" => "lampmd","0" => "Bright","1" => "Eco","2" => "Dynamic");
+		$option['Power mode'] = array("id" => "pwmode","0" => "Eco","1" => "Active");
+		$option['Logo'] = array("id" => "logo","0" => "Default","2" => "Neutral","1" => "User");
+		$option['3D-2D'] = array("id" => "3dto2d","0" => "3D","1" => "L","2" => "R");
+		$option['Color Space'] = array("id" => "colorsp0","0" => "Auto","1" => "RGB(0~255)","2" => "RGB(16~235)","3" => "YUV(0~255)","4" => "YUV(16~235)");
+		$option['3D Mode'] = array("id" => "3dmode","1" => "DLP-Link","2" => "VESA 3D","3" => "NVIDIA 3D Vision","4" => "IR","0" => "Off");
+		$option['Background Color'] = array("id" => "background","0" => "Reserved","1" => "Blue","2" => "Blaack","3" => "Red","4" => "Green","5" => "White");
+		$option['Wall Color'] = array("id" => "wall","0" => "Off","1" => "Black board","2" => "Light Yellow","3" => "Light Green","4" => "Light Blue","5" => "Pink","6" => "Gray");
+		$option['Gamma'] = array("id" => "Degamma","0" => "Film","1" => "Video","2" => "Graphics","3" => "Standard(2.2)","4" => "1.8","5" => "2.0","6" => "2.4","7" => "3D");
+		$option['Color Temperature'] = array("id" => "colortmp","0" => "D55","1" => "D65","2" => "D75","3" => "D83","4" => "D93","5" => "Native");
+		$option['3D Format'] = array("id" => "3dformat","0" => "Auto","1" => "SBS","2" => "Top and Bottom","4" => "Frame Packing");
+		$option['12V Trigger'] = array("id" => "trigger","1" => "On","0" => "Off");
+		$option['Audio Input'] = array("id" => "audio","0" => "Default","1" => "Audio Input 1","2" => "Audio Input 2","3" => "Audio Input 3");
+		$option['Aspect Ratio'] = array("id" => "aspect0","L","0" => "4:3","1" => "16:9","2" => "Native","3" => "Auto");
+		$option['Screen Type'] = array("id" => "screen","0" => "16:10","1" => "16:9");
+		$option['Power'] = array("id" => "Power","0" => "100","1" => "95","2" => "90","3" => "85","4" => "80","255" => "Not Support");
+
+        $data = file_get_contents($URL_CGI);
+		log::add('Optoma', 'debug', 'Parse control_cgi : ' . $data);
+		preg_match( '#{(.*)}#U', $data, $firstpass);
+        $secondpass = str_replace("{", "",$firstpass[0]);
+        $thirdpass = str_replace("}", "",$secondpass);
 		$arr = array();
-		$pairs = explode(',', $cleanerdata);
+		$pairs = explode(',', $thirdpass);
         foreach ($pairs as $i) {
         	list($name,$value) = explode(':', $i, 2);
         	$arr[$name] = $value;
         }
-		
-		$source = array("Powerstatus" => "pw","Source" => "a","Display Mode" => "b",
-                          "Brightness" => "c","Contrast" => "d","Sharpness" => "f","Projection" => "t",
-                          "Brightness Mode" => "h","Mute" => "j","AV Mute" => "k","Power mode" => "l",
-                          "Volume Audio" => "m","Freeze" => "n","Logo" => "o","3D-2D" => "p",
-                          "Color Space" => "q","Zoom Value" => "r","3D Mode" => "w","Background Color" => "x",
-                          "Wall Color" => "y","Volume Mic" => "z","Phase" => "A","Brilliant Color" => "B",
-                          "Gamma" => "C","Color Temperature" => "D","3D Format" => "E",
-                          "Internal Speaker" => "F","12V Trigger" => "G","Sleep Timer min." => "H",
-                          "Audio Input" => "I","H. Keystone" => "J","V. Keystone" => "K","Aspect Ratio" => "L",
-                          "H.Image Shift" => "M","V.Image Shift" => "N","High Altitude" => "O",
-                          "Direct Power On" => "P","Projector ID" => "Q","Remote Code" => "R",
-                          "Screen Type" => "S","3D Sync. Invert" => "T","Power" => "U",
-                          "Information hide" => "V","Display Mode Lock" => "W","Dynamic Black" => "X",
-                          "Keypad Lock" => "Y","button_up" => "e","button_down" => "g","button_left" => "i",
-                          "button_right" => "s","locking Source" => "Z","ISF" => "isf");
-
-        foreach( $arr as $key => $value ){
+		foreach( $arr as $key => $value ){
             if (is_array($source)) {
                 foreach( $source as $cle => $valeur ){
                     if ($valeur === $key) {
                         $donnee[$cle] = $value;
                     }
-
                 }
             }
         }
+		foreach( $source as $cle => $valeur ){
+			if (is_array($option[$cle])) {
+				foreach( $option[$cle] as $key => $value ){
+					if (str_replace('"', '',$donnee[$cle]) == $key) 
+						$donnee[$cle] = $value;
+					}
+				}
+		}
 		return $donnee;
-   }
+		}
+
+	public static function devicesParameters($filename) {
+		$ModelVP = "UHD51";
+		$return = array();
+		$path = dirname(__FILE__) . '/../config/'. $ModelVP . '/';
+      		log::add('Optoma', 'debug', 'Action sur ' . $path . $filename);
+
+		$files = ls($path, '*.json', false, array('files', 'quiet'));
+			foreach ($files as $file) {
+              if ($file == $filename) {
+				try {
+					$content = file_get_contents($path . '/' . $file);
+					if (is_json($content)) {
+						$return += json_decode($content, true);
+					}
+				} catch (Exception $e) {
+
+				}
+              }
+			}
+		return $return;
+    }
 }
 
 class OptomaCmd extends cmd {
-    /*     * *************************Attributs****************************** */
-
-
-    /*     * ***********************Methode static*************************** */
-
-
-    /*     * *********************Methode d'instance************************* */
-
-    /*
-     * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
-      public function dontRemoveCmd() {
-      return true;
-      }
-     */
 
     public function execute($_options = array()) {
-		$eqLogic = $this->getEqLogic(); //récupère l'éqlogic de l'équipement
-		
-		switch ($this->getLogicalId()) {	
-		case 'On':
-			log::add('Optoma', 'debug', 'Exécution de la commande On');
-			$eqLogic->call_vdp ('On');
+		$eqLogic = $this->getEqLogic();
+		switch ($this->getLogicalId()) {
+		case 'Power On':
+			$eqLogic->call_vdp ('Power On');
 			break;
-		
-		case 'Off':
-			log::add('Optoma', 'debug', 'Exécution de la commande Off');
-			$eqLogic->call_vdp ('Off');
+		case 'Power Off':
+			$eqLogic->call_vdp ('Power Off');
 			break;
-		
+		case '3D Mode':
+			$eqLogic->call_vdp ('3D Mode');
+			break;
+		case 'Aspect Ratio':
+			$eqLogic->call_vdp ('Aspect Ratio');
+			break;
+		case 'Brightness Mode':
+			$eqLogic->call_vdp ('Brightness Mode');
+			break;
+		case 'Display Mode':
+			$eqLogic->call_vdp ('Display Mode');
+			break;
+		case 'Source':
+			$eqLogic->call_vdp ('Source');
+			break;
 		default:
-			log::add('Optoma', 'debug', 'Exécution de la commande Refresh');
 			$eqLogic->call_vdp ('Refresh');
-
 		}
+		log::add('Optoma', 'debug', 'Action sur ' . $this->getLogicalId());
 	}
 }
