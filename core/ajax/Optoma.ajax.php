@@ -25,9 +25,9 @@ try {
 	}
 
 	ajax::init();
-
+  
 	if (init('action') == 'amxDeviceDiscovery') {
- 		$arr = ajax::success(Optoma::amxDeviceDiscovery());
+      	$arr = ajax::success(Optoma::amxDeviceDiscovery(init('state')));
         $return['cmd'] = array();
         foreach ($arr as $cmd) {
             $return['cmd'][] = $cmd;
