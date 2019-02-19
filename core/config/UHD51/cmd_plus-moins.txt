@@ -1,0 +1,77 @@
+{
+	"Volume(Audio)": {
+					"vol1":"-",
+					"vol2":"vol2",
+					"range":"0,10"
+	},
+	"Volume(Mic)": {
+					"mic1":"-",
+					"mic2":"mic2",
+					"range":"0,10"
+	},
+	"Brightness": {
+					"bright1":"-",
+					"bright2":"bright2",
+					"range":"-50,50"
+	},
+	"Contrast": {
+					"contrast1":"-",
+					"contrast2":"contrast2",
+					"range":"-50,50"
+    },
+	"Sharpness": {
+					"Sharp1":"-",
+					"Sharp2":"Sharp2",
+					"range":"1,15"
+    },
+	"Phase": {
+					"Phase1":"-",
+					"Phase2":"Phase2",
+					"range":"0,31"
+	},
+	"Brilliant Color": {
+					"brill1":"-",
+					"brill2":"brill2",
+					"range":"0,10"
+    },
+	"Zoom Value": {
+					"zoom1":"-",
+					"zoom2":"zoom2",
+					"range":"-5,25"
+	},
+	"H. Keystone": {
+					"hkeys1":"-",
+					"hkeys2":"hkeys2",
+					"range":"-30,30"
+	},
+	"V. Keystone": {
+					"vkeys1":"-",
+					"vkeys2":"vkeys2",
+					"range":"-30,30"
+	},
+	"H.Image Shift": {
+					"hpos1":"-",
+					"hpos2":"hpos2",
+					"range":"-100,100"
+	},
+	"V.Image Shift": {
+					"vpos1":"-",
+					"vpos2":"vpos2",
+					"range":"-100,100"
+	},
+	"Sleep Timer(min.)": {
+					"sleep1":"-",
+					"sleep2":"sleep2",
+					"range":"0,10"
+	},
+	"Projector ID": {
+					"projid1":"-",
+					"projid2":"projid2",
+					"range":"0,99"
+	},
+	"Remote Code": {
+					"remote1":"-",
+					"remote2":"remote2",
+					"range":"0,99"
+	}
+}

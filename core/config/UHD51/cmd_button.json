@@ -1,0 +1,19 @@
+{
+  "btn_powon":"Power On",
+  "btn_powoff":"Power Off",
+  "resync":"Resync",
+  "reset":"Reset",
+  "logocapture":"Logo Capture",
+  "avmute":"AV Mute",
+  "freeze":"Freeze",
+  "infohide":"Information hide",
+  "altitude":"High Altitude",
+  "keypad":"Keypad Lock",
+  "dismdlocked":"Display Mode Lock",
+  "directpwon":"Direct Power On",
+  "3Dsync":"3D Sync. Invert",
+  "3Dmodet":"3D Mode",
+  "speaker":"Internal Speaker",
+  "mute":"Mute",
+  "dynamic":"Dynamic Black"
+}
