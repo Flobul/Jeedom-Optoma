@@ -112,7 +112,7 @@ if ($state == 1) {
 								<select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
 									<option value="">{{Aucun}}</option>
 									<?php
-										foreach (object::all() as $object) {
+										foreach (jeeObject::all() as $object) {
 										echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
 									}
 									?>
@@ -271,7 +271,7 @@ La commande est envoyée toutes les minutes, 5 minutes, 15 minutes, 30 minutes..
 					<thead>
 						<tr>
 							<th style="width: 190px;">{{Nom}}</th>
-                            <th style="width: 220px;">{{Type}}</th>
+							<th style="width: 220px;">{{Type}}</th>
 							<th>{{Valeur}}</th>
 							<th style="width: 200px;">{{Paramètres}}</th>
 							<th style="width: 90px;">{{Action}}</th>
@@ -287,4 +287,3 @@ La commande est envoyée toutes les minutes, 5 minutes, 15 minutes, 30 minutes..
 
 <?php include_file('desktop', 'Optoma', 'js', 'Optoma');?>
 <?php include_file('core', 'plugin.template', 'js');?>
-
