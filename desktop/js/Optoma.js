@@ -59,7 +59,7 @@ $('#bt_searchCGILink').on('click', function () {
 function amxDeviceDiscovery(_state) {
 	$.ajax({
 		type: "POST",
-		url: "plugins/Optoma/core/ajax/Optoma.ajax.php", 
+		url: "plugins/Optoma/core/ajax/Optoma.ajax.php",
 		data: {
 			action: "amxDeviceDiscovery",
 			state: _state,
@@ -94,7 +94,7 @@ function webOptoma() {
 			$url = $('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value();
             $.ajax({
                 type: "POST",
-                url: "plugins/Optoma/core/ajax/Optoma.ajax.php", 
+                url: "plugins/Optoma/core/ajax/Optoma.ajax.php",
                 data: {
                     action: "webOptoma",
                 },
@@ -112,12 +112,12 @@ function webOptoma() {
 function searchCGILink() {
 		$AdrIP = $('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value();
   		$CGILink = $('.eqLogicAttr[data-l1key=configuration][data-l2key=ControlCGI]').value();
-  
+
   		if ($AdrIP != ''){
 			$('#div_alert').showAlert({message: '{{Recherche du lien CGI en cours. (environ 15 secondes)}}', level: 'warning'});
             $.ajax({
                 type: "POST",
-                url: "plugins/Optoma/core/ajax/Optoma.ajax.php", 
+                url: "plugins/Optoma/core/ajax/Optoma.ajax.php",
                 data: {
                     action: "searchCGILink",
                 },
@@ -161,7 +161,7 @@ function searchCGILink() {
 /*
  * Fonction pour l'ajout de commande, appellé automatiquement par plugin.Optoma
  */
- 
+
  function addCmdToTable(_cmd) {
     if (!isset(_cmd)) {
         var _cmd = {configuration: {}};
@@ -172,7 +172,7 @@ function searchCGILink() {
     if (init(_cmd.logicalId) == 'refresh') {
 		return;
 	}
-	
+
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
   if (init(_cmd.type) == 'info') {
 		tr += '<td>';
@@ -186,9 +186,18 @@ function searchCGILink() {
 		tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-top : -5px;width : 40%; display : inline-block;" />';
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '" style="margin-top : -5px;width : 50%; display : inline-block;" ></span>';
 		tr += '</td>';
-		tr += '<td>';
-  		tr += '<span class="cmdAttr"  data-l1key="configuration" data-l2key="value"></span>';
-		tr += '</td>';
+    tr += '<td>';
+    tr += '<input class="cmdAttr" id="'+ _cmd.id +'value" style="width : 200px; font-style: italic;" readonly="true" value="">';
+    $('#'+_cmd.id +'value').val("loading");
+    jeedom.cmd.execute({
+        id: _cmd.id,
+        cache: 0,
+        notify: false,
+        success: function(result) {
+            $('#'+_cmd.id +'value').val(result);
+        }
+      });
+    tr += '</td>';
 		tr += '<td>';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span></br> ';
@@ -233,13 +242,13 @@ function searchCGILink() {
 		tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" title="Supprimer de la commande" data-action="remove"></i></td>';
     }
 		tr += '</td>';
-    
+
     $('#table_cmd tbody').append(tr);
     $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
 
-	}	
+	}
     tr += '</tr>';
-	
+
 	if (init(_cmd.type) == 'info') {
 		if (isset(_cmd.type)) {
 			$('#table_info tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
@@ -307,4 +316,3 @@ $('body').on('Optoma::includeDevice', function (_event,_options) {
     }
   }
 });
-
