@@ -1,42 +1,40 @@
-AcerVP plugin
+Plugin Optoma
 =============
 
-![Logo plugin](../assets/images/AcerVP_icon.png "Logo plugin")
+![Logo plugin](../assets/images/Optoma_icon.png "Logo plugin")
 
-Plugin to control Acer projectors via Jeedom.
+This plugin control Optoma videoprojectors by using Jeedom.
 
-> ** Note **
-> This plugin exploits the embedded web interface of the video projector.
+> **Note**  
+> This plugin uses embedded web page of the videoprojector.
 
+**Functionality :**
 
-** Features: **
+- Turn on / turn off,
+- Display the input source, display mode, aspect ratio, brightness mode, 3D mode,
 
-- Switch on / switch off,
-- Display of the used input,
-- Display of the number of hours of use of the lamp,
-
-** Compatible models **
-- Acer M550
-- Probably other models Acer
+**Compatibility**
+- UHD51
+- maybe some other models
 
 Dashboard
 =========
 
-![Dashboard visual](../assets/images/Dashboard.png "Dashboard visual")
+![Dashboard visual](../assets/images/Dashboard.png "Dashboard")
 
 Plugin configuration
-====================
-
-After downloading the plugin, activate the plugin.
-
-Equipment configuration
 =======================
 
-The equipment configuration is accessible from the menu *Plugins > Multimedia > Acer Video Projector*.
+First download the plugin, then activate it.
 
-### Equipment tab:
+Equipment configuration
+=============================
 
-- ** Name of VideoProjector **: name of your equipment (ex M550),
+Equipment configuration is accessible by Menu *Plugins > Multimedia > Optoma Video Projecteur*.
+
+### Tab Equipement:
+
+- ** VideoProjector name **: name of your equipment (ex UHD51),
 - ** Parent object **: indicates the parent object to which the equipment belongs,
 - ** Category **: the categories of the equipment (it can belong to several categories),
 - ** Enable **: to make your equipment active,
@@ -45,10 +43,10 @@ The equipment configuration is accessible from the menu *Plugins > Multimedia > 
 - ** Login **: Login to connect to the projector (guest)
 - ** Password **: Password associated with the login
 
-### Orders Tab
+### Tab Commandes
 
-Basic commands are generated automatically
+Base commands are automatically created
 
-### List of versions
+### Changelog
 
-*[See the list of versions](changelog.md)*
+*[See changelog](changelog.md)*

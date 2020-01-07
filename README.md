@@ -1,2 +1,2 @@
 # Jeedom-Optoma
-Command Optoma videoprojectors
+Contrôler les vidéoprojecteurs Optoma

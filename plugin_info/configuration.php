@@ -27,9 +27,8 @@ if (!isConnect()) {
    		<div class="form-group">
 			<label class="col-lg-4 control-label">{{Fonctionnement du plugin}}</label>
 			<div class="col-lg-5">
-				Ce plugin utilise les pages de gestion web LAN embarquées sur les vidéoprojecteurs d’Acer pour récupérer les informations et commander les vidéoprojecteurs.
+				Ce plugin utilise les pages de gestion web LAN embarquées sur les vidéoprojecteurs Optoma pour récupérer les informations et commander les vidéoprojecteurs.
 			</div>
 		</div>
 	</fieldset>
 </form>
-

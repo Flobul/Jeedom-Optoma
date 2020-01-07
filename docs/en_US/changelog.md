@@ -1,13 +1,13 @@
 # Changelog
 
-List of AcerVP plugin versions.
+Changelog plugin Optoma.
+
+03/02/2018
+Version 0.2
+Parsing web page control.asp
+
+31/01/2018
+Version 0.1
+Parsing web page index.asp
 
 *[Back to documentation](index.md)*
-
-## Version 1.01 of december 17, 2018
-
-Updating the icon
-
-## Version 1.00 of November 22, 2018
-
-First stable release
