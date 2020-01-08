@@ -17,9 +17,9 @@ if ($state == 1) {
       <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
         <?php
         if ($state == 1) {
-          echo ' <a class="btn btn-success tooltips changeIncludeState" title="{{Inclure périphérique Optoma}}" data-state="0" style="width : 100%;margin-bottom : 5px;"><i class="fa fa-sign-in fa-rotate-90"></i> {{Arrêter inclusion}}</a>';
+          echo ' <a class="btn btn-success tooltips changeIncludeState" title="{{Inclure périphérique Optoma}}" data-state="0" style="width : 100%;margin-bottom : 5px;"><i class="fas fa-sign-in-alt fa-rotate-90"></i> {{Arrêter inclusion}}</a>';
         } else {
-          echo ' <a class="btn btn-default tooltips changeIncludeState" title="{{Inclure périphérique Optoma}}" data-state="1" style="width : 100%;margin-bottom : 5px;"><i class="fa fa-sign-in fa-rotate-90"></i> {{Mode inclusion}}</a>';
+          echo ' <a class="btn btn-default tooltips changeIncludeState" title="{{Inclure périphérique Optoma}}" data-state="1" style="width : 100%;margin-bottom : 5px;"><i class="fas fa-sign-in-alt fa-rotate-90"></i> {{Mode inclusion}}</a>';
         }
         ?>
         <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
@@ -44,16 +44,16 @@ if ($state == 1) {
       if ($state == 1) {
         echo '<div class="cursor changeIncludeState card" data-state="0" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
         echo '<center>';
-        echo '<i class="fa fa-sign-in fa-rotate-90" style="font-size : 5em;color:#ea1b39;"></i>';
+        echo '<i class="fas fa-sign-in-alt fa-rotate-90" style="font-size : 3em;color:#ea1b39;"></i>';
         echo '</center>';
-        echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#ea1b39"><center>{{Arrêter inclusion}}</center></span>';
+        echo '<span style="font-size : 1.1em;position:relative; top : 11px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#ea1b39"><center>{{Arrêter inclusion}}</center></span>';
         echo '</div>';
       } else {
         echo '<div class="cursor changeIncludeState card" data-state="1" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
         echo '<center>';
-        echo '<i class="fa fa-sign-in fa-rotate-90" style="font-size : 5em;color:#ea1b39;"></i>';
+        echo '<i class="fas fa-sign-in-alt fa-rotate-90" style="font-size : 3em;color:#ea1b39;"></i>';
         echo '</center>';
-        echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#ea1b39"><center>{{Mode inclusion}}</center></span>';
+        echo '<span style="font-size : 1.1em;position:relative; top : 11px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#ea1b39"><center>{{Mode inclusion}}</center></span>';
         echo '</div>';
       }
       ?>
@@ -69,9 +69,9 @@ if ($state == 1) {
             		</div>
             	<div class="cursor" id="bt_healthoptoma" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
               <center>
-                <i class="fas fa-medkit" style="font-size : 6em;color:#767676;"></i>
+                <i class="fas fa-medkit" style="font-size : 3em;color:#767676;"></i>
               </center>
-              <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Santé}}</center></span>
+              <span style="font-size : 1.1em;position:relative; top : 11px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Santé}}</center></span>
             </div>
 		</div>
 		<legend><i class="fa fa-table"></i> {{Mes VidéoProjecteurs}}</legend>
