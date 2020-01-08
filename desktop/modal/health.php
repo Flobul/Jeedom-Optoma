@@ -44,7 +44,6 @@ foreach ($eqLogics as $eqLogic) {
 		$status = '<span class="label label-danger" style="font-size : 1em; cursor : default;">{{NOK}}</span>';
 	}
 	echo '<td>' . $status . '</td>';
-	log::add('Optoma', 'debug', 'Power = ' . $eqLogic->getCmd('info', 'Powerstatus'));
 	echo '<td><span class="label" style="font-size : 0.9em;cursor:default;padding:0px 5px;background-color:#cccc00">' . $rssicmd .'</span></td>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('createtime') . '</span></td></tr>';
