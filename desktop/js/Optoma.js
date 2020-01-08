@@ -186,18 +186,18 @@ function searchCGILink() {
 		tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-top : -5px;width : 40%; display : inline-block;" />';
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '" style="margin-top : -5px;width : 50%; display : inline-block;" ></span>';
 		tr += '</td>';
-    tr += '<td>';
-    tr += '<input class="cmdAttr" id="'+ _cmd.id +'value" style="width : 200px; font-style: italic;" readonly="true" value="">';
-    $('#'+_cmd.id +'value').val("loading");
-    jeedom.cmd.execute({
-        id: _cmd.id,
-        cache: 0,
-        notify: false,
-        success: function(result) {
-            $('#'+_cmd.id +'value').val(result);
-        }
-      });
-    tr += '</td>';
+		tr += '<td>';
+		tr += '<input class="cmdAttr" id="'+ _cmd.id +'value" style="width : 200px; font-style: italic;" readonly="true" value="">';
+		$('#'+_cmd.id +'value').val("loading");
+		jeedom.cmd.execute({
+			id: _cmd.id,
+			cache: 0,
+			notify: false,
+			success: function(result) {
+				$('#'+_cmd.id +'value').val(result);
+			}
+		});
+		tr += '</td>';
 		tr += '<td>';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span></br> ';
@@ -229,7 +229,6 @@ function searchCGILink() {
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '" style="margin-top : -5px;width : 50%; display : inline-block;" ></span>';
 		tr += '</td>';
 		tr += '<td>';
-  		tr += '<span class="cmdAttr"  data-l1key="configuration" data-l2key="value"></span>';
 		tr += '</td>';
 		tr += '<td>';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
