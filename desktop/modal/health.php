@@ -49,8 +49,10 @@ foreach ($eqLogics as $eqLogic) {
 	foreach ($remotes as $remote){
 		$name = $remote->getName();
 		$rssicmd = $eqLogic->getCmd('info', 'Powerstatus' . $name);
+		log::add('Optoma', 'debug', $rssicmd);
+
 	}
-	echo '<span class="label" style="font-size : 0.9em;cursor:default;padding:0px 5px;background-color:#cccc00">' . $rssicmd .'</span>';
+	echo '<td><span class="label" style="font-size : 0.9em;cursor:default;padding:0px 5px;background-color:#cccc00">' . $rssicmd .'</span></td>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('createtime') . '</span></td></tr>';
 }
