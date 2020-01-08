@@ -44,10 +44,20 @@ foreach ($eqLogics as $eqLogic) {
 		$status = '<span class="label label-danger" style="font-size : 1em; cursor : default;">{{NOK}}</span>';
 	}
 	echo '<td>' . $status . '</td>';
-	echo '<td><span class="label" style="font-size : 0.9em;cursor:default;padding:0px 5px;background-color:#cccc00">' . $rssicmd .'</span></td>';
+	$powerstatus = $eqLogic->getCmd('info', 'Powerstatus');
+	if (is_object($powerstatus)) {
+		$powervalue = $powerstatus->execCmd();
+	}
+	if ($powervalue == 1){
+		$power = '<span class="label label-success" style="font-size : 1em;" title="{{Présent}}"><i class="fa fa-check"></i></span>';
+	} else {
+		$power = '<span class="label label-danger" style="font-size : 1em;" title="{{Absent}}"><i class="fa fa-times"></i></span>';
+	}
+	echo '<td>' . $power . '</td>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('createtime') . '</span></td></tr>';
 }
 ?>
 	</tbody>
 </table>
+
