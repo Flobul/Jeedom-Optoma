@@ -46,6 +46,7 @@ foreach ($eqLogics as $eqLogic) {
 	echo '<td>' . $status . '</td>';
 
 	$powerstatuscmd = $eqLogic->getCmd('info', 'Powerstatus');
+		log::add('Optoma', 'debug', 'Power = ' . $powerstatuscmd);
 	$Powerstatus = '';
 	if (is_object($powerstatuscmd)) {
 		$Powerstatus = $powerstatuscmd->execCmd();
