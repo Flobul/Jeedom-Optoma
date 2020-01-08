@@ -28,6 +28,7 @@ $eqLogics = Optoma::byType('Optoma');
 			<th>{{ID}}</th>
 			<th>{{IP}}</th>
 			<th>{{Statut}}</th>
+			<th>{{Powerstatus}}</th>
 			<th>{{Dernière communication}}</th>
 			<th>{{Date création}}</th>
 		</tr>
@@ -43,6 +44,7 @@ foreach ($eqLogics as $eqLogic) {
 		$status = '<span class="label label-danger" style="font-size : 1em; cursor : default;">{{NOK}}</span>';
 	}
 	echo '<td>' . $status . '</td>';
+	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('Powerstatus') . '</span></td></tr>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
 	echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('createtime') . '</span></td></tr>';
 }
