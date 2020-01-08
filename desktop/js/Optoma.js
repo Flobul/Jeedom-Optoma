@@ -315,3 +315,8 @@ $('body').on('Optoma::includeDevice', function (_event,_options) {
     }
   }
 });
+
+$('#bt_healthoptoma').on('click', function () {
+  $('#md_modal').dialog({title: "{{Santé Optoma}}"});
+  $('#md_modal').load('index.php?v=d&plugin=optoma&modal=health').dialog('open');
+});
