@@ -18,7 +18,7 @@
 if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
 }
-$eqLogics = optoma::byType('Optoma');
+$eqLogics = Optoma::byType('Optoma');
 ?>
 
 <table class="table table-condensed tablesorter" id="table_healthoptoma">
