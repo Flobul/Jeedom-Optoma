@@ -187,7 +187,7 @@ function searchCGILink() {
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '" style="margin-top : -5px;width : 50%; display : inline-block;" ></span>';
 		tr += '</td>';
 		tr += '<td>';
-		tr += '<input class="cmdAttr" id="'+ _cmd.id +'value" style="width : 200px; font-style: italic;" readonly="true" value="">';
+		tr += '<input readonly class="cmdAttr" id="'+ _cmd.id +'value" style="width : 200px; font-style: italic; ">';
 		$('#'+_cmd.id +'value').val("loading");
 		jeedom.cmd.execute({
 			id: _cmd.id,
