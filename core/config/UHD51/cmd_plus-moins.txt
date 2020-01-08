@@ -1,3 +1,6 @@
+/*Commands listed here can be found on Optoma web site : https://www.optoma.fr/product-details/uhd51#downloads
+Download PDF : https://www.optoma.fr/ContentStorage/Documents/286c27f6-93f7-4274-acf9-67b225f99e34.pdf
+*/
 {
 	"Volume(Audio)": {
 					"vol1":"-",
@@ -18,12 +21,12 @@
 					"contrast1":"-",
 					"contrast2":"contrast2",
 					"range":"-50,50"
-    },
+	},
 	"Sharpness": {
 					"Sharp1":"-",
 					"Sharp2":"Sharp2",
 					"range":"1,15"
-    },
+	},
 	"Phase": {
 					"Phase1":"-",
 					"Phase2":"Phase2",
@@ -33,7 +36,7 @@
 					"brill1":"-",
 					"brill2":"brill2",
 					"range":"0,10"
-    },
+	},
 	"Zoom Value": {
 					"zoom1":"-",
 					"zoom2":"zoom2",
