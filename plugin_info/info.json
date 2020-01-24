@@ -10,8 +10,8 @@
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 0,
-	"changelog" : "https://github.com/Flobul/Jeedom-Optoma/blob/master/docs/fr_FR/changelog.md",
-	"documentation" : "https://github.com/Flobul/Jeedom-Optoma/blob/master/docs/fr_FR/index.md",
+	"changelog" : "https://flobul.github.io/Jeedom-Optoma/fr_FR/changelog",
+	"documentation" : "https://flobul.github.io/Jeedom-Optoma/fr_FR/",
 	"language" : ["fr_FR","en_US","sp_SP"],
 	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile"]
 }
