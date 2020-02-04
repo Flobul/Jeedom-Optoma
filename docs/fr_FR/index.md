@@ -1,54 +1,52 @@
-Plugin Optoma
+Optoma plugin
 =============
 
 ![Logo plugin](../assets/images/Optoma_icon.png "Logo plugin")
 
-Plugin pour commander les vidéoprojecteurs Optoma via Jeedom.
+This plugin control Optoma videoprojectors by using Jeedom.
 
-> **Note**  
-> Ce plugin exploite la page web du vidéoprojecteur.
+> ** Note **
+> This plugin uses embedded web page of the videoprojector.
 
+** Functionality: **
 
-**Fonctionnalités :**
+- Turn on / turn off,
+- Display the input source, display mode, aspect ratio, brightness mode, 3D mode,
 
-- Allumer / éteindre,
-- Affichage de l'éntrée exploitée,
-- Affichage du nombre d'heures d'utilisation de la lampe,
-
-**Modèles compatibles**
+** Compatibility **
 - UHD51
-- Probablement d'autres modèles Optoma
+- maybe some other models
 
 Dashboard
 =========
 
-![Visuel du dashboard](../assets/images/Dashboard.png "Visuel du dashboard")
+![Dashboard visual](../assets/images/Dashboard.png "Dashboard")
 
-Configuration du plugin
+Configuration plugin
 =======================
 
-Après téléchargement du plugin, activer le plugin.
+First download the plugin, then activate it.
 
-Configuration des équipements
+Equipment configuration
 =============================
 
-La configuration des équipements est accessible à partir du menu *Plugins > Multimedia > Optoma Video Projecteur*.
+Equipment configuration is accessible by Menu *Plugins> Multimedia> Optoma Video Projector*.
 
-### Onglet Equipement:
+### Equipment Tab:
 
--   **Nom du VidéoProjecteur** : nom de votre équipement (ex UHD51),
--   **Objet parent** : indique l’objet parent auquel appartient l’équipement,
--   **Catégorie** : les catégories de l’équipement (il peut appartenir à plusieurs catégories),
--   **Activer** : permet de rendre votre équipement actif,
--   **Visible** : rend votre équipement visible sur le dashboard,
--   **Adresse IP** : Adresse IP du vidéoprojecteur.
--   **Identifiant** : Identifiant pour se connecter au vidéoprojecteur
--   **Mot de passe** : Mot de passe associé à l'identifiant
+- **VideoProjector name**: name of your equipment (ex UHD51),
+- **Parent object**: indicates the parent object to which the equipment belongs,
+- **Category**: the categories of the equipment (it can belong to several categories),
+- **Enable**: to make your equipment active,
+- **Visible**: makes your equipment visible on the dashboard,
+- **IP Address**: IP address of the projector.
+- **Login**: Login to connect to the projector (guest)
+- **Password**: Password associated with the login
 
-### Onglet Commandes
+### Tab Orders
 
-Les commandes de bases sont générées automatiquement 
+Base commands are automatically created
 
-### Liste des versions
+### Changelog
 
-*[Voir la liste des versions](changelog.md)*
+*[See changelog](changelog.md) *
