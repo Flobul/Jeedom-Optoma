@@ -4,14 +4,14 @@
 	"description" : "Plugin pour piloter les videoprojecteurs Optoma",
 	"licence" : "AGPL",
 	"author" : "Flobul",
-	"require" : "3.0",
+	"require" : "4.0",
 	"version" : "1.0",
 	"category" : "multimedia",
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 0,
-	"changelog" : "https://flobul.github.io/Jeedom-Optoma/fr_FR/changelog",
-	"documentation" : "https://flobul.github.io/Jeedom-Optoma/fr_FR/",
+	"changelog" : "https://flobul.github.io/Jeedom-Optoma/#language#/changelog",
+	"documentation" : "https://flobul.github.io/Jeedom-Optoma/#language#/",
 	"language" : ["fr_FR","en_US","sp_SP"],
 	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile"]
 }
