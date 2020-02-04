@@ -12,27 +12,6 @@ if ($state == 1) {
 }
 ?>
 <div class="row row-overflow">
-  <div class="col-lg-2 col-sm-3 col-sm-4">
-    <div class="bs-sidebar">
-      <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
-        <?php
-        if ($state == 1) {
-          echo ' <a class="btn btn-success tooltips changeIncludeState" title="{{Inclure périphérique Optoma}}" data-state="0" style="width : 100%;margin-bottom : 5px;"><i class="fas fa-sign-in-alt fa-rotate-90"></i> {{Arrêter inclusion}}</a>';
-        } else {
-          echo ' <a class="btn btn-default tooltips changeIncludeState" title="{{Inclure périphérique Optoma}}" data-state="1" style="width : 100%;margin-bottom : 5px;"><i class="fas fa-sign-in-alt fa-rotate-90"></i> {{Mode inclusion}}</a>';
-        }
-        ?>
-        <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
-        <?php
-        foreach ($eqLogics as $eqLogic) {
-          echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
-        }
-        ?>
-      </ul>
-    </div>
-  </div>
-
-
 	<div class="col-lg-10 col-md-9 col-sm-8 eqLogicThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
 		<legend><i class="fa fa-cog"></i>  {{Gestion}}
 									<sup>
