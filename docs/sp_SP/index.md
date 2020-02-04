@@ -1,54 +1,54 @@
-Plugin AcerVP
+Complemento Optoma
 =============
 
-![Logo plugin](../assets/images/AcerVP_icon.png "Logo plugin")
+![Complemento de logotipo](../assets/images/Optoma_icon.png "Complemento de logotipo")
 
-Plugin para controlar proyectores Acer a través de Jeedom.
+Complemento para controlar los proyectores Optoma a través de Jeedom.
 
-> ** Nota **
-> Este plugin explota la interfaz web integrada del proyector de video.
+> **Nota**
+> Este complemento opera la página web del proyector de video.
 
 
-** Características: **
+**Características:**
 
 - Encender / apagar,
-- Visualización de la entrada mostrada,
-- Visualización del uso en horas de la lámpara,
+- Visualización de la entrada utilizada,
+- Visualización de la cantidad de horas que se ha utilizado la lámpara,
 
-** Modelos compatibles **
-- Acer M550
-- Probablemente otros modelos Acer.
+**Modelos compatibles**
+- UHD51
+- Probablemente otros modelos Optoma
 
 Dashboard
 =========
 
-![Panel de control visual](../assets/images/Dashboard.png "Panel de control visual")
+![Panel visual](../assets/images/Dashboard.png "Panel visual")
 
-Configuración de plugin
+Configuración del complemento
 =======================
 
-Después de descargar el plugin, active el plugin.
+Después de descargar el complemento, actívelo.
 
 Configuración del equipo
-========================
+=============================
 
-Se puede acceder a la configuración del equipo desde el menú * Plugins > Multimedia > Acer Video Projecteur *.
+Se puede acceder a la configuración del equipo desde el menú *Complementos> Multimedia> Optoma Video Projector*.
 
-### pestaña Equipo:
+### Pestaña Equipo:
 
-- ** Nombre del VideoProjector **: nombre de su equipo (ex M550),
-- ** Objeto padre **: indica el objeto padre al que pertenece el equipo,
-- ** Categoría **: las categorías del equipo (puede pertenecer a varias categorías),
-- ** Habilitar **: para activar su equipo,
-- ** Visible **: hace que su equipo sea visible en el tablero,
-- ** Dirección IP **: dirección IP del proyector.
-- ** Login **: usario para conectarse al proyector (guest)
-- ** Contraseña **: Contraseña asociada con el usario
+- **Nombre del VideoProjector**: nombre de su equipo (ex UHD51),
+- **Objeto padre**: indica el objeto padre al que pertenece el equipo,
+- **Categoría**: las categorías del equipo (puede pertenecer a varias categorías),
+- **Activar**: activa su equipo,
+- **Visible**: hace que su equipo sea visible en el tablero,
+- **Dirección IP**: dirección IP del video proyector.
+- **Identificador**: Identificador para conectar al proyector de video
+- **Contraseña**: Contraseña asociada con el identificador
 
-### Pestaña Pedidos
+### Pestaña de comandos
 
 Los comandos básicos se generan automáticamente.
 
 ### Lista de versiones
 
-*[Ver la lista de versiones](changelog.md)*
+*[Ver lista de versiones](changelog.md) *
