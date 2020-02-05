@@ -14,10 +14,10 @@ if ($state == 1) {
 <div class="row row-overflow">
 	<div class="col-lg-10 col-md-9 col-sm-8 eqLogicThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
 		<legend><i class="fa fa-cog"></i>  {{Gestion}}
-									<sup>
-										<i class="fa fa-question-circle tooltips" title="Pour utiliser le mode inclusion, il faut au préalable avoir activé la fonction AMX Device Discovery sur votre vidéoprojecteur."
-                                      style="font-size : 1em;color:grey;"></i>
-									</sup></legend>
+			<sup>
+				<i class="fa fa-question-circle tooltips" title="Pour utiliser le mode inclusion, il faut au préalable avoir activé la fonction AMX Device Discovery sur votre vidéoprojecteur."
+					style="font-size : 1em;color:grey;"></i>
+			</sup></legend>
 		<div class="eqLogicThumbnailContainer">
                 <?php
       if ($state == 1) {
@@ -45,13 +45,13 @@ if ($state == 1) {
 				<i class="fa fa-wrench" style="font-size : 6em;color:#767676;"></i>
 				<br>
 				<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676">{{Configuration}}</span>
-            		</div>
-            	<div class="cursor" id="bt_healthoptoma" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
-              <center>
-                <i class="fas fa-medkit" style="font-size : 3em;color:#767676;"></i>
-              </center>
-              <span style="font-size : 1.1em;position:relative; top : 11px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Santé}}</center></span>
-            </div>
+			</div>
+			<div class="cursor" id="bt_healthoptoma" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
+			<center>
+				<i class="fas fa-medkit" style="font-size : 3em;color:#767676;"></i>
+			</center>
+				<span style="font-size : 1.1em;position:relative; top : 11px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Santé}}</center></span>
+			</div>
 		</div>
 		<legend><i class="fa fa-table"></i> {{Mes VidéoProjecteurs}}</legend>
 		<div class="eqLogicThumbnailContainer">
@@ -188,44 +188,45 @@ sans rafraîchissement des données." style="font-size : 1em;color:grey;"></i>
 Assurez-vous que le protocole est activé sur votre vidéoprojecteur.
 Requête CGI est le mode préférentiel." style="font-size : 1.5em;color:grey;"></i>
 								</sup>
-                                  </label>
+							</label>
 							<div class="col-sm-6">
-                            	<div>
-                                    <label class="radio-inline"><input type="radio" name="config" class="eqLogicAttr" data-l1key="configuration" data-l2key="askCGI" />{{Requête CGI (recommandée)}}
+							<div>
+							<label class="radio-inline"><input type="radio" name="config" class="eqLogicAttr" data-l1key="configuration" data-l2key="askCGI" />{{Requête CGI (recommandée)}}
 								<sup>
 										<i class="fa fa-question-circle tooltips" title="Nécessite l'activation du HTTP sur le vidéoprojecteur.
 (récupération des informations et commandes)" style="font-size : 1.5em;color:grey;"></i>
 								</sup>
-                                  </label>
-                                </div>
-                            	<div>
-                                	<label class="radio-inline"><input type="radio" name="config" class="eqLogicAttr" data-l1key="configuration" data-l2key="askTelnet" />{{Telnet}}
+							</label>
+							</div>
+							<div>
+							<label class="radio-inline"><input type="radio" name="config" class="eqLogicAttr" data-l1key="configuration" data-l2key="askTelnet" />{{Telnet}}
 								<sup>
 										<i class="fa fa-question-circle tooltips" title="Nécessite l'activation du Telnet sur le vidéoprojecteur.
 (récupération des informations et commandes)" style="font-size : 1.5em;color:grey;"></i>
 								</sup>
-                                  </label>
-                                </div>
-                            	<div>
-                                    <label class="radio-inline"><input type="radio" name="config" class="eqLogicAttr" data-l1key="configuration" data-l2key="askPJLink" />{{PJLink}}
+							</label>
+							</div>
+							<div>
+							<label class="radio-inline"><input type="radio" name="config" class="eqLogicAttr" data-l1key="configuration" data-l2key="askPJLink" />{{PJLink}}
 								<sup>
 										<i class="fa fa-question-circle tooltips" title="Nécessite l'activation de PJ Link sur le vidéoprojecteur.
 (récupération des informations et commandes)" style="font-size : 1.5em;color:grey;"></i>
 								</sup>
-                                  </label>
-                                </div>
+							</label>
+							</div>
 							</div>
 								<label class="col-sm-6 control-label" >{{Intervalle de rafraîchissement des informations}}
 								<sup>
 										<i class="fa fa-question-circle tooltips" title="Récupération des informations par envoi de la commande 'Refresh' à intervalle choisi.
 La commande est envoyée toutes les minutes, 5 minutes, 15 minutes, 30 minutes..." style="font-size : 1.5em;color:grey;"></i>
 								</sup>
-                                  </label>
+							</label>
 								<div class="col-sm-3 input-group">
 									<select class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="RepeatCmd">
 										<option value="">{{Non}}</option>
 										<option value="cron">{{Toutes les minutes}}</option>
 										<option value="cron5">{{Toutes les 5 minutes}}</option>
+										<option value="cron10">{{Toutes les 10 minutes}}</option>
 										<option value="cron15">{{Toutes les 15 minutes}}</option>
 										<option value="cron30">{{Toutes les 30 minutes}}</option>
 										<option value="cronHourly">{{Toutes les heures}}</option>
@@ -241,7 +242,7 @@ La commande est envoyée toutes les minutes, 5 minutes, 15 minutes, 30 minutes..
 					<thead>
 						<tr>
 							<th style="width: 300px;">{{Nom}}</th>
-                            <th style="width: 220px;">{{Type}}</th>
+							<th style="width: 220px;">{{Type}}</th>
 							<th>{{Valeur}}</th>
 							<th style="width: 200px;">{{Paramètres}}</th>
 							<th style="width: 90px;">{{Action}}</th>

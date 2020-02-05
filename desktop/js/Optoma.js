@@ -289,7 +289,7 @@ $('.changeIncludeState').on('click', function () {
 				$('.changeIncludeState').attr('data-state', 0);
 				$('.changeIncludeState.card').css('background-color','#8000FF');
 				$('.changeIncludeState.card span center').text('{{Arrêter l\'inclusion}}');
-				$('.changeIncludeState:not(.card)').html('<i class="fa fa-sign-in fa-rotate-90"></i> {{Arreter inclusion}}');
+				$('.changeIncludeState:not(.card)').html('<i class="fa fa-sign-in fa-rotate-90"></i> {{Arrêter l\'inclusion}}');
 				$('#div_inclusionAlert').showAlert({message: '{{Vous êtes en mode inclusion. Cliquez à nouveau sur le bouton d\'inclusion pour sortir de ce mode}}', level: 'warning'});
 			} else {
 				$.hideAlert();

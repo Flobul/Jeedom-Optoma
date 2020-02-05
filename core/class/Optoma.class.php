@@ -26,7 +26,7 @@ class Optoma extends eqLogic {
     /*     * ***********************Methode static*************************** */
 
 	public static function cron() {
-		foreach(eqLogic::byType('Optoma') as $Optoma){		
+		foreach(eqLogic::byType('Optoma') as $Optoma){
 			if($Optoma->getIsEnable()){
 				if ($Optoma->getConfiguration('RepeatCmd') == "cron") {
 					$cmd = $Optoma->getCmd(null, 'Refresh');
@@ -38,9 +38,9 @@ class Optoma extends eqLogic {
 			}
 		}
 	}
-  
+
   	public static function cron5() {
-		foreach(eqLogic::byType('Optoma') as $Optoma){		
+		foreach(eqLogic::byType('Optoma') as $Optoma){
 			if($Optoma->getIsEnable()){
 				if ($Optoma->getConfiguration('RepeatCmd') == "cron5"){
                    $cmd = $Optoma->getCmd(null, 'Refresh');
@@ -52,9 +52,23 @@ class Optoma extends eqLogic {
 			}
 		}
 	}
-  
+
+	public static function cron10() {
+	foreach(eqLogic::byType('Optoma') as $Optoma){
+		if($Optoma->getIsEnable()){
+			if ($Optoma->getConfiguration('RepeatCmd') == "cron10"){
+								 $cmd = $Optoma->getCmd(null, 'Refresh');
+								 if (!is_object($cmd)) {
+									 continue;
+								 }
+								 $cmd->execCmd();
+			}
+		}
+	}
+}
+
   	public static function cron15() {
-		foreach(eqLogic::byType('Optoma') as $Optoma){		
+		foreach(eqLogic::byType('Optoma') as $Optoma){
 			if($Optoma->getIsEnable()){
 				if ($Optoma->getConfiguration('RepeatCmd') == "cron15"){
                    $cmd = $Optoma->getCmd(null, 'Refresh');
@@ -68,7 +82,7 @@ class Optoma extends eqLogic {
 	}
 
   	public static function cron30() {
-		foreach(eqLogic::byType('Optoma') as $Optoma){		
+		foreach(eqLogic::byType('Optoma') as $Optoma){
 			if($Optoma->getIsEnable()){
 				if ($Optoma->getConfiguration('RepeatCmd') == "cron30"){
                    $cmd = $Optoma->getCmd(null, 'Refresh');
@@ -80,9 +94,9 @@ class Optoma extends eqLogic {
 			}
 		}
 	}
-  
+
 	public static function cronHourly() {
-		foreach(eqLogic::byType('Optoma') as $Optoma){		
+		foreach(eqLogic::byType('Optoma') as $Optoma){
 			if($Optoma->getIsEnable()){
 				if ($Optoma->getConfiguration('RepeatCmd') == "cronHourly"){
                    $cmd = $Optoma->getCmd(null, 'Refresh');
@@ -114,13 +128,13 @@ class Optoma extends eqLogic {
 
     public function preSave() {
 
-    }        
-    
+    }
+
     public function preUpdate() {
 		if (empty($this->getConfiguration('AdrIP'))) {
 			throw new Exception(__('L\'adresse IP ne peut pas être vide',__FILE__));
 		}
-      
+
 		if ($this->getConfiguration('askCGI') == 0 && $this->getConfiguration('askTelnet') == 0 && $this->getConfiguration('askPJLink') == 0) {
 			throw new Exception(__('Le protocole de contrôle ne peut pas être vide',__FILE__));
 		}
@@ -138,7 +152,7 @@ class Optoma extends eqLogic {
     public function postUpdate() {
 		if ( $this->getIsEnable() ){
 			log::add('Optoma', 'debug', 'Création des commandes dans le postUpdate');
-			// Information Power On/Off 
+			// Information Power On/Off
 			$info = $this->getCmd(null, 'Powerstatus');
 			if (!is_object($info)) {
 				$info = new OptomaCmd();
@@ -151,7 +165,7 @@ class Optoma extends eqLogic {
 				$info->setIsVisible(1);
 				$info->save();
             }
-			// Commande Mise sous tension (Power On) 
+			// Commande Mise sous tension (Power On)
 			$cmd = $this->getCmd(null, 'Power On');
 			if (!is_object($cmd)) {
 				$cmd = new OptomaCmd();
@@ -169,7 +183,7 @@ class Optoma extends eqLogic {
                 $cmd->setDisplay('showNameOnview','0');
                 $cmd->save();
             }
-			// Commande Mise hors tension (Power Off) 
+			// Commande Mise hors tension (Power Off)
 			$cmd = $this->getCmd(null, 'Power Off');
 			if (!is_object($cmd)) {
 				$cmd = new OptomaCmd();
@@ -345,7 +359,7 @@ class Optoma extends eqLogic {
 				$info->setSubType('binary');
         		$info->setIsVisible(0);
 				$info->save();
-            }        
+            }
             // Information Mute
 			$info = $this->getCmd(null, 'Mute');
 			if (!is_object($info)) {
@@ -747,7 +761,7 @@ class Optoma extends eqLogic {
                 $info->setIsVisible(1);
                 $info->save();
       		}
-      		// Commande Refresh 
+      		// Commande Refresh
       		$cmd = $this->getCmd(null, 'Refresh');
       		if ( ! is_object($cmd)) {
 				$cmd = new OptomaCmd();
@@ -759,18 +773,18 @@ class Optoma extends eqLogic {
 				$cmd->setOrder(49);
         		$cmd->setIsVisible(1);
 				$cmd->save();
-      		}      
+      		}
 		}
     }
 
     public function preRemove() {
-        
+
     }
 
     public function postRemove() {
-        
+
     }
-    
+
     public function call_vdp( $cmd ) {
 		static $VPcontrol = array();
     	static $VPstate;
@@ -779,11 +793,11 @@ class Optoma extends eqLogic {
 		$URL_action_login = 'http://' . $this->getConfiguration('AdrIP') . '/Info.asp';
 		$URL_control = 'http://' . $this->getConfiguration('AdrIP') . '/control.asp';
 		$URL_CGI = $this->getConfiguration('ControlCGI');
-      
+
 		switch ($cmd){
-            
+
 		case 'Refresh':
-		
+
 			log::add('Optoma', 'debug', 'Lancement commande Refresh');
             $methodCGI = $this->getConfiguration('askCGI');
             $methodTelnet = $this->getConfiguration('askTelnet');
@@ -795,13 +809,13 @@ class Optoma extends eqLogic {
 					$this->checkAndUpdateCmd($key, $value);
 				}
             }
-            
+
             if ($methodTelnet == 1) {
-              
+
             }
-            
+
             if ($methodPJLink == 1) {
-              
+
             }
           default:
             $cmd_action = self::devicesParameters('cmd_button.json');
@@ -832,7 +846,7 @@ class Optoma extends eqLogic {
             }
 		}
 	}
-  
+
 	public static function amxDeviceDiscovery($_state) {
 		log::add('Optoma', 'error', "Lancement du mode inclusion.");
 		if ($_state == 1) {
@@ -865,7 +879,7 @@ class Optoma extends eqLogic {
 			log::add('Optoma', 'debug', 'Fin manuelle de l\'inclusion');
         }
 	}
-  
+
   	public static function DecodeAMXMessage($remote_ip,$buf){
         foreach(explode('<-',str_replace('>','',$buf)) as $param){
                 $Make=explode('=',$param);
@@ -892,12 +906,12 @@ class Optoma extends eqLogic {
 			Optoma::AddEquipement($Type." ".$Model,$UUID,$remote_ip);
         }
    	}
-  
+
   public static function AddEquipement($Name,$_logicalId,$AdrIP){
 		foreach(self::byLogicalId($_logicalId, 'Optoma',true) as $Equipement){
           		if (is_object($Equipement) && $Equipement->getConfiguration('AdrIP') == $AdrIP) {
           		return $Equipement;
-			} 
+			}
 		}
     	$ControlCGI = Optoma::searchCGILink($AdrIP);
 		if (isset($ControlCGI)) {
@@ -920,7 +934,7 @@ class Optoma extends eqLogic {
 		event::add('Optoma::includeDevice', $Equipement->getId());
 		return $Equipement;
 	}
-  
+
 	public static function searchCGILink($URL) {
 		if (isset($URL)) {
 			$AdrIP = $URL;
@@ -953,7 +967,7 @@ class Optoma extends eqLogic {
 			log::add('Optoma', 'debug', 'Lien trouvé : '. $URL_cgi);
 			return $URL_cgi;
 	}
-   
+
 	public static function getCGI($URL_CGI) {
 		static $source = array("Powerstatus" => "pw","Source" => "a","Display Mode" => "b",
                         "Brightness" => "c","Contrast" => "d","Sharpness" => "f","Projection" => "t",
@@ -1013,7 +1027,7 @@ class Optoma extends eqLogic {
 		foreach( $source as $cle => $valeur ){
 			if (is_array($option[$cle])) {
 				foreach( $option[$cle] as $key => $value ){
-					if (str_replace('"', '',$donnee[$cle]) == $key) 
+					if (str_replace('"', '',$donnee[$cle]) == $key)
 						$donnee[$cle] = $value;
 					}
 				}
