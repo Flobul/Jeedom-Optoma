@@ -22,6 +22,7 @@
         "Catégorie": "Category",
         "Activer": "Activate",
         "Visible": "Visible",
+        "Paramètres du vidéoprojecteur": "Beamer settings",
         "Adresse IP": "IP Address",
         "Accès à la page web": "Access to the web page",
         "Interface web Optoma": "Optoma web Interface",
@@ -46,29 +47,29 @@
         "Paramètres": "Settings",
         "Action": "Action"
     },
-    "plugins\/Optoma\/desktop\/modal\/health.js": {
+    "plugins\/Optoma\/desktop\/modal\/health.php": {
       "Module": "Module",
       "ID": "ID",
       "IP": "IP",
       "Status": "Status",
       "Powerstatus": "Powerstatus",
       "Dernière communication": "Last communication",
-      "Date de création": "Creation date",
+      "Date création": "Creation date",
       "Présent": "Present",
       "Absent": "Absent"
     },
     "plugins\/Optoma\/core\/class\/Optoma.class.php": {
-      "L\'adresse IP ne peut pas être vide": "The IP address cannot be empty",
+      "L\\'adresse IP ne peut pas être vide": "The IP address cannot be empty",
       "Le protocole de contrôle ne peut pas être vide": "The control protocol cannot be empty",
       "Le lien CGI ne peut pas être vide": "The CGI link cannot be empty",
       "Le format du lien CGI est incorrect": "The CGI Link format is incorrect"
     },
     "plugins\/Optoma\/desktop\/modal\/web.php": {
-        "L\'adresse IP Optoma ne peut être vide : ": "The IP address cannot be empty :"
+        "L\\'adresse IP Optoma ne peut être vide : ": "The IP address cannot be empty :"
     },
     "plugins\/Optoma\/desktop\/js\/Optoma.js": {
         "Interface Optoma": "Optoma Interface",
-        "Voulez-vous écraser l\'adresse IP actuelle ?": "Do you want to overwrite the actual IP Address?",
+        "Voulez-vous écraser l\\'adresse IP actuelle ?": "Do you want to overwrite the actual IP Address?",
         "Recherche du lien CGI en cours. (environ 15 secondes)": "Searching for CGI Link. (about 15 secondes)",
         "Voulez-vous écraser le lien actuel ?": "Do you want to overwrite the actual lien?",
         "Lien identique.": "Same link.",
@@ -76,10 +77,10 @@
         "Afficher": "Display",
         "Historiser": "Historize",
         "Tester": "Test",
-        "Arrêter l\'inclusion": "Stop inclusion",
-        "Vous êtes en mode inclusion. Cliquez à nouveau sur le bouton d\'inclusion pour sortir de ce mode": "You are in inclusion mode. Click again to exit mode",
+        "Arrêter l\\'inclusion": "Stop inclusion",
+        "Vous êtes en mode inclusion. Cliquez à nouveau sur le bouton d\\'inclusion pour sortir de ce mode": "You are in inclusion mode. Click again to exit mode",
         "Mode inclusion": "Mode inclusion",
-        "Un périphérique vient d\'être inclu/exclu. Veuillez réactualiser la page": "A device has just been included/excluded. Please reload the page",
+        "Un périphérique vient d\\'être inclu/exclu. Veuillez réactualiser la page": "A device has just been included/excluded. Please reload the page",
         "Santé Optoma": "Optoma Health"
     }
 }

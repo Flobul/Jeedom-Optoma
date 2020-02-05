@@ -133,7 +133,7 @@ if ($state == 1) {
 				</div>
 				<div class="col-sm-6">
 					<form class="form-horizontal">
-						<legend>Paramètres du vidéoprojecteur
+						<legend>{{Paramètres du vidéoprojecteur}}
 									<sup>
 										<i class="fa fa-question-circle tooltips" title="Entrez tous les paramètres demandés.
 Ils ne sont à saisir qu'une seule fois." style="font-size : 1em;color:grey;"></i>
