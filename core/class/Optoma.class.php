@@ -376,6 +376,8 @@ class OptomaCmd extends cmd
                           Optoma::testCurl("link_admin.htm");
                           log::add('Optoma', 'debug', "## TEST PAGE control.htm = ");
                           Optoma::testCurl("control.htm");
+                          log::add('Optoma', 'debug', "## TEST PAGE control.js = ");
+                          Optoma::testCurl("control.js");
                           log::add('Optoma', 'debug', "## TEST PAGE tgi/control.tgi = ");
                           Optoma::testCurl("tgi/control.tgi");
                       }
