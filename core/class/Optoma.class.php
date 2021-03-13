@@ -178,11 +178,11 @@ class Optoma extends eqLogic
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-  CURLOPT_URL => 'http://192.168.0.138/'.$_url,
+  CURLOPT_URL => 'http://192.168.1.47/'.$_url,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
+  CURLOPT_TIMEOUT => 5,
   CURLOPT_FOLLOWLOCATION => true,
   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
   CURLOPT_CUSTOMREQUEST => 'GET',
