@@ -1,0 +1,1169 @@
+{
+   "commands":[
+      {
+         "name":"Powerstatus",
+         "logicalId":"Powerstatus",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":1,
+         "isHistorized":1,
+         "generic_type":"ENERGY_STATE",
+         "template":{
+            "dashboard":"core::prise",
+            "mobile":"core::prise"
+         }
+      },
+      {
+         "name":"Power On",
+         "logicalId":"Power On::btn_powon",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Powerstatus"
+         }
+      {
+         "name":"Power Off",
+         "logicalId":"Power Off::btn_powoff",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Powerstatus"
+         }
+      },
+      {
+         "name":"Brightness",
+         "logicalId":"Brightness",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":-50,
+            "maxValue":50
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Brightness -",
+         "logicalId":"bright1::-",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Brightness"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Brightness +",
+         "logicalId":"bright2::+",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Brightness"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Set Brightness",
+         "logicalId":"bright::",
+         "type":"action",
+         "subtype":"slider",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Brightness",
+            "minValue":-50,
+            "maxValue":50
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Contrast",
+         "logicalId":"Contrast",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":-50,
+            "maxValue":50
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Contrast -",
+         "logicalId":"contrast1::-",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Contrast"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Contrast +",
+         "logicalId":"contrast2::+",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Contrast"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Set Contrast",
+         "logicalId":"contrast::",
+         "type":"action",
+         "subtype":"slider",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Contrast",
+            "minValue":-50,
+            "maxValue":50
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Sharpness",
+         "logicalId":"Sharpness",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":-50,
+            "maxValue":50
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Sharpness -",
+         "logicalId":"Sharp1::-",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Sharpness"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Sharpness +",
+         "logicalId":"Sharp2::+",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Sharpness"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Set Sharpness",
+         "logicalId":"Sharp::",
+         "type":"action",
+         "subtype":"slider",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Sharpness",
+            "minValue":-50,
+            "maxValue":50
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Phase",
+         "logicalId":"Phase",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":0,
+            "maxValue":31
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Phase -",
+         "logicalId":"Phase1::-",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Phase"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Phase +",
+         "logicalId":"Phase2::+",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Phase"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Set Phase",
+         "logicalId":"Phase::",
+         "type":"action",
+         "subtype":"slider",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Phase",
+            "minValue":0,
+            "maxValue":31
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Brilliant Color",
+         "logicalId":"Brilliant Color",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":0,
+            "maxValue":10
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Brilliant Color -",
+         "logicalId":"brill1::-",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Brilliant Color"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Brilliant Color +",
+         "logicalId":"brill2::+",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Brilliant Color"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Set Brilliant Color",
+         "logicalId":"brill::",
+         "type":"action",
+         "subtype":"slider",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Brilliant Color",
+            "minValue":0,
+            "maxValue":10
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Color Space",
+         "logicalId":"Color Space",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"H. Keystone",
+         "logicalId":"H. Keystone",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":-30,
+            "maxValue":30
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"V. Keystone",
+         "logicalId":"V. Keystone",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":-30,
+            "maxValue":30
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"H.Image Shift",
+         "logicalId":"H.Image Shift",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":-100,
+            "maxValue":100
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"V.Image Shift",
+         "logicalId":"V.Image Shift",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":-100,
+            "maxValue":100
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Four Corners",
+         "logicalId":"Four Corners",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Sleep Timer",
+         "logicalId":"Sleep Timer",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":0,
+            "maxValue":10
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Projector ID",
+         "logicalId":"Projector ID",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":0,
+            "maxValue":99
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Remote Code",
+         "logicalId":"Remote Code",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":0,
+            "maxValue":99
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Refresh",
+         "logicalId":"Refresh",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Reset",
+         "logicalId":"Reset::reset",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "command":"reset"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Resync",
+         "logicalId":"Resync::resync",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "command":"resync"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Logo Capture",
+         "logicalId":"Logo Capture::logocapture",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"AV Mute",
+         "logicalId":"AV Mute",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set AV Mute",
+         "logicalId":"AV Mute::avmute",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "command":"avmute",
+            "cmdInfo":"AV Mute"
+         },
+         "generic_type":"MEDIA_MUTE"
+      },
+      {
+         "name":"Freeze",
+         "logicalId":"Freeze",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Freeze",
+         "logicalId":"Freeze::freeze",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Freeze"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Information Hide",
+         "logicalId":"Information Hide",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Information Hide",
+         "logicalId":"Information Hide::infohide",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Information Hide"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"High Altitude",
+         "logicalId":"High Altitude",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set High Altitude",
+         "logicalId":"High Altitude::altitude",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"High Altitude"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Keypad Lock",
+         "logicalId":"Keypad Lock",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Keypad Lock",
+         "logicalId":"Keypad Lock::keypad",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Keypad Lock"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Display Mode Lock",
+         "logicalId":"Display Mode Lock",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Display Mode Lock",
+         "logicalId":"Display Mode Lock::dismdlocked",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Display Mode Lock"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Direct Power On",
+         "logicalId":"Direct Power On",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Direct Power On",
+         "logicalId":"Direct Power On::directpwon",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Direct Power On"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"3D Sync. Invert",
+         "logicalId":"3D Sync. Invert",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set 3D Sync. Invert",
+         "logicalId":"3D Sync. Invert::3Dsync",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"3D Sync. Invert"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"3D Modet",
+         "logicalId":"3D Modet",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set 3D Modet",
+         "logicalId":"3D Mode::3Dmodet",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"3D Modet"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Internal Speaker",
+         "logicalId":"Internal Speaker",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Internal Speaker",
+         "logicalId":"Internal Speaker::speaker",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Internal Speaker"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Mute",
+         "logicalId":"Mute",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Mute",
+         "logicalId":"Mute::mute",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Mute"
+         },
+         "generic_type":"MEDIA_MUTE"
+      },
+      {
+         "name":"Dynamic Black",
+         "logicalId":"Dynamic Black",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Dynamic Black",
+         "logicalId":"Dynamic Black::dynamic",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Dynamic Black"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Volume Audio",
+         "logicalId":"Volume Audio",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":0,
+            "maxValue":10
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Volume Audio -",
+         "logicalId":"vol1::-",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Volume Audio"
+         },
+         "generic_type":"SET_VOLUME"
+      },
+      {
+         "name":"Volume Audio +",
+         "logicalId":"vol2::+",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Volume Audio"
+         },
+         "generic_type":"SET_VOLUME"
+      },
+      {
+         "name":"Set Volume Audio",
+         "logicalId":"vol::",
+         "type":"action",
+         "subtype":"slider",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Volume Audio",
+            "minValue":0,
+            "maxValue":10
+         },
+         "generic_type":"SET_VOLUME"
+      },
+      {
+         "name":"Volume Micro",
+         "logicalId":"Volume Micro",
+         "type":"info",
+         "subtype":"numeric",
+         "isVisible":0,
+         "isHistorized":0,
+         "configuration":{
+            "minValue":0,
+            "maxValue":10
+         },
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Volume Micro -",
+         "logicalId":"mic1::-",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Volume Micro"
+         },
+         "generic_type":"SET_VOLUME"
+      },
+      {
+         "name":"Volume Micro +",
+         "logicalId":"mic2::+",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Volume Micro"
+         },
+         "generic_type":"SET_VOLUME"
+      },
+      {
+         "name":"Set Volume Micro",
+         "logicalId":"mic::",
+         "type":"action",
+         "subtype":"slider",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Volume Micro",
+            "minValue":0,
+            "maxValue":10
+         },
+         "generic_type":"SET_VOLUME"
+      },
+      {
+         "name":"Audio Input",
+         "logicalId":"Audio Input",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Audio Input",
+         "logicalId":"audio::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Audio Input",
+            "listValue":"0|Default;1|Audio Input 1;2|Audio Input 2|3|Audio Input 3"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Aspect Ratio",
+         "logicalId":"Aspect Ratio",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Aspect Ratio",
+         "logicalId":"aspect0::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Aspect Ratio",
+            "listValue":"0|4:3;1|16:9;2|Native;3|Auto"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Screen Type",
+         "logicalId":"Screen Type",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Screen Type",
+         "logicalId":"screen::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Screen Type",
+            "listValue":"0|16:10;1|16:9"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Power",
+         "logicalId":"Power",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Power",
+         "logicalId":"Power::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Power",
+            "listValue":"0|100;1|95;2|90;3|85;4|80;255|Not Support"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Source",
+         "logicalId":"Source",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Source",
+         "logicalId":"source::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Source",
+            "listValue":"0|HDMI1;1|HDMI2;2|Component;3|VGA;4|Media"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Display Mode",
+         "logicalId":"Display Mode",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Display Mode",
+         "logicalId":"dismode0::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Display Mode",
+            "listValue":"0|Cinema;1|HDR;2|HDR SIM;3|Game;4|Reference;5|Bright;6|User;7|ISF Day;8|ISF Night;9|3D;10|User(3D User)"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Projection",
+         "logicalId":"Projection",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Projection",
+         "logicalId":"projection::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Projection",
+            "listValue":"0|Front-Desktop;1|Front-Ceiling;2|Rear-Desktop;3|Rear-Ceiling"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Brightness Mode",
+         "logicalId":"Brightness Mode",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Brightness Mode",
+         "logicalId":"lampmd::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Brightness Mode",
+            "listValue":"0|Bright;1|Eco"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Power Mode",
+         "logicalId":"Power Mode",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Power Mode",
+         "logicalId":"pwmode::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Power Mode",
+            "listValue":"0|Eco;1|Active"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Logo",
+         "logicalId":"Logo",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Logo",
+         "logicalId":"logo::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Logo",
+            "listValue":"0|Default;1|User;2|Neutral"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"3D-2D",
+         "logicalId":"3D-2D",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set 3D-2D",
+         "logicalId":"3dto2d::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"3D-2D",
+            "listValue":"0|3D;1|L;2|R"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Color Space",
+         "logicalId":"Color Space",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Color Space",
+         "logicalId":"colorsp0::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Color Space",
+            "listValue":"0|Auto;1|RGB(0~255);2|RGB(16~235);3|YUV(0~255);4|YUV(16~235)"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"3D Mode",
+         "logicalId":"3D Mode",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set 3D Mode",
+         "logicalId":"3dmode::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"3D Mode",
+            "listValue":"0|Off;1|DLP-Link;2|VESA 3D;3|NVIDIA 3D Vision;4|IR"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Background Color",
+         "logicalId":"Background Color",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Background Color",
+         "logicalId":"background::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Background Color",
+            "listValue":"0|Reserved;1|Blue;2|Black;3|Red;4|Green;5|White"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Wall Color",
+         "logicalId":"Wall Color",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Wall Color",
+         "logicalId":"wall::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Wall Color",
+            "listValue":"0|Off;1|Black board;2|Light Yellow;3|Light Green;4|Light Blue;5|Pink;6|Gray"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Gamma",
+         "logicalId":"Gamma",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Gamma",
+         "logicalId":"Degamma::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Gamma",
+            "listValue":"0|Film;1|Video;2|Graphics;3|Standard(2.2);4|1.8;5|2.0;6|2.4;7|3D"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"Color Temperature",
+         "logicalId":"Color Temperature",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set Color Temperature",
+         "logicalId":"colortmp::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"Color Temperature",
+            "listValue":"0|D55;1|D65;2|D75;3|D83;4|D93;5|Native"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"3D Format",
+         "logicalId":"3D Format",
+         "type":"info",
+         "subtype":"string",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Set 3D Format",
+         "logicalId":"3dformat::",
+         "type":"action",
+         "subtype":"select",
+         "isVisible":1,
+         "configuration":{
+            "cmdInfo":"3D Format",
+            "listValue":"0|Auto;1|SBS;2|Top and Bottom;4|Frame Packing"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"12V Trigger",
+         "logicalId":"12V Trigger",
+         "type":"info",
+         "subtype":"binary",
+         "isVisible":0,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"12V Trigger On",
+         "logicalId":"12V Trigger::On",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":0,
+         "configuration":{
+            "cmdInfo":"12V Trigger"
+         },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"12V Trigger Off",
+         "logicalId":"12V Trigger::Off",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":0,
+         "configuration":{
+            "cmdInfo":"12V Trigger"
+         },
+         "generic_type":"GENERIC_ACTION"
+      }
+   ]
+}

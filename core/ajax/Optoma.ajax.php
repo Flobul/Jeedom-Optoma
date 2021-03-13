@@ -35,15 +35,6 @@ try {
         ajax::success($return);
 	}
 
-	if (init('action') == 'searchCGILink') {
- 		$arr = ajax::success(Optoma::searchCGILink());
-        $return['cmd'] = array();
-        foreach ($arr as $cmd) {
-            $return['cmd'][] = $cmd;
-        }
-        ajax::success($return);
-	}
-
 	throw new Exception('Aucune methode correspondante');
 	/*     * *********Catch exeption*************** */
 } catch (Exception $e) {

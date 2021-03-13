@@ -33,27 +33,10 @@ $("#table_cmd").delegate(".listEquipementAction", 'click', function () {
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 $("#table_info").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
-
-$('.eqLogicAttr[data-l2key=askCGI]').on('click',function(){
-  $('#option_cgi').css({visibility: "visible"});
-});
-
-$('.eqLogicAttr[data-l2key=askTelnet]').on('click',function(){
-  $('#option_cgi').css({visibility: "hidden"});
-});
-
-$('.eqLogicAttr[data-l2key=askPJLink]').on('click',function(){
-  $('#option_cgi').css({visibility: "hidden"});
-});
-
 $('#bt_weboptoma').on('click', function () {
   var nodeId = $('#idipoptoma').value();
   $('#md_modal').dialog({title: "{{Interface Optoma}}"});
   $('#md_modal').load('index.php?v=d&plugin=Optoma&modal=web&ip=' + nodeId).dialog('open');
-});
-
-$('#bt_searchCGILink').on('click', function () {
-	searchCGILink();
 });
 
 function amxDeviceDiscovery(_state) {
@@ -74,24 +57,24 @@ function amxDeviceDiscovery(_state) {
 				$('#div_alert').showAlert({message: data.result, level: 'danger'});
 				return;
 			}
-			if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value() != '') {
+			if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=IP]').value() != '') {
 				bootbox.confirm('{{Voulez-vous écraser l\'adresse IP actuelle ?}}', function (result) {
 				if (result) {
-					$('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value(data.result);
+					$('.eqLogicAttr[data-l1key=configuration][data-l2key=IP]').value(data.result);
 				}
 				});
 			}
 			else {
-				$('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value(data.result);
+				$('.eqLogicAttr[data-l1key=configuration][data-l2key=IP]').value(data.result);
 			}
 		}
 	});
 }
 
 function webOptoma() {
-  		if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value() != '') {
+  		if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=IP]').value() != '') {
 			$('#div_alert').showAlert({message: '{{Recherche du lien CGI en cours. (environ 15 secondes)}}', level: 'warning'});
-			$url = $('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value();
+			$url = $('.eqLogicAttr[data-l1key=configuration][data-l2key=IP]').value();
             $.ajax({
                 type: "POST",
                 url: "plugins/Optoma/core/ajax/Optoma.ajax.php",
@@ -108,59 +91,6 @@ function webOptoma() {
             });
         }
 }
-
-function searchCGILink() {
-		$AdrIP = $('.eqLogicAttr[data-l1key=configuration][data-l2key=AdrIP]').value();
-  		$CGILink = $('.eqLogicAttr[data-l1key=configuration][data-l2key=ControlCGI]').value();
-
-  		if ($AdrIP != ''){
-			$('#div_alert').showAlert({message: '{{Recherche du lien CGI en cours. (environ 15 secondes)}}', level: 'warning'});
-            $.ajax({
-                type: "POST",
-                url: "plugins/Optoma/core/ajax/Optoma.ajax.php",
-                data: {
-                    action: "searchCGILink",
-                },
-                dataType: 'json',
-                global: false,
-                error: function (request, status, error) {
-                    handleAjaxError(request, status, error);
-                },
-                success: function (data) {
-                    if (data.state != 'ok') {
-                        $('#div_alert').showAlert({message: data.result, level: 'danger'});
-                        return;
-                    }
-					if ($CGILink != '' && $CGILink != data.result) {
-                         bootbox.confirm('{{Voulez-vous écraser le lien actuel ?}}', function (result) {
-                               if (result) {
-                                    $('.eqLogicAttr[data-l1key=configuration][data-l2key=ControlCGI]').value(data.result);
-                                    $('#div_alert').showAlert({message: 'Lien CGI écrasé ! Veuillez sauvegarder.', level: 'success'});
-                               }
-                          });
-                    }
-					else if ($CGILink == data.result) {
-						$('#div_alert').showAlert({message: '{{Lien identique.}}', level: 'warning'});
-                    }
-                  	else if ($CGILink == '') {
-                        $('.eqLogicAttr[data-l1key=configuration][data-l2key=ControlCGI]').value(data.result);
-                        $('#div_alert').showAlert({message: 'Lien CGI trouvé ! Veuillez sauvegarder.', level: 'success'});
-                    }
-					else {
-                      $('#div_alert').showAlert({message: data.result, level: 'danger'});
-                      return;
-                    }
-                }
-            });
-        }
-  		else {
-          $('#div_alert').showAlert({message: 'Merci de remplir l\'adresse IP.', level: 'danger'});
-        }
-}
-
-/*
- * Fonction pour l'ajout de commande, appellé automatiquement par plugin.Optoma
- */
 
  function addCmdToTable(_cmd) {
     if (!isset(_cmd)) {
@@ -201,8 +131,12 @@ function searchCGILink() {
 		tr += '<td>';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span></br> ';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="Min" title="Min" style="width : 30%; display : inline-block;margin-top : 5px;margin-right : 5px;" >';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="Max" title="Max" style="width : 30%; display : inline-block;margin-top : 5px;margin-right : 5px;" >';
+  if (init(_cmd.subType) == 'numeric') {
+    tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="display:inline-block;width: 50px;"></input>';
+    tr += '<input class="cmdAttr form-control input-sm" data-l1key="unite" placeholder="{{Unité}}" title="{{Unité}}" style="display:inline-block;width: 50px;"></input>';
+    tr += '<style>.select {}</style>';
+    tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max}}" title="{{Max}}" style="width: 50px;"></input>';
+  }
 		tr += '</td>';
 
 		tr += '<td>';
@@ -229,11 +163,15 @@ function searchCGILink() {
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '" style="margin-top : -5px;width : 50%; display : inline-block;" ></span>';
 		tr += '</td>';
 		tr += '<td>';
+    tr += '<select class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="updateCmdId" style="margin-top : 5px;" title="Commande d\'information à mettre à jour">';
+  tr += '<option value="">Aucune</option>';
+  tr += '</select>';
 		tr += '</td>';
 		tr += '<td>';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
-		tr += '</td>';
+  tr += '</td>';
+      tr += '</td>';
 		tr += '<td>';
     if (is_numeric(_cmd.id)) {
 		tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible tooltips" title="Configuration de la commande" data-action="configure"><i class="fa fa-cogs"></i></a> ';
@@ -255,16 +193,16 @@ function searchCGILink() {
 		jeedom.cmd.changeType($('#table_info tbody tr:last'), init(_cmd.subType));
 	}
 	if (init(_cmd.type) == 'action') {
-    var tr = $('#table_cmd tbody tr:last');
+        var tr = $('#table_cmd tbody tr:last');
 		jeedom.eqLogic.builSelectCmd({
-			id: $(".li_eqLogic.active").attr('data-eqLogic_id'),
+			id: $('.eqLogicAttr[data-l1key=id]').value(),
 			filter: {type: 'info'},
 			error: function (error) {
 				$('#div_alert').showAlert({message: error.message, level: 'danger'});
 			},
 			success: function (result) {
 				tr.find('.cmdAttr[data-l1key=value]').append(result);
-				tr.find('.cmdAttr[data-l1key=configuration][data-l2key=value]').append(result);
+		        tr.find('.cmdAttr[data-l1key=configuration][data-l2key=updateCmdId]').append(result);
 				tr.setValues(_cmd, '.cmdAttr');
 				jeedom.cmd.changeType(tr, init(_cmd.subType));
 			}
@@ -320,3 +258,90 @@ $('#bt_healthoptoma').on('click', function () {
   $('#md_modal').dialog({title: "{{Santé Optoma}}"});
   $('#md_modal').load('index.php?v=d&plugin=Optoma&modal=health').dialog('open');
 });
+
+$('#bt_documentationOptoma').off('click').on('click', function() {
+  window.open($(this).attr("data-location"), "_blank", null);
+});
+function getConfFile(_eqLogic) {
+
+  $.ajax({
+    type: "POST",
+    url: "plugins/Optoma/core/ajax/Optoma.ajax.php",
+    data: {
+      action: "getConfFile",
+      id: _eqLogic.id,
+      type: _eqLogic.configuration.type,
+    },
+    dataType: 'json',
+    global: false,
+    error: function(request, status, error) {
+      handleAjaxError(request, status, error);
+    },
+    success: function(data) {
+      $('.eqLogicAttr[data-l1key=configuration][data-l2key=fileconf]').empty();
+      if (data.result.length > 1) {
+        var option = '';
+        option += '<option value="' + data.result + '">' + data.result + '</option>';
+        $('.eqLogicAttr[data-l1key=configuration][data-l2key=fileconf]').append(option);
+        $('.eqLogicAttr[data-l1key=configuration][data-l2key=fileconf]').show();
+        if (isset(_eqLogic.configuration.fileconf)) {
+          $('.eqLogicAttr[data-l1key=configuration][data-l2key=fileconf]').value(_eqLogic.configuration.fileconf);
+        }
+      } else {
+        $('.eqLogicAttr[data-l1key=configuration][data-l2key=fileconf]').hide();
+      }
+      modifyWithoutSave = false;
+    }
+  });
+}
+
+function printEqLogic(_eqLogic) {
+  printEqLogicTab(_eqLogic); //affiche les info de l'équipement
+      $('body').setValues(_eqLogic, '.eqLogicAttr');
+      initCheckBox();
+      modifyWithoutSave = false;
+}
+
+function printEqLogicTab(_eqLogic) {
+
+  $('#table_infoseqlogic tbody').empty();
+
+  //affichage des configurations du device
+  printEqLogicHelper("{{Type}}", "type", _eqLogic);
+  printEqLogicHelper("{{Modèle}}", "model", _eqLogic);
+  printEqLogicHelper("{{Adresse MAC}}", "MAC", _eqLogic);
+  printEqLogicHelper("{{Découverte auto}}", "auto_discovery", _eqLogic);
+
+  var type = "../../plugin_info/Other";
+
+  if (isset(type) && type !== undefined) {
+    $('#img_device').attr("src", 'plugins/Optoma/core/config/img/' + type + '.png');
+  }
+  modifyWithoutSave = true;
+}
+
+function printEqLogicHelper(_label, _name, _eqLogic) {
+
+  if (isset(_eqLogic.result)) {
+    var eqLogic = _eqLogic.result;
+  } else {
+    var eqLogic = _eqLogic;
+  }
+  if (isset(eqLogic.configuration[_name])) {
+    if (eqLogic.configuration[_name] !== undefined) {
+      var trm = '<tr>';
+      trm += '	<td class="col-sm-4">';
+      trm += '		<span style="font-size : 1em;">' + _label + '</span>';
+      trm += '	</td>';
+      trm += '	<td>';
+      trm += '		<span class="label label-default" style="font-size : 1em;white-space:unset !important">';
+      trm += '			<span class="eqLogicAttr" data-l1key="configuration" data-l2key="' + _name + '">';
+      trm += '			</span>';
+      trm += '		</span>';
+      trm += '	</td>';
+      trm += '</tr>';
+      $('#table_infoseqlogic tbody').append(trm);
+      $('#table_infoseqlogic tbody tr:last').setValues(eqLogic, '.eqLogicAttr');
+    }
+  }
+}
