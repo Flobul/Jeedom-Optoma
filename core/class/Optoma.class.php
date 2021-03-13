@@ -157,7 +157,6 @@ class Optoma extends eqLogic
 			}
         }
 		if (count($link_cmds) > 0) {
-            log::add(__CLASS__, 'debug', __("Likns_cmds  : ", __FILE__) . json_encode($link_cmds));
 			foreach ($this->getCmd() as $eqLogic_cmd) {
 				foreach ($link_cmds as $cmd_id => $link_cmd) {
 					if ($link_cmd == $eqLogic_cmd->getName()) {
@@ -360,6 +359,16 @@ class OptomaCmd extends cmd
                     $value = $args[0] . "=" . $_options['select'];
                     break;
                 case 'other':
+                    if($eqLogic->getConfiguration('API') == "/tgi/control.tgi") {
+                        log::add('Optoma', 'debug', "## TEST PAGE login.htm = ");
+                        Optoma::testCurl("login.htm");
+                        log::add('Optoma', 'debug', "## TEST PAGE link_admin.htm = ");
+                        Optoma::testCurl("link_admin.htm");
+                        log::add('Optoma', 'debug', "## TEST PAGE control.htm = ");
+                        Optoma::testCurl("control.htm");
+                        log::add('Optoma', 'debug', "## TEST PAGE tgi/control.tgi = ");
+                        Optoma::testCurl("tgi/control.tgi");
+                    }
                     if($this->getLogicalId() == 'Refresh') {
                         $result_api = $eqLogic->sendRequest($API_url);
                         preg_match('#{(.*)}#U', $result_api, $result);
@@ -369,18 +378,6 @@ class OptomaCmd extends cmd
                         foreach ($full as $key => $value) {
                             $eqLogic->checkAndUpdateCmd($key, $value);
                         }
-                      if($eqLogic->getConfiguration('API') == "/tgi/control.tgi") {
-                          log::add('Optoma', 'debug', "## TEST PAGE login.htm = ");
-                          Optoma::testCurl("login.htm");
-                          log::add('Optoma', 'debug', "## TEST PAGE link_admin.htm = ");
-                          Optoma::testCurl("link_admin.htm");
-                          log::add('Optoma', 'debug', "## TEST PAGE control.htm = ");
-                          Optoma::testCurl("control.htm");
-                          log::add('Optoma', 'debug', "## TEST PAGE control.js = ");
-                          Optoma::testCurl("control.js");
-                          log::add('Optoma', 'debug', "## TEST PAGE tgi/control.tgi = ");
-                          Optoma::testCurl("tgi/control.tgi");
-                      }
                     } else {
                         $value = $args[0] . "=" . $args[1];
                     }
