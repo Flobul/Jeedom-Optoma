@@ -173,12 +173,12 @@ class Optoma extends eqLogic
         return true;
     }
       
-  public static function testCurl($_url){
+  public static function testCurl($_url, $_page){
 
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-  CURLOPT_URL => 'http://192.168.1.47/'.$_url,
+  CURLOPT_URL => $_url . $_page,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
@@ -196,9 +196,70 @@ curl_setopt_array($curl, array(
 $response = curl_exec($curl);
 
 curl_close($curl);
-		log::add('Optoma', 'debug', 'Erreur de connexion au vidéoprojecteur' . $response);
+		log::add('Optoma', 'debug', 'DEBUG testCurl résultat : ' . $response);
 
   }
+  
+    public static function testLogin($_url, $_page, $_pwd){
+
+
+  $curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => $_url . '/tgi/login.tgi',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 5,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'POST',
+  CURLOPT_POSTFIELDS => 'Password='.$_pwd.'&Username=1&user=0&Challenge=&Response=2c3b09ef8ad3e94bd60ab8c6ea2e07d5',
+  CURLOPT_HTTPHEADER => array(
+    'Upgrade-Insecure-Requests: 1',
+    'Content-Type: application/x-www-form-urlencoded',
+    'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
+    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+  ),
+));
+
+$response = curl_exec($curl);
+
+curl_close($curl);
+		log::add('Optoma', 'debug', 'DEBUG testLogin résultat : ' . $response);
+
+}
+  
+      public static function testLoginBis($_url, $_page, $_pwd){
+
+
+  $curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => $_url . '/tgi/login.tgi',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 5,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'POST',
+  CURLOPT_POSTFIELDS => 'Password='.$_pwd.'&Username=1&user=0&Challenge=&Response=2c3b09ef8ad3e94bd60ab8c6ea2e07d5',
+  CURLOPT_HTTPHEADER => array(
+    'Cookie: ATOP=asdf',
+    'Upgrade-Insecure-Requests: 1',
+    'Content-Type: application/x-www-form-urlencoded',
+    'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
+    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+  ),
+));
+
+$response = curl_exec($curl);
+
+curl_close($curl);
+		log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat : ' . $response);
+
+}
   
     public function sendRequest($_url, $_timeout = 2, $_retry = 5)
     {
@@ -359,15 +420,19 @@ class OptomaCmd extends cmd
                     $value = $args[0] . "=" . $_options['select'];
                     break;
                 case 'other':
-                    if($eqLogic->getConfiguration('API') == "/tgi/control.tgi") {
-                        log::add('Optoma', 'debug', "## TEST PAGE login.htm = ");
-                        Optoma::testCurl("login.htm");
-                        log::add('Optoma', 'debug', "## TEST PAGE link_admin.htm = ");
-                        Optoma::testCurl("link_admin.htm");
-                        log::add('Optoma', 'debug', "## TEST PAGE control.htm = ");
-                        Optoma::testCurl("control.htm");
-                        log::add('Optoma', 'debug', "## TEST PAGE tgi/control.tgi = ");
-                        Optoma::testCurl("tgi/control.tgi");
+                    if($eqLogic->getConfiguration('API') !== "/tgi/control.tgi") {
+                        log::add('Optoma', 'debug', "## TEST PAGE /md5.js = ");
+                        Optoma::testCurl($eqLogic->getConfiguration('IP'), "/md5.js");
+                        log::add('Optoma', 'debug', "## TEST PAGE login.js = ");
+                        Optoma::testCurl($eqLogic->getConfiguration('IP'), "/login.js");
+                      
+                        log::add('Optoma', 'debug', "## TEST Connexion js/control.js = ");
+                        Optoma::testCurl($eqLogic->getConfiguration('IP'), "/js/control.js");
+                        
+                        log::add('Optoma', 'debug', "## TEST Connexion tgi/control.tgi = ");
+                        Optoma::testLogin($eqLogic->getConfiguration('IP'), $eqLogic->getConfiguration('API'), $eqLogic->getConfiguration('password'));
+                        log::add('Optoma', 'debug', "## TEST Connexion Bis tgi/control.tgi = ");
+                        Optoma::testLoginBis($eqLogic->getConfiguration('IP'), $eqLogic->getConfiguration('API'), $eqLogic->getConfiguration('password'));
                     }
                     if($this->getLogicalId() == 'Refresh') {
                         $result_api = $eqLogic->sendRequest($API_url);
@@ -389,3 +454,4 @@ class OptomaCmd extends cmd
         log::add('Optoma', 'debug', __("Action sur ", __FILE__) . $this->getLogicalId());
     }
 }
+
