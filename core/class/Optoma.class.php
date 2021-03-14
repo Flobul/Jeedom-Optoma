@@ -24,7 +24,7 @@ require_once __DIR__ . "/../../../../plugins/Optoma/core/class/Optomapi.class.ph
 class Optoma extends eqLogic
 {
     /*     * *************************Attributs****************************** */
-    public static $_pluginVersion = '0.9';
+    public static $_pluginVersion = '0.91';
 
     /*     * ***********************Methode static*************************** */
 
@@ -453,7 +453,7 @@ class OptomaCmd extends cmd
                     }
             }
             if ($this->getLogicalId() !== 'Refresh') {
-                // $result_api = $eqLogic->sendRequest($API_url . '?' . urlencode($value));
+                $result_api = $eqLogic->sendRequest($API_url . '?' . urlencode($value));
             }
         }
         log::add('Optoma', 'debug', __("Action sur ", __FILE__) . $this->getLogicalId());
