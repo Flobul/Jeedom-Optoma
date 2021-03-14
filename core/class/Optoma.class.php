@@ -192,29 +192,31 @@ class Optoma extends eqLogic
         return true;
     }
       
-    public static function testCurl($_url, $_page)
+    public static function testCurl()
     {
-        $curl = curl_init();
+$curl = curl_init();
 
-        curl_setopt_array($curl, array(
-  CURLOPT_URL => $_url . $_page,
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'http://192.168.1.47/tgi/login.tgi',
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 5,
+  CURLOPT_TIMEOUT => 0,
   CURLOPT_FOLLOWLOCATION => true,
   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'GET',
+  CURLOPT_CUSTOMREQUEST => 'POST',
+  CURLOPT_POSTFIELDS => 'Challenge=&Password=&Response=c95158ba1da9865d4b763367caad4026&Username=1&user=0',
   CURLOPT_HTTPHEADER => array(
     'Upgrade-Insecure-Requests: 1',
-    'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
-    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+    'Content-Type: application/x-www-form-urlencoded',
+    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36 Edg/89.0.774.50',
+    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
   ),
 ));
 
-        $response = curl_exec($curl);
+$response = curl_exec($curl);
 
-        curl_close($curl);
+curl_close($curl);
         log::add('Optoma', 'debug', 'DEBUG testCurl résultat : ' . $response);
     }
   
@@ -258,19 +260,22 @@ function curl_post_test($url, $post="", $cookiejar="")
     public static function testLoginBis($_url, $_page, $_pwd)
     {
         $session = "";
-
         $login = self::curl_post_test($_url."/login.htm", "", "cookiejar");
         preg_match('/Challenge" VALUE="(\S+?)"/', $login, $matches);
         $challenge = $matches[1];
         $resp = md5("admin".$_pwd . $challenge);
-        $logincgi = self::curl_post_test($_url."/tgi/login.tgi", "Username=1&Password=".$_pwd."&Challenge=&Response=$resp", "cookiejar");
+        //$logincgi = self::curl_post_test($_url."/tgi/login.tgi", "Username=1&Password=".$_pwd."&Challenge=&Response=$resp", "cookiejar");
+		self::testCurl();
+
         $portstats = self::curl_post_test($_url."/tgi/control.tgi", "", "cookiejar");
+        $portstat3 = self::curl_post_test($_url."/tgi/control.tgi?Challenge=&Password=&Response=c95158ba1da9865d4b763367caad4026&Username=1&user=0", "", "cookiejar");
         log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat1 : ' . $challenge);
 
 
         log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat2 : ' . $logincgi);
 
         log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat3 : ' . $portstats);
+        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat4 : ' . $portstat3);
 
     }
   
