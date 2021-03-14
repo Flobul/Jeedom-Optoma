@@ -1,82 +1,176 @@
 <?php
 
-class Optomapi {
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-	public function setFullNames($_data) {
-        $array = array();
-		if (is_array($_data)) {
-			foreach ($_data as $key => $value) {
-				$fullKey = self::getKeyName($key);
-                $array[$fullKey] = $value;
-                //$array[$fullKey] = self::getStringValue($fullKey, $value); // à changer en même temps que setValue pour retrouver la commande à envoyer
-            }
-        }
-        return $array;
-	}
+class Optomapi
+{
 
-	public static function getKeyName($_word) {
-        static $source = array(
-            "pw" => "Powerstatus",
-            "a" => "Source",
-            "b" => "Display Mode",
-            "c" => "Brightness",
-            "d" => "Contrast",
-            "f" => "Sharpness",
-            "t" => "Projection",
-            "h" => "Brightness Mode",
-            "j" => "Mute",
-            "k" => "AV Mute",
-            "l" => "Power mode",
-            "m" => "Volume Audio",
-            "n" => "Freeze",
-            "o" => "Logo",
-            "p" => "3D-2D",
-            "q" => "Color Space",
-            "r" => "Zoom Value",
-            "w" => "3D Mode",
-            "x" => "Background Color",
-            "y" => "Wall Color",
-            "z" => "Volume Micro",
-            "A" => "Phase",
-            "B" => "Brilliant Color",
-            "C" => "Gamma",
-            "D" => "Color Temperature",
-            "E" => "3D Format",
-            "F" => "Internal Speaker",
-            "G" => "12V Trigger",
-            "H" => "Sleep Timer",
-            "I" => "Audio Input",
-            "J" => "H. Keystone",
-            "K" => "V. Keystone",
-            "L" => "Aspect Ratio",
-            "M" => "H.Image Shift",
-            "N" => "V.Image Shift",
-            "O" => "High Altitude",
-            "P" => "Direct Power On",
-            "Q" => "Projector ID",
-            "R" => "Remote Code",
-            "S" => "Screen Type",
-            "T" => "3D Sync. Invert",
-            "U" => "Power",
-            "V" => "Information hide",
-            "W" => "Display Mode Lock",
-            "X" => "Dynamic Black",
-            "Y" => "Keypad Lock",
-            "e" => "button_up",
-            "g" => "button_down",
-            "i" => "button_left",
-            "s" => "button_right",
-            "Z" => "locking Source",
-            "ISF" => "isf"
-        );
-        (array_key_exists($_word, $source) == true) ? $_word = $source[$_word] : $_word;
-		return $_word;
-	}
-  
-	public static function getStringValue($_key, $_value) {
+    /*     * *************************Attributs****************************** */
+
+    private static $apiSource = array(
+        "pw" => "Powerstatus",
+        "a" => "Source",
+        "b" => "Display Mode",
+        "c" => "Brightness",
+        "d" => "Contrast",
+        "f" => "Sharpness",
+        "t" => "Projection",
+        "h" => "Brightness Mode",
+        "j" => "Mute",
+        "k" => "AV Mute",
+        "l" => "Power mode",
+        "m" => "Volume Audio",
+        "n" => "Freeze",
+        "o" => "Logo",
+        "p" => "3D-2D",
+        "q" => "Color Space",
+        "r" => "Zoom Value",
+        "w" => "3D Mode",
+        "x" => "Background Color",
+        "y" => "Wall Color",
+        "z" => "Volume Micro",
+        "A" => "Phase",
+        "B" => "Brilliant Color",
+        "C" => "Gamma",
+        "D" => "Color Temperature",
+        "E" => "3D Format",
+        "F" => "Internal Speaker",
+        "G" => "12V Trigger",
+        "H" => "Sleep Timer",
+        "I" => "Audio Input",
+        "J" => "H. Keystone",
+        "K" => "V. Keystone",
+        "L" => "Aspect Ratio",
+        "M" => "H.Image Shift",
+        "N" => "V.Image Shift",
+        "O" => "High Altitude",
+        "P" => "Direct Power On",
+        "Q" => "Projector ID",
+        "R" => "Remote Code",
+        "S" => "Screen Type",
+        "T" => "3D Sync. Invert",
+        "U" => "Power",
+        "V" => "Information hide",
+        "W" => "Display Mode Lock",
+        "X" => "Dynamic Black",
+        "Y" => "Keypad Lock",
+        "e" => "button_up",
+        "g" => "button_down",
+        "i" => "button_left",
+        "s" => "button_right",
+        "Z" => "locking Source",
+        "ISF" => "isf"
+    );
+
+    private static $rangeOptions = array(
+        'Brightness' => array(
+            "range" => array(
+                -50,
+                50
+            )
+        ) ,
+        'Contrast' => array(
+            "range" => array(
+                -50,
+                50
+            )
+        ) ,
+        'Sharpness' => array(
+            "range" => array(
+                -50,
+                50
+            )
+        ) ,
+        'Phase' => array(
+            "range" => array(
+                0,
+                31
+            )
+        ) ,
+        'Brilliant Color' => array(
+            "range" => array(
+                0,
+                10
+            )
+        ) ,
+        'Phase' => array(
+            "range" => array(
+                0,
+                31
+            )
+        ) ,
+        'H. Keystone' => array(
+            "range" => array(
+                -30,
+                30
+            )
+        ) ,
+        'V. Keystone' => array(
+            "range" => array(
+                -30,
+                30
+            )
+        ) ,
+        'H.Image Shift' => array(
+            "range" => array(
+                -100,
+                100
+            )
+        ) ,
+        'V.Image Shift' => array(
+            "range" => array(
+                -100,
+                100
+            )
+        ) ,
+        'Sleep Timer' => array(
+            "range" => array(
+                0,
+                10
+            )
+        ) ,
+        'Projector ID' => array(
+            "range" => array(
+                0,
+                99
+            )
+        ) ,
+        'Remote Code' => array(
+            "range" => array(
+                0,
+                99
+            )
+        ) ,
+        'Volume Audio' => array(
+            "range" => array(
+                0,
+                10
+            )
+        ) ,
+        'Volume Micro' => array(
+            "range" => array(
+                0,
+                10
+            )
+        )
+    );
       
-        $option = array(
-          'Source' => array(
+    private static $listOptions = array(
+        'Source' => array(
             "id" => "source",
             "0" => "HDMI1",
             "1" => "HDMI2",
@@ -224,11 +318,58 @@ class Optomapi {
             "255" => "Not Support"
             )
         );
-        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
-        if (array_key_exists($_value, $option[$_key]) == true) {
-            $_value = $option[$_key][$_value];
+
+    /*     * ***********************Methode static*************************** */
+
+    public function setFullNames($_data)
+    {
+        $array = array();
+        if (is_array($_data)) {
+            foreach ($_data as $key => $value) {
+                $fullKey = self::getKeyName($key);
+                $array[$fullKey] = $value;
+                $array[$fullKey] = self::getValueFromId($fullKey, $value);
+            }
         }
-		return $_value;
+        return $array;
+    }
+
+    public static function getKeyName($_word)
+    {
+        (array_key_exists($_word, self::$apiSource) == true) ? $_word = $apiSource[$_word] : $_word;
+        return $_word;
+    }
+
+    public static function getListValue($_key)
+    {
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        $list = '';
+        if (is_array(self::$listOptions[$_key])) {
+            foreach (self::$listOptions[$_key] as $cle => $valeur) {
+                if ($cle !== 'id') {
+                    $list .= $valeur . "|" . $valeur . ";";
+                }
+            }
+        }
+        return $list;
+    }
+
+    public static function getRangeValue($_key)
+    {
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        if (array_key_exists('range', self::$rangeOptions[$_key]) == true) {
+            $range = self::$rangeOptions[$_key]['range'];
+        }
+        return $range;
+    }
+
+    public static function getValueFromId($_key, $_id)
+    {
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        if (array_key_exists($_id, self::$listOptions[$_key]) == true) {
+            $_id = self::$listOptions[$_key][$_id];
+        }
+        return $_id;
     }
 }
 ?>

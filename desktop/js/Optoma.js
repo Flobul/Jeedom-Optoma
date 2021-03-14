@@ -71,27 +71,6 @@ function amxDeviceDiscovery(_state) {
 	});
 }
 
-function webOptoma() {
-  		if ($('.eqLogicAttr[data-l1key=configuration][data-l2key=IP]').value() != '') {
-			$('#div_alert').showAlert({message: '{{Recherche du lien CGI en cours. (environ 15 secondes)}}', level: 'warning'});
-			$url = $('.eqLogicAttr[data-l1key=configuration][data-l2key=IP]').value();
-            $.ajax({
-                type: "POST",
-                url: "plugins/Optoma/core/ajax/Optoma.ajax.php",
-                data: {
-                    action: "webOptoma",
-                },
-                dataType: 'json',
-                global: false,
-                error: function (request, status, error) {
-                    handleAjaxError(request, status, error);
-                },
-                success: function (data) {
-                   }
-            });
-        }
-}
-
  function addCmdToTable(_cmd) {
     if (!isset(_cmd)) {
         var _cmd = {configuration: {}};
@@ -105,19 +84,18 @@ function webOptoma() {
 
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
   if (init(_cmd.type) == 'info') {
-		tr += '<td>';
+		tr += '<td style="display:inline-flex;">';
 		tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom}} style="margin-top : 5px" >';
-		tr += '<select class="cmdAttr form-control tooltips input-sm" data-l1key="value" style="margin-top : 5px;margin-right : 10px;" title="La valeur de la commande vaut par défaut la commande" >';
-		tr += '<option value="">Aucune</option>';
-		tr += '</select>';
+		tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon"><i class="fas fa-flag"></i> {{Icône}}</a>';
+		tr += '<span class="cmdAttr" data-l1key="display" data-l2key="icon"></span>';
+		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom}} style="margin-top:5px" >';
 		tr += '</td>';
 		tr += '<td>';
-		tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-top : -5px;width : 40%; display : inline-block;" />';
-		tr += '<span class="subType" subType="' + init(_cmd.subType) + '" style="margin-top : -5px;width : 50%; display : inline-block;" ></span>';
+		tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-top:-5px;width:40%;display:inline-block;" />';
+		tr += '<span class="subType" subType="' + init(_cmd.subType) + '" style="margin-top:-5px;width:50%;display:inline-block;" ></span>';
 		tr += '</td>';
 		tr += '<td>';
-		tr += '<input readonly class="cmdAttr" id="'+ _cmd.id +'value" style="width : 200px; font-style: italic; ">';
+		tr += '<input readonly class="cmdAttr" id="'+ _cmd.id +'value" style="width:200px;font-style:italic;">';
 		$('#'+_cmd.id +'value').val("loading");
 		jeedom.cmd.execute({
 			id: _cmd.id,
@@ -131,21 +109,19 @@ function webOptoma() {
 		tr += '<td>';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span></br> ';
-  if (init(_cmd.subType) == 'numeric') {
-    tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="display:inline-block;width: 50px;"></input>';
-    tr += '<input class="cmdAttr form-control input-sm" data-l1key="unite" placeholder="{{Unité}}" title="{{Unité}}" style="display:inline-block;width: 50px;"></input>';
-    tr += '<style>.select {}</style>';
-    tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max}}" title="{{Max}}" style="width: 50px;"></input>';
-  }
+        if (init(_cmd.subType) == 'numeric') {
+            tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="display:inline-block;width:50px;"></input>';
+            tr += '<style>.select {}</style>';
+            tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="maxValue" placeholder="{{Max}}" title="{{Max}}" style="display:inline-block;width:50px;"></input>';
+        }
 		tr += '</td>';
-
 		tr += '<td>';
-    if (is_numeric(_cmd.id)) {
-		tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible tooltips" title="Configuration de la commande" data-action="configure"><i class="fa fa-cogs"></i></a> ';
-		tr += '<a class="btn btn-default btn-xs cmdAction tooltips" title="Test de la commande" data-action="test"><i class="fa fa-rss"></i></a>';
-		tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" title="Supprimer de la commande" data-action="remove"></i></td>';
-		}
-		tr += '</td>';
+        if (is_numeric(_cmd.id)) {
+            tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible tooltips" title="Configuration de la commande" data-action="configure"><i class="fa fa-cogs"></i></a> ';
+            tr += '<a class="btn btn-default btn-xs cmdAction tooltips" title="Test de la commande" data-action="test"><i class="fa fa-rss"></i></a>';
+            tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" title="Supprimer de la commande" data-action="remove"></i></td>';
+        }
+        tr += '</td>';
 
     $('#table_info tbody').append(tr);
     $('#table_info tbody tr:last').setValues(_cmd, '.cmdAttr');
@@ -154,18 +130,18 @@ function webOptoma() {
 		tr += '<td>';
 		tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="margin-top : 0;width : 50%; display : inline-block;" placeholder="{{Nom}}" >';
-		tr += '<select class="cmdAttr form-control tooltips input-sm" data-l1key="value" style="margin-top : 0;width : 50%; display : inline-block;" title="La valeur de la commande vaut par défaut la commande">';
+		tr += '</td>';
+		tr += '<td>';
+		tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-top:-5px;width:40%;display:inline-block;" />';
+		tr += '<span class="subType" subType="' + init(_cmd.subType) + '" style="margin-top:-5px;width:50%;display:inline-block;"></span>';
+		tr += '</td>';
+		tr += '<td>';
+		tr += '<select class="cmdAttr form-control tooltips input-sm" data-l1key="value" style="margin-top:0;width:40%;display:inline-block;" title="{{La valeur de la commande action vaut par défaut la commande information}}">';
 		tr += '<option value="">Aucune</option>';
 		tr += '</select>';
-		tr += '</td>';
-		tr += '<td>';
-		tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-top : -5px;width : 40%; display : inline-block;" />';
-		tr += '<span class="subType" subType="' + init(_cmd.subType) + '" style="margin-top : -5px;width : 50%; display : inline-block;" ></span>';
-		tr += '</td>';
-		tr += '<td>';
-    tr += '<select class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="updateCmdId" style="margin-top : 5px;" title="Commande d\'information à mettre à jour">';
-  tr += '<option value="">Aucune</option>';
-  tr += '</select>';
+        tr += '<select class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="updateCmdId" style="margin-top:5px;margin-left:5px;width:40%;display:inline-block;" title="{{Commande d\'information à mettre à jour}}">';
+        tr += '<option value="">Aucune</option>';
+        tr += '</select>';
 		tr += '</td>';
 		tr += '<td>';
 		tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
@@ -310,6 +286,8 @@ function printEqLogicTab(_eqLogic) {
   printEqLogicHelper("{{Type}}", "type", _eqLogic);
   printEqLogicHelper("{{Modèle}}", "model", _eqLogic);
   printEqLogicHelper("{{Adresse MAC}}", "MAC", _eqLogic);
+  printEqLogicHelper("{{Version LAN}}", "", _eqLogic);
+  printEqLogicHelper("{{Version Firmware}}", "", _eqLogic);
   printEqLogicHelper("{{Découverte auto}}", "auto_discovery", _eqLogic);
 
   var type = "../../plugin_info/Other";

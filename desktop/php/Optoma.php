@@ -186,17 +186,17 @@ if ($state == 1) {
 				</fieldset>
 						<legend>{{Paramètres du vidéoprojecteur}}
 									<sup>
-										<i class="fa fa-question-circle tooltips" title="Entrez tous les paramètres demandés.
-Ils ne sont à saisir qu'une seule fois." style="font-size : 1em;color:grey;"></i>
+										<i class="fa fa-question-circle tooltips" title="{{Entrez tous les paramètres demandés.
+Ils ne sont à saisir qu'une seule fois.}}" style="font-size : 1em;color:grey;"></i>
 									</sup>
 									</legend>
 						<fieldset>
 						<div class="form-group">
 							<label class="col-sm-3 control-label">{{Adresse IP}}
 									<sup>
-										<i class="fa fa-question-circle tooltips" title="Entrez l'adresse IP de votre vidéoprojecteur.
+										<i class="fa fa-question-circle tooltips" title="{{Entrez l'adresse IP de votre vidéoprojecteur.
 Si vous n'avez pas activé la fonction AMX Device Discovery,
-saisissez l'adresse manuellement."></i>
+saisissez l'adresse manuellement.}}"></i>
 									</sup>
 							</label>
 							<div class="col-sm-5">
@@ -206,14 +206,14 @@ saisissez l'adresse manuellement."></i>
 						<div class="form-group">
 							<label class="col-sm-3 control-label">{{Adresse API}}
 									<sup>
-										<i class="fa fa-question-circle tooltips" title="Sélectionnez l'adresse de l'API de votre vidéoprojecteur."></i>
+										<i class="fa fa-question-circle tooltips" title="{{Sélectionnez l'adresse de l'API de votre vidéoprojecteur.}}"></i>
 									</sup>
 							</label>
 							<div class="col-sm-5">
 							    <select id="idipoptoma" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="API">
 									<option value="">{{Aucun}}</option>
 									<option value="/form/control_cgi">/form/control_cgi</option>
-									<option value="/tgi/control.tgi">/tgi/control.tgi</option>
+									<option value="/tgi/control.tgi">/tgi/control.tgi ( )</option>
                                 </select>
 							</div>
 						</div>
@@ -227,14 +227,14 @@ saisissez l'adresse manuellement."></i>
 						<div class="form-group">
  							<label class="col-sm-3 control-label">{{Identifiant et mot de passe}}
  									<sup>
- 										<i class="fa fa-question-circle tooltips" title="Entrez l'identifiant de votre vidéoprojecteur.
+ 										<i class="fa fa-question-circle tooltips" title="{{Entrez l'identifiant de votre vidéoprojecteur.
  Ce champ est grisé sur certains vidéoprojecteurs.
- Par défaut : admin"></i>
+ Par défaut : admin}}"></i>
  									</sup>
  									</label>
 
 							<div class="col-sm-3">
- 								<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="username" placeholder="admin"/>
+ 								<input type="text" class="eqLogicAttr form-control" disabled data-l1key="configuration" data-l2key="username" placeholder="admin"/>
  							</div>
                                       
 							<div class="col-sm-3">
@@ -256,7 +256,7 @@ saisissez l'adresse manuellement."></i>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{Configuration}}</label>
 						<div class="col-sm-8">
-							<a id="bt_autoDetectModule" class="btn btn-warning" title="{{Recréer les commandes}}"><i class="fas fa-search"></i> {{Recréer les commandes}}</a>
+							<a id="bt_autoDetectModule" class="btn btn-warning" title="{{Recréer les commandes}}" style="display:none"><i class="fas fa-search"></i> {{Recréer les commandes}}</a>
 							<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="fileconf" style="display:none"></select>
 						</div>
 					</div>
@@ -271,7 +271,7 @@ saisissez l'adresse manuellement."></i>
 					<div class="form-group">
 						<div class="col-sm-10">
 							<center>
-							<img src="core/img/no_image.gif" data-original=".svg" id="img_device" class="img-responsive" style="max-height:450px;min-height:300px;max-width:400px" onerror="this.src='plugins/Optoma/core/config/devices/UHD.jpg'"/>
+							<img src="core/img/no_image.gif" data-original=".svg" id="img_device" class="img-responsive" style="max-height:450px;min-height:300px;max-width:400px" onerror="this.src='plugins/Optoma/core/config/devices/UHD.png'"/>
 							</center>
 						</div>
 					</div>
@@ -293,7 +293,7 @@ saisissez l'adresse manuellement."></i>
 						<tr>
 							<th style="width: 300px;">{{Nom}}</th>
 							<th style="width: 220px;">{{Type}}</th>
-							<th>{{Valeur}}</th>
+							<th>{{Commande information à mettre à jour}}</th>
 							<th style="width: 200px;">{{Paramètres}}</th>
 							<th style="width: 90px;">{{Action}}</th>
 						</tr>

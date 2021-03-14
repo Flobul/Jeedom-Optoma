@@ -39,7 +39,7 @@ class Optoma extends eqLogic
                     try {
                         log::add(__CLASS__, 'debug', __("Démarrage du cron ", __FILE__). $autorefresh);
                         foreach ($eqLogics as $eqLogic) {
-                            if($eqLogic->getIsEnable()){
+                            if ($eqLogic->getIsEnable()) {
                                 $cmd = $eqLogic->getCmd(null, 'Refresh');
                                 if (is_object($cmd)) {
                                     $cmd->execCmd();
@@ -151,33 +151,52 @@ class Optoma extends eqLogic
                 $cmd->setEqLogic_id($this->getId());
             }
             utils::a2o($cmd, $command);
+            if ($command['subtype'] == 'numeric') {
+                $range = Optomapi::getRangeValue($command['logicalId']);
+            } elseif ($command['subtype'] == 'slider') {
+                $range = Optomapi::getRangeValue($command['configuration']['cmdInfo']);
+                //if ($listValue != '') {
+                 //   $cmd->setConfiguration('listValue', substr($listValue, 0, -1));
+                //}
+            }
+            if (is_array($range)) {
+                $cmd->setConfiguration('minValue', $range[0]);
+                $cmd->setConfiguration('maxValue', $range[1]);
+            }
+
+            if (isset($command['configuration']['cmdInfo']) && $command['subtype'] == 'select') {
+                $listValue = Optomapi::getListValue($command['configuration']['cmdInfo']);
+                if ($listValue != '') {
+                    $cmd->setConfiguration('listValue', substr($listValue, 0, -1));
+                }
+            }
             $cmd->save();
-			if (isset($command['configuration']) && isset($command['configuration']['cmdInfo'])) {
-				$link_cmds[$cmd->getId()] = $command['configuration']['cmdInfo'];
-			}
+            if (isset($command['configuration']) && isset($command['configuration']['cmdInfo'])) {
+                $link_cmds[$cmd->getId()] = $command['configuration']['cmdInfo'];
+            }
         }
-		if (count($link_cmds) > 0) {
-			foreach ($this->getCmd() as $eqLogic_cmd) {
-				foreach ($link_cmds as $cmd_id => $link_cmd) {
-					if ($link_cmd == $eqLogic_cmd->getName()) {
-						$cmd = cmd::byId($cmd_id);
-						if (is_object($cmd)) {
-							$cmd->setConfiguration('updateCmdId', $eqLogic_cmd->getId());
-							$cmd->setValue($eqLogic_cmd->getId());
-							$cmd->save();
-						}
-					}
-				}
-			}
-		}
+        if (count($link_cmds) > 0) {
+            foreach ($this->getCmd() as $eqLogic_cmd) {
+                foreach ($link_cmds as $cmd_id => $link_cmd) {
+                    if ($link_cmd == $eqLogic_cmd->getName()) {
+                        $cmd = cmd::byId($cmd_id);
+                        if (is_object($cmd)) {
+                            $cmd->setConfiguration('updateCmdId', $eqLogic_cmd->getId());
+                            $cmd->setValue($eqLogic_cmd->getId());
+                            $cmd->save();
+                        }
+                    }
+                }
+            }
+        }
         return true;
     }
       
-  public static function testCurl($_url, $_page){
+    public static function testCurl($_url, $_page)
+    {
+        $curl = curl_init();
 
-$curl = curl_init();
-
-curl_setopt_array($curl, array(
+        curl_setopt_array($curl, array(
   CURLOPT_URL => $_url . $_page,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
@@ -193,73 +212,67 @@ curl_setopt_array($curl, array(
   ),
 ));
 
-$response = curl_exec($curl);
+        $response = curl_exec($curl);
 
-curl_close($curl);
-		log::add('Optoma', 'debug', 'DEBUG testCurl résultat : ' . $response);
-
-  }
+        curl_close($curl);
+        log::add('Optoma', 'debug', 'DEBUG testCurl résultat : ' . $response);
+    }
   
-    public static function testLogin($_url, $_page, $_pwd){
-
-
-  $curl = curl_init();
-
-curl_setopt_array($curl, array(
-  CURLOPT_URL => $_url . '/tgi/login.tgi',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 5,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS => 'Password='.$_pwd.'&Username=1&user=0&Challenge=&Response=2c3b09ef8ad3e94bd60ab8c6ea2e07d5',
-  CURLOPT_HTTPHEADER => array(
-    'Upgrade-Insecure-Requests: 1',
-    'Content-Type: application/x-www-form-urlencoded',
-    'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
-    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
-  ),
-));
-
-$response = curl_exec($curl);
-
-curl_close($curl);
-		log::add('Optoma', 'debug', 'DEBUG testLogin résultat : ' . $response);
-
-}
+function curl_post_test($url, $post="", $cookiejar="")
+{
+	$retstr = "";
+	
+	// output buffer b/c curl goes straight to screen
+	ob_start();
+	
+	// create a new curl resource
+	$ch = curl_init();
+	
+	// set URL and other appropriate options
+	curl_setopt($ch, CURLOPT_URL, $url);
+	
+	// post if applicable
+	if (!empty($post))
+	{
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+	} // end if post
+	
+	// handle cookies
+	if (!empty($cookiejar))
+	{
+		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiejar);
+		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiejar);
+	} // end if cookiejar
+	
+	// grab URL and pass it to the browser
+	curl_exec($ch);
+	
+	// close curl resource, and free up system resources
+	curl_close($ch);
+	
+	$retstr = ob_get_clean();
+	return $retstr;
+} // end curl_post();
   
-      public static function testLoginBis($_url, $_page, $_pwd){
+    public static function testLoginBis($_url, $_page, $_pwd)
+    {
+        $session = "";
+
+        $login = self::curl_post_test($_url."/login.htm", "", "cookiejar");
+        preg_match('/Challenge" value="(\S+?)"/', $login, $matches);
+        $challenge = $matches[1];
+        $resp = md5("admin".$_pwd . $challenge);
+        $logincgi = self::curl_post_test($_url."/tgi/login.tgi", "Username=1&Password=".$_pwd."&Challenge=&Response=$resp", "cookiejar");
+        $portstats = self::curl_post_test($_url."/tgi/control.tgi", "", "cookiejar");
+        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat1 : ' . $challenge);
 
 
-  $curl = curl_init();
+        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat2 : ' . $logincgi);
 
-curl_setopt_array($curl, array(
-  CURLOPT_URL => $_url . '/tgi/login.tgi',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 5,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS => 'Password='.$_pwd.'&Username=1&user=0&Challenge=&Response=2c3b09ef8ad3e94bd60ab8c6ea2e07d5',
-  CURLOPT_HTTPHEADER => array(
-    'Cookie: ATOP=asdf',
-    'Upgrade-Insecure-Requests: 1',
-    'Content-Type: application/x-www-form-urlencoded',
-    'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
-    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
-  ),
-));
+        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat3 : ' . $portstats);
 
-$response = curl_exec($curl);
-
-curl_close($curl);
-		log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat : ' . $response);
-
-}
+    }
   
     public function sendRequest($_url, $_timeout = 2, $_retry = 5)
     {
@@ -280,8 +293,8 @@ curl_close($curl);
         if (strpos($result, "<html>") !== false) {
             return $result;
         } else {
-        	log::add(__CLASS__, 'debug', "L." . __LINE__ . " F." . __FUNCTION__ . __(" Données non reconnues : ", __FILE__) . $result);
-        	return false;
+            log::add(__CLASS__, 'debug', "L." . __LINE__ . " F." . __FUNCTION__ . __(" Données non reconnues : ", __FILE__) . $result);
+            return false;
         }
     }
 
@@ -405,10 +418,10 @@ class OptomaCmd extends cmd
     {
         $eqLogic = $this->getEqLogic();
         if ($this->getLogicalId() !== "") {
-            $API_url = Optoma::getAPIUrl($eqLogic->getConfiguration('IP'),$eqLogic->getConfiguration('API'));
+            $API_url = Optoma::getAPIUrl($eqLogic->getConfiguration('IP'), $eqLogic->getConfiguration('API'));
             if (strpos($this->getLogicalId(), "::") !== false) {
-                $args = explode("::",$this->getLogicalId());
-            } 
+                $args = explode("::", $this->getLogicalId());
+            }
             switch ($this->getSubType()) {
                 case 'message':
                     $value = $args[0] . "=" . $_options['message'];
@@ -417,29 +430,21 @@ class OptomaCmd extends cmd
                     $value = $args[0] . "=" . $_options['slider'];
                     break;
                 case 'select':
-                    $value = $args[0] . "=" . $_options['select'];
+                    $select = Optomapi::getValueFromId($this->getConfiguration('cmdInfo'), $_options['select']);
+                    $value = $args[0] . "=" . $select;
                     break;
                 case 'other':
-                    if($eqLogic->getConfiguration('API') == "/tgi/control.tgi") {
-                        log::add('Optoma', 'debug', "## TEST PAGE /md5.js = ");
-                        Optoma::testCurl($eqLogic->getConfiguration('IP'), "/md5.js");
-                        log::add('Optoma', 'debug', "## TEST PAGE login.js = ");
-                        Optoma::testCurl($eqLogic->getConfiguration('IP'), "/login.js");
-                      
-                        log::add('Optoma', 'debug', "## TEST Connexion js/control.js = ");
-                        Optoma::testCurl($eqLogic->getConfiguration('IP'), "/js/control.js");
-                        
-                        log::add('Optoma', 'debug', "## TEST Connexion tgi/control.tgi = ");
-                        Optoma::testLogin($eqLogic->getConfiguration('IP'), $eqLogic->getConfiguration('API'), $eqLogic->getConfiguration('password'));
+                    if ($eqLogic->getConfiguration('API') == "/tgi/control.tgi") {
+
                         log::add('Optoma', 'debug', "## TEST Connexion Bis tgi/control.tgi = ");
                         Optoma::testLoginBis($eqLogic->getConfiguration('IP'), $eqLogic->getConfiguration('API'), $eqLogic->getConfiguration('password'));
                     }
-                    if($this->getLogicalId() == 'Refresh') {
+                    if ($this->getLogicalId() == 'Refresh') {
                         $result_api = $eqLogic->sendRequest($API_url);
                         preg_match('#{(.*)}#U', $result_api, $result);
                         $decodedResult = json_decode(preg_replace('/([{,])(\s*)([A-Za-z0-9_\-]+?)\s*:/', '$1"$3":', $result[0]), true);
                         $API = new Optomapi();
-                        $full = $API->setFullNames($decodedResult); // translate key and value
+                        $full = $API->setFullNames($decodedResult);
                         foreach ($full as $key => $value) {
                             $eqLogic->checkAndUpdateCmd($key, $value);
                         }
@@ -447,11 +452,11 @@ class OptomaCmd extends cmd
                         $value = $args[0] . "=" . $args[1];
                     }
             }
-            if($this->getLogicalId() !== 'Refresh') {
-                $result_api = $eqLogic->sendRequest($API_url . '?' . urlencode($value));
+            if ($this->getLogicalId() !== 'Refresh') {
+                // $result_api = $eqLogic->sendRequest($API_url . '?' . urlencode($value));
             }
         }
         log::add('Optoma', 'debug', __("Action sur ", __FILE__) . $this->getLogicalId());
     }
 }
-
+?>
