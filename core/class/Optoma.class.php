@@ -420,7 +420,7 @@ class OptomaCmd extends cmd
                     $value = $args[0] . "=" . $_options['select'];
                     break;
                 case 'other':
-                    if($eqLogic->getConfiguration('API') !== "/tgi/control.tgi") {
+                    if($eqLogic->getConfiguration('API') == "/tgi/control.tgi") {
                         log::add('Optoma', 'debug', "## TEST PAGE /md5.js = ");
                         Optoma::testCurl($eqLogic->getConfiguration('IP'), "/md5.js");
                         log::add('Optoma', 'debug', "## TEST PAGE login.js = ");
