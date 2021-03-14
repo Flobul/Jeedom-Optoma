@@ -260,7 +260,7 @@ function curl_post_test($url, $post="", $cookiejar="")
         $session = "";
 
         $login = self::curl_post_test($_url."/login.htm", "", "cookiejar");
-        preg_match('/Challenge" value="(\S+?)"/', $login, $matches);
+        preg_match('/Challenge" VALUE="(\S+?)"/', $login, $matches);
         $challenge = $matches[1];
         $resp = md5("admin".$_pwd . $challenge);
         $logincgi = self::curl_post_test($_url."/tgi/login.tgi", "Username=1&Password=".$_pwd."&Challenge=&Response=$resp", "cookiejar");
