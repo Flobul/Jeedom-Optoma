@@ -21,7 +21,8 @@
          "isVisible":1,
          "configuration":{
             "cmdInfo":"Powerstatus"
-         }
+         },
+         "generic_type":"ENERGY_ON"
       },
       {
          "name":"Power Off",
@@ -31,7 +32,8 @@
          "isVisible":1,
          "configuration":{
             "cmdInfo":"Powerstatus"
-         }
+         },
+         "generic_type":"ENERGY_OFF"
       },
       {
          "name":"Brightness",
@@ -40,7 +42,7 @@
          "subtype":"numeric",
          "isVisible":0,
          "isHistorized":0,
-         "generic_type":"GENERIC_INFO"
+         "generic_type":"BRIGHTNESS"
       },
       {
          "name":"Brightness -",
@@ -325,14 +327,6 @@
          "generic_type":"GENERIC_INFO"
       },
       {
-         "name":"Refresh",
-         "logicalId":"Refresh",
-         "type":"action",
-         "subtype":"other",
-         "isVisible":1,
-         "generic_type":"GENERIC_ACTION"
-      },
-      {
          "name":"Reset",
          "logicalId":"Reset::reset",
          "type":"action",
@@ -610,7 +604,7 @@
          "subtype":"numeric",
          "isVisible":0,
          "isHistorized":0,
-         "generic_type":"GENERIC_INFO"
+         "generic_type":"VOLUME"
       },
       {
          "name":"Volume Audio -",
@@ -621,7 +615,7 @@
          "configuration":{
             "cmdInfo":"Volume Audio"
          },
-         "generic_type":"SET_VOLUME"
+         "generic_type":"GENERIC_ACTION"
       },
       {
          "name":"Volume Audio +",
@@ -632,7 +626,7 @@
          "configuration":{
             "cmdInfo":"Volume Audio"
          },
-         "generic_type":"SET_VOLUME"
+         "generic_type":"GENERIC_ACTION"
       },
       {
          "name":"Set Volume Audio",
@@ -652,7 +646,7 @@
          "subtype":"numeric",
          "isVisible":0,
          "isHistorized":0,
-         "generic_type":"GENERIC_INFO"
+         "generic_type":"VOLUME"
       },
       {
          "name":"Volume Micro -",
@@ -663,7 +657,7 @@
          "configuration":{
             "cmdInfo":"Volume Micro"
          },
-         "generic_type":"SET_VOLUME"
+         "generic_type":"GENERIC_ACTION"
       },
       {
          "name":"Volume Micro +",
@@ -674,7 +668,7 @@
          "configuration":{
             "cmdInfo":"Volume Micro"
          },
-         "generic_type":"SET_VOLUME"
+         "generic_type":"GENERIC_ACTION"
       },
       {
          "name":"Set Volume Micro",
@@ -1076,6 +1070,23 @@
          "configuration":{
             "cmdInfo":"12V Trigger"
          },
+         "generic_type":"GENERIC_ACTION"
+      },
+      {
+         "name":"SystemInfo",
+         "logicalId":"SystemInfo",
+         "type":"info",
+         "subType":"string",
+         "isVisible":1,
+         "isHistorized":0,
+         "generic_type":"GENERIC_INFO"
+      },
+      {
+         "name":"Refresh",
+         "logicalId":"Refresh",
+         "type":"action",
+         "subtype":"other",
+         "isVisible":1,
          "generic_type":"GENERIC_ACTION"
       }
    ]

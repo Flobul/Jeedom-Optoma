@@ -1,17 +1,30 @@
 {
-	"id" : "Optoma",
-	"name" : "Optoma Video Projecteur",
-	"description" : "Plugin pour piloter les videoprojecteurs Optoma",
-	"licence" : "AGPL",
-	"author" : "Flobul",
-	"require" : "4.0",
-	"version" : "1.0",
-	"category" : "multimedia",
-	"hasDependency" : false,
-	"hasOwnDeamon" : false,
-	"maxDependancyInstallTime" : 0,
-	"changelog" : "https://flobul.github.io/Jeedom-Optoma/#language#/changelog",
-	"documentation" : "https://flobul.github.io/Jeedom-Optoma/#language#/",
-	"language" : ["fr_FR","en_US","sp_SP"],
-	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile"]
+   "id":"Optoma",
+   "name":"Optoma vidéoprojecteur",
+   "description":"Plugin permettant de récupérer les informations et de piloter les videoprojecteurs Optoma UHD.</br>Comptibilité : les pages web du vidéoprojecteurs sont en *.asp, non compatible pour l'instant avec les pages en *.htm",
+   "licence":"AGPL",
+   "author":"DomoFlo1",
+   "require":"4.0",
+   "category":"multimedia",
+   "hasDependency":false,
+   "hasOwnDeamon":true,
+   "maxDependancyInstallTime":0,
+   "changelog":"https://flobul.github.io/Jeedom-Optoma/#language#/changelog",
+   "documentation":"https://flobul.github.io/Jeedom-Optoma/#language#/",
+   "link":{
+      "forum":"https://community.jeedom.com/tag/plugin-optoma"
+   },
+   "language":[
+      "fr_FR",
+      "en_US"
+   ],
+   "compatibility":[
+      "miniplus",
+      "smart",
+      "rpi",
+      "docker",
+      "diy",
+      "mobile",
+      "v4"
+   ]
 }

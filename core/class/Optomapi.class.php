@@ -20,7 +20,42 @@ class Optomapi
 {
 
     /*     * *************************Attributs****************************** */
+    /**
+     * Traduit les code d'erreurs en message
+     * @var string
+     */
+    private static $error = array(
+        "0" => "Standby Mode",
+        "1" => "Warming up",
+        "2" => "Cooling Down",
+        "3" => "Out of Range",
+        "4" => "Lamp Fail (LED Fail)",
+        "5" => "Thermal Switch Error",
+        "6" => "Fan Lock",
+        "7" => "Over Temperature",
+        "8" => "Lamp Hours Running Out",
+        "9" => "Cover Open",
+        "10" => "Lamp Ignite Fail",
+        "11" => "Format Board Power On Fail",
+        "12" => "Color Wheel Unexpected Stop",
+        "13" => "Over Temperature",
+        "14" => "FAN 1 Lock",
+        "15" => "FAN 2 Lock",
+        "16" => "FAN 3 Lock",
+        "17" => "FAN 4 Lock",
+        "18" => "FAN 5 Lock",
+        "19" => "LAN fail then restart",
+        "20" => "LD lower than 60%",
+        "21" => "LD NTC (1) Over Temperature",
+        "22" => "LD NTC (2) Over Temperature",
+        "23" => "High Ambient Temperature",
+        "24" => "System Ready"
+      );
 
+    /**
+     * Traduit les clés de l'API en id logique
+     * @var string
+     */
     private static $apiSource = array(
         "pw" => "Powerstatus",
         "a" => "Source",
@@ -75,7 +110,10 @@ class Optomapi
         "Z" => "locking Source",
         "ISF" => "isf"
     );
-
+    /**
+     * Donne les minValue et maxValue des id logique
+     * @var [type]
+     */
     private static $rangeOptions = array(
         'Brightness' => array(
             "range" => array(
@@ -168,7 +206,10 @@ class Optomapi
             )
         )
     );
-      
+    /**
+     * Donne les listeValue des id logique
+     * @var string
+     */
     private static $listOptions = array(
         'Source' => array(
             "id" => "source",
@@ -205,7 +246,7 @@ class Optomapi
             "1" => "Eco",
             "2" => "Dynamic"
         ),
-        'Power mode' => array(
+        'Power Mode' => array(
             "id" => "pwmode",
             "0" => "Eco",
             "1" => "Active"
@@ -320,8 +361,12 @@ class Optomapi
         );
 
     /*     * ***********************Methode static*************************** */
-
-    public function setFullNames($_data)
+    /**
+     * Traduit la clé et la valeur du tableau de l'API
+     * @param array $_data Tableau brut de l'API
+     * @return array $array Tableau des valeurs traduites
+     */
+    public static function setFullNames($_data)
     {
         $array = array();
         if (is_array($_data)) {
@@ -333,13 +378,21 @@ class Optomapi
         }
         return $array;
     }
-
+    /**
+     * Traduit la clé de l'API
+     * @param  string $_word Mot non traduit
+     * @return string $_word Mot traduit
+     */
     public static function getKeyName($_word)
     {
         (array_key_exists($_word, self::$apiSource) == true) ? $_word = $apiSource[$_word] : $_word;
         return $_word;
     }
-
+    /**
+     * Traduit la valeur de l'api
+     * @param  string $_key Clé non traduite
+     * @return string $list Clé traduite
+     */
     public static function getListValue($_key)
     {
         $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
@@ -353,16 +406,26 @@ class Optomapi
         }
         return $list;
     }
-
+    /**
+     * Récupère les minValue et maxValue de l'id logique
+     * @param  string $_key id logique
+     * @return array       Tableau des 2 valeurs minValue et maxValue
+     */
     public static function getRangeValue($_key)
     {
         $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        $range = array();
         if (array_key_exists('range', self::$rangeOptions[$_key]) == true) {
             $range = self::$rangeOptions[$_key]['range'];
         }
         return $range;
     }
-
+    /**
+     * Retourne la valeur de listValue traduite
+     * @param  string $_key id logique
+     * @param  string $_id  Valeur non traduite
+     * @return string $_id  Valeur traduite
+     */
     public static function getValueFromId($_key, $_id)
     {
         $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
@@ -371,5 +434,18 @@ class Optomapi
         }
         return $_id;
     }
+    /**
+     * Retourne le nom de l'erreur à partir du code d'erreur
+     * @param  string $_key code d'erreur
+     * @return string $_id  Message d'erreur traduit
+     */
+    public static function getError($_key = '')
+    {
+        if (isset(self::$error[$_key])) {
+            $_id = self::$error[$_key];
+        } else {
+            $_id = "N/A";
+        }
+        return $_id;
+    }
 }
-?>

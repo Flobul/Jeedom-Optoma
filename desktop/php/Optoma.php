@@ -70,12 +70,12 @@ if ($state == 1) {
           echo '<center>';
           echo '<i class="fas fa-sign-in-alt fa-rotate-90"></i>';
           echo '</center>';
-          echo '<span title="{{Recherche automatique du vidéoprojecteur grâce à la fonction AMX Device Discovery.}}"><center>{{Mode inclusion}}</center></span>';
+          echo '<span title="{{Recherche automatique du vidéoprojecteur grâce à la fonction AMX Device Discovery.}}"><center>{{Mode inclusion AMX}}</center></span>';
           echo '</div>';
       }
       ?>
-        <div class="cursor eqLogicAction logoSecondary" data-action="add">
-				<i class="fa fa-plus-circle"></i>
+        <div class="cursor eqLogicAction logoPrimary" data-action="add">
+				<i class="fas fa-plus-circle"></i>
 				<br>
 				<span>{{Ajouter}}</span>
 			</div>
@@ -94,7 +94,8 @@ if ($state == 1) {
 			<span>{{Documentation}}</span>
 		</div>
 		</div>
-		<legend><i class="fa fa-table"></i> {{Mes Vidéoprojecteurs}}</legend>
+		<legend><i class="fas fa-photo-video"></i> {{Mes Vidéoprojecteurs}}</legend>
+	    <input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
 		<div class="eqLogicThumbnailContainer">
 			<?php
                 foreach ($eqLogics as $eqLogic) {
@@ -213,7 +214,7 @@ saisissez l'adresse manuellement.}}"></i>
 							    <select id="idipoptoma" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="API">
 									<option value="">{{Aucun}}</option>
 									<option value="/form/control_cgi">/form/control_cgi</option>
-									<option value="/tgi/control.tgi">/tgi/control.tgi ( )</option>
+									<option value="/tgi/control.tgi">/tgi/control.tgi (non géré actuellement)</option>
                                 </select>
 							</div>
 						</div>

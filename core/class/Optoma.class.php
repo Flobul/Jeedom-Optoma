@@ -19,15 +19,18 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 require_once __DIR__ . "/../../../../plugins/Optoma/core/class/Optomapi.class.php";
-
+require_once __DIR__ . '/../../../../plugins/Optoma/3rdparty/telnet.php';
 
 class Optoma extends eqLogic
 {
     /*     * *************************Attributs****************************** */
-    public static $_pluginVersion = '0.9';
+    public static $_pluginVersion = '0.92';
 
     /*     * ***********************Methode static*************************** */
-
+    /**
+     * Lancement à l'intervalle selectionné de la commande Refresh
+     * si l'équipement est actif et que la commande existe
+     */
     public static function cron()
     {
         $autorefresh = config::byKey('autorefresh', 'Optoma');
@@ -57,7 +60,217 @@ class Optoma extends eqLogic
         }
         log::add(__CLASS__, 'debug', __FUNCTION__ . __(' : fin', __FILE__));
     }
-    
+
+    public static function deamon_info()
+    {
+        //log::add('Optoma_Daemon', 'info', 'Etat du service Optoma');
+
+        $return = array();
+        $return['log'] = 'vp_telnet_Daemon';
+        $return['state'] = 'nok';
+        $pid = trim(shell_exec('ps ax | grep "/Optomad.php" | grep -v "grep" | wc -l'));
+        if ($pid != '' && $pid != '0') {
+            $return['state'] = 'ok';
+        }
+        if (config::byKey('listenport', 'Optoma') >  '1') {
+            $return['launchable'] = 'ok';
+        } else {
+            $return['launchable'] = 'nok';
+            $return['launchable_message'] = __('Le port n\'est pas configuré.', __FILE__);
+        }
+        //log::add('Optoma_Daemon', 'info', "Statut=".$return['state']);
+        return $return;
+    }
+
+    public static function deamon_start($_debug = false)
+    {
+        log::add('Optoma_Daemon', 'info', __('Lancement du service Optoma', __FILE__));
+        $deamon_info = self::deamon_info();
+        if ($deamon_info['launchable'] != 'ok') {
+            throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
+        }
+        if ($deamon_info['state'] == 'ok') {
+            self::deamon_stop();
+            sleep(2);
+        }
+        log::add('Optoma_Daemon', 'info', __('Lancement du démon Optoma', __FILE__));
+        $cmd = substr(dirname(__FILE__), 0, strpos(dirname(__FILE__), '/core/class')).'/resources/Optomad.php';
+
+        $result = exec('sudo php ' . $cmd . ' >> ' . log::getPathToLog('Optoma_Daemon') . ' 2>&1 &');
+        if (strpos(strtolower($result), 'error') !== false || strpos(strtolower($result), 'traceback') !== false) {
+            log::add('Optoma_Daemon', 'error', $result);
+            return false;
+        }
+        sleep(1);
+        $i = 0;
+        while ($i < 30) {
+            $deamon_info = self::deamon_info();
+            if ($deamon_info['state'] == 'ok') {
+                break;
+            }
+            sleep(1);
+            $i++;
+        }
+        if ($i >= 30) {
+            log::add('Optoma_Daemon', 'error', __('Impossible de lancer le démon Optoma_Daemon', __FILE__), 'unableStartDeamon');
+            return false;
+        }
+        log::add('Optoma_Daemon', 'info', __('Démon Optoma_Daemon lancé', __FILE__));
+        return true;
+    }
+
+    public static function deamon_stop()
+    {
+        log::add('Optoma_Daemon', 'info', __('Arrêt du service Optoma', __FILE__));
+        $cmd='/Optomad.php';
+        exec('sudo kill -9 $(ps aux | grep "'.$cmd.'" | awk \'{print $2}\')');
+        sleep(1);
+        exec('sudo kill -9 $(ps aux | grep "'.$cmd.'" | awk \'{print $2}\')');
+        sleep(1);
+        $deamon_info = self::deamon_info();
+        if ($deamon_info['state'] == 'ok') {
+            exec('sudo kill -9 $(ps aux | grep "'.$cmd.'" | awk \'{print $2}\')');
+            sleep(1);
+        } else {
+            return true;
+        }
+        $deamon_info = self::deamon_info();
+        if ($deamon_info['state'] == 'ok') {
+            exec('sudo kill -9 $(ps aux | grep "'.$cmd.'" | awk \'{print $2}\')');
+            sleep(1);
+            return true;
+        }
+    }
+    /**
+     * Ouvre un socket pendant 60 secondes et envoie le résultat en buffer à décoder
+     * @param  bool $_state Etat du mode inclusion
+     */
+    public static function amxDeviceDiscovery($_state)
+    {
+        log::add(__CLASS__, 'debug', __("Lancement du mode inclusion", __FILE__));
+        if ($_state == 1) {
+            event::add('Optoma::includeDevice', null);
+            if (!($sock = socket_create(AF_INET, SOCK_DGRAM, 0))) {
+                log::add(__CLASS__, 'debug', "Couldn't create socket: " . socket_strerror(socket_last_error($sock)));
+                return false;
+            }
+            if (!socket_bind($sock, "0.0.0.0", 9131)) {
+                log::add(__CLASS__, 'debug', "Couldn't bind port: " . socket_strerror(socket_last_error($sock)));
+                return false;
+            }
+            if (!socket_set_option($sock, IPPROTO_IP, MCAST_JOIN_GROUP, array("group"=>"239.255.250.250","interface"=>0))) {
+                log::add(__CLASS__, 'debug', "socket_set_option() failed: reason: " . socket_strerror(socket_last_error($sock)));
+                return false;
+            }
+            socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, array("sec"=>60, "usec"=>0));
+            $start=time();
+            while (true) {
+                $r = socket_recvfrom($sock, $buf, 512, 0, $remote_ip, $remote_port);
+                log::add(__CLASS__, 'debug', $remote_ip." : ".$remote_port." -- " . $buf);
+                self::decodeAMXMessage($remote_ip, $buf);
+                if ((time()-$start) > 60) {
+                    break;
+                }
+            }
+            socket_close($sock);
+            event::add('Optoma::includeDevice', null);
+        } else {
+            log::add(__CLASS__, 'debug', __("Fin manuelle de l'inclusion", __FILE__));
+        }
+    }
+    /**
+     * Décode le message reçu par le socket (AMX Device Discovery)
+     * et créé l'équipement avec le message reçu
+     * @param  string $remote_ip IP relevée à la réception du buffer
+     * @param  type $buf       Message reçu contenant les infos de l'appareil
+     */
+    public static function decodeAMXMessage($remote_ip, $buf)
+    {
+        $result = array();
+        foreach (explode('<-', str_replace('>', '', $buf)) as $param) {
+            $Make = explode('=', $param);
+            if ($Make[0] == "Make") {
+                $result['type'] = str_replace(' ', '_', $Make[1]);
+                if ($result['type'] !== "Optoma") {
+                    log::add(__CLASS__, 'debug', __("Ce n'est pas un Optoma: ", __FILE__) . $result['type']);
+                }
+            }
+            if ($Make[0] == "Model") {
+                $result['model'] = str_replace(' ', '_', $Make[1]);
+            }
+            if ($Make[0] == "UUID") {
+                $result['UUID'] = str_replace(' ', '_', $Make[1]);
+            }
+            if ($Make[0] == "SDKClass") {
+                $result['SDKClass'] = str_replace(' ', '_', $Make[1]);
+                if ($result['SDKClass'] !== "VideoProjector") {
+                    log::add(__CLASS__, 'debug', __("Ce n'est pas un vidéoprojecteur: ", __FILE__) . $result['SDKClass']);
+                }
+            }
+        }
+        if ($result['SDKClass'] == 'VideoProjector') {
+            Optoma::addEquipement($result, $remote_ip);
+        }
+    }
+    /**
+     * Créé l'équipement avec les valeurs du buffer
+     * @param array $_data Tableau des valeurs récupérées dans le buffer
+     * @param string $_IP   IP relevée à la réception du buffer
+     * @return object $Optoma Retourne l'équipement créé
+     */
+    public static function addEquipement($_data, $_IP)
+    {
+        $name = $_data['type'] . " " . $_data['model'] . " - " . $_data['UUID'];
+        foreach (self::byLogicalId($_data['UUID'], 'Optoma', true) as $Optoma) {
+            if (is_object($Optoma) && $Optoma->getConfiguration('IP') == $_IP) {
+                return $Optoma;
+            }
+        }
+
+        $Optoma = new Optoma();
+        $Optoma->setName($name);
+        $Optoma->setLogicalId($_data['UUID']);
+        $Optoma->setObject_id(null);
+        $Optoma->setEqType_name('Optoma');
+        $Optoma->setIsEnable(1);
+        $Optoma->setIsVisible(1);
+        $Optoma->setConfiguration('type', $_data['type']);
+        $Optoma->setConfiguration('model', $_data['model']);
+        $Optoma->setConfiguration('MAC', $_data['UUID']);
+        $Optoma->setConfiguration('IP', $_IP);
+        $Optoma->setConfiguration('auto_discovery', 'AMX Device Discovery');
+        $Optoma->save();
+        config::save('include_mode', 0, 'Optoma');
+        event::add('Optoma::includeDevice', $Optoma->getId());
+
+        return $Optoma;
+    }
+    /**
+     * Recherche la configuration dans le dossier du modèle
+     * et renvoie la configuration associée
+     * @param  string $filename Nom du fichier
+     * @return array           Configuration en tableau
+     */
+    public static function devicesParameters($filename)
+    {
+        $ModelVP = "UHD";
+        $return = array();
+        $path = dirname(__FILE__) . '/../config/'. $ModelVP . '/';
+
+        $files = ls($path, '*.json', false, array('files', 'quiet'));
+        foreach ($files as $file) {
+            if ($file == $filename) {
+                try {
+                    $content = file_get_contents($path . '/' . $file);
+                    if (is_json($content)) {
+                        $return += json_decode($content, true);
+                    }
+                } catch (Exception $e) {
+                }
+            }
+        }
+        return $return;
+    }
 
     public function preInsert()
     {
@@ -86,14 +299,8 @@ class Optoma extends eqLogic
         if (empty($this->getConfiguration('IP'))) {
             throw new Exception(__('L\'adresse IP ne peut pas être vide', __FILE__));
         }
-
-        if ($this->getConfiguration('askCGI') == 1) {
-            if (empty($this->getConfiguration('API'))) {
-                throw new Exception(__('Le lien CGI ne peut pas être vide', __FILE__));
-            }
-            if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $this->getConfiguration('API'))) {
-                throw new Exception(__('Le format du lien CGI est incorrect', __FILE__));
-            }
+        if (!filter_var($this->getConfiguration('IP'), FILTER_VALIDATE_IP)) {
+            throw new Exception(__('Le format de l\'adresse IP est incorrect', __FILE__));
         }
     }
 
@@ -103,22 +310,40 @@ class Optoma extends eqLogic
             $this->loadCmdFromConf('UHD');
         }
     }
-
+    /**
+     * Retourne l'URL de la page Info
+     * @param  string $_ip Adresse IP de l'équipement
+     * @return string      URL de la page Info
+     */
     public function getInfoUrl($_ip)
     {
         return "http://" . $_ip . "/Info.asp";
     }
-  
+    /**
+     * Retourne l'URL de la page Control
+     * @param  string $_ip Adresse IP de l'équipement
+     * @return string      URL de la page Control
+     */
     public function getControlUrl($_ip)
     {
         return "http://" . $_ip . "/Control.asp";
     }
-
+    /**
+     * Retourne l'URL de l'API
+     * @param  string $_ip  Adresse IP de l'équipement
+     * @param  string $_api API de l'équipement
+     * @return string       URL de l'API
+     */
     public function getAPIUrl($_ip, $_api)
     {
         return "http://" . $_ip . $_api;
     }
-
+    /**
+     * Recherche la configuration dans le dossier du modèle
+     * et créé les commandes si elles sont inexistantes
+     * @param  string $type Nom
+     * @return bool       Renvoi 0 si fichier en erreur, 1 sinon
+     */
     public function loadCmdFromConf($type)
     {
         $return = array();
@@ -151,17 +376,14 @@ class Optoma extends eqLogic
                 $cmd->setEqLogic_id($this->getId());
             }
             utils::a2o($cmd, $command);
-            if ($command['subtype'] == 'numeric') {
+            if (isset($command['subtype']) && $command['subtype'] == 'numeric') {
                 $range = Optomapi::getRangeValue($command['logicalId']);
-            } elseif ($command['subtype'] == 'slider') {
+            } elseif (isset($command['subtype']) && $command['subtype'] == 'slider') {
                 $range = Optomapi::getRangeValue($command['configuration']['cmdInfo']);
-                //if ($listValue != '') {
-                 //   $cmd->setConfiguration('listValue', substr($listValue, 0, -1));
-                //}
-            }
-            if (is_array($range)) {
-                $cmd->setConfiguration('minValue', $range[0]);
-                $cmd->setConfiguration('maxValue', $range[1]);
+                if (is_array($range)) {
+                    $cmd->setConfiguration('minValue', $range[0]);
+                    $cmd->setConfiguration('maxValue', $range[1]);
+                }
             }
 
             if (isset($command['configuration']['cmdInfo']) && $command['subtype'] == 'select') {
@@ -191,89 +413,13 @@ class Optoma extends eqLogic
         }
         return true;
     }
-      
-    public static function testCurl($_url, $_page)
-    {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-  CURLOPT_URL => $_url . $_page,
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 5,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'GET',
-  CURLOPT_HTTPHEADER => array(
-    'Upgrade-Insecure-Requests: 1',
-    'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
-    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
-  ),
-));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-        log::add('Optoma', 'debug', 'DEBUG testCurl résultat : ' . $response);
-    }
-  
-function curl_post_test($url, $post="", $cookiejar="")
-{
-	$retstr = "";
-	
-	// output buffer b/c curl goes straight to screen
-	ob_start();
-	
-	// create a new curl resource
-	$ch = curl_init();
-	
-	// set URL and other appropriate options
-	curl_setopt($ch, CURLOPT_URL, $url);
-	
-	// post if applicable
-	if (!empty($post))
-	{
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-	} // end if post
-	
-	// handle cookies
-	if (!empty($cookiejar))
-	{
-		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiejar);
-		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiejar);
-	} // end if cookiejar
-	
-	// grab URL and pass it to the browser
-	curl_exec($ch);
-	
-	// close curl resource, and free up system resources
-	curl_close($ch);
-	
-	$retstr = ob_get_clean();
-	return $retstr;
-} // end curl_post();
-  
-    public static function testLoginBis($_url, $_page, $_pwd)
-    {
-        $session = "";
-
-        $login = self::curl_post_test($_url."/login.htm", "", "cookiejar");
-        preg_match('/Challenge" value="(\S+?)"/', $login, $matches);
-        $challenge = $matches[1];
-        $resp = md5("admin".$_pwd . $challenge);
-        $logincgi = self::curl_post_test($_url."/tgi/login.tgi", "Username=1&Password=".$_pwd."&Challenge=&Response=$resp", "cookiejar");
-        $portstats = self::curl_post_test($_url."/tgi/control.tgi", "", "cookiejar");
-        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat1 : ' . $challenge);
-
-
-        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat2 : ' . $logincgi);
-
-        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat3 : ' . $portstats);
-
-    }
-  
+    /**
+     * Envoi des requêtes vers l'url et renvoi le résultat
+     * @param  string  $_url     URL des données
+     * @param  integer $_timeout Temps maximal de connexion
+     * @param  integer $_retry   Nombre de tentatives de connexions
+     * @return array            Résultat de la requête (json)
+     */
     public function sendRequest($_url, $_timeout = 2, $_retry = 5)
     {
         try {
@@ -282,7 +428,7 @@ function curl_post_test($url, $post="", $cookiejar="")
             log::add(__CLASS__, 'debug', "L." . __LINE__ . " F." . __FUNCTION__ . __(" Erreur d'authentification : ", __FILE__) . $request);
             return;
         }
-      
+
         try {
             $result = $request->exec($_timeout, $_retry);
         } catch (Exception $e) {
@@ -296,119 +442,6 @@ function curl_post_test($url, $post="", $cookiejar="")
             log::add(__CLASS__, 'debug', "L." . __LINE__ . " F." . __FUNCTION__ . __(" Données non reconnues : ", __FILE__) . $result);
             return false;
         }
-    }
-
-    public static function amxDeviceDiscovery($_state)
-    {
-        log::add(__CLASS__, 'debug', "Lancement du mode inclusion.");
-        if ($_state == 1) {
-            event::add('Optoma::includeDevice', null);
-            if (!($sock = socket_create(AF_INET, SOCK_DGRAM, 0))) {
-                log::add(__CLASS__, 'debug', "Couldn't create socket: " . socket_strerror(socket_last_error($sock)));
-                return false;
-            }
-            if (!socket_bind($sock, "0.0.0.0", 9131)) {
-                log::add(__CLASS__, 'debug', "Couldn't bind port: " . socket_strerror(socket_last_error($sock)));
-                return false;
-            }
-            if (!socket_set_option($sock, IPPROTO_IP, MCAST_JOIN_GROUP, array("group"=>"239.255.250.250","interface"=>0))) {
-                log::add(__CLASS__, 'debug', "socket_set_option() failed: reason: " . socket_strerror(socket_last_error($sock)));
-                return false;
-            }
-            socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, array("sec"=>60, "usec"=>0));
-            $start=time();
-            while (true) {
-                $r = socket_recvfrom($sock, $buf, 512, 0, $remote_ip, $remote_port);
-                log::add(__CLASS__, 'debug', $remote_ip." : ".$remote_port." -- " . $buf);
-                self::DecodeAMXMessage($remote_ip, $buf);
-                if ((time()-$start) > 60) {
-                    break;
-                }
-            }
-            socket_close($sock);
-            event::add('Optoma::includeDevice', null);
-        } else {
-            log::add(__CLASS__, 'debug', __("Fin manuelle de l'inclusion", __FILE__));
-        }
-    }
-
-    public static function DecodeAMXMessage($remote_ip, $buf)
-    {
-        $result = array();
-        foreach (explode('<-', str_replace('>', '', $buf)) as $param) {
-            $Make = explode('=', $param);
-            if ($Make[0] == "Make") {
-                $result['type'] = str_replace(' ', '_', $Make[1]);
-                if ($result['type'] !== "Optoma") {
-                    log::add(__CLASS__, 'debug', __("Ce n'est pas un Optoma: ", __FILE__) . $result['type']);
-                }
-            }
-            if ($Make[0] == "Model") {
-                $result['model'] = str_replace(' ', '_', $Make[1]);
-            }
-            if ($Make[0] == "UUID") {
-                $result['UUID'] = str_replace(' ', '_', $Make[1]);
-            }
-            if ($Make[0] == "SDKClass") {
-                $result['SDKClass'] = str_replace(' ', '_', $Make[1]);
-                if ($result['SDKClass'] !== "VideoProjector") {
-                    log::add(__CLASS__, 'debug', __("Ce n'est pas un vidéoprojecteur: ", __FILE__) . $result['SDKClass']);
-                }
-            }
-        }
-        if ($result['SDKClass'] == 'VideoProjector') {
-            Optoma::AddEquipement($result, $remote_ip);
-        }
-    }
-
-    public static function AddEquipement($_data, $_IP)
-    {
-        $name = $_data['type'] . " " . $_data['model'] . " - " . $_data['UUID'];
-        foreach (self::byLogicalId($_data['UUID'], 'Optoma', true) as $Optoma) {
-            if (is_object($Optoma) && $Optoma->getConfiguration('IP') == $_IP) {
-                return $Optoma;
-            }
-        }
-
-        $Optoma = new Optoma();
-        $Optoma->setName($name);
-        $Optoma->setLogicalId($_data['UUID']);
-        $Optoma->setObject_id(null);
-        $Optoma->setEqType_name('Optoma');
-        $Optoma->setIsEnable(1);
-        $Optoma->setIsVisible(1);
-        $Optoma->setConfiguration('type', $_data['type']);
-        $Optoma->setConfiguration('model', $_data['model']);
-        $Optoma->setConfiguration('MAC', $_data['UUID']);
-        $Optoma->setConfiguration('IP', $_IP);
-        $Optoma->setConfiguration('auto_discovery', 'AMX Device Discovery');
-        $Optoma->save();
-        config::save('include_mode', 0, 'Optoma');
-        event::add('Optoma::includeDevice', $Optoma->getId());
-      
-        return $Optoma;
-    }
-
-    public static function devicesParameters($filename)
-    {
-        $ModelVP = "UHD";
-        $return = array();
-        $path = dirname(__FILE__) . '/../config/'. $ModelVP . '/';
-        log::add(__CLASS__, 'debug', __("Action sur ", __FILE__) . $path . $filename);
-
-        $files = ls($path, '*.json', false, array('files', 'quiet'));
-        foreach ($files as $file) {
-            if ($file == $filename) {
-                try {
-                    $content = file_get_contents($path . '/' . $file);
-                    if (is_json($content)) {
-                        $return += json_decode($content, true);
-                    }
-                } catch (Exception $e) {
-                }
-            }
-        }
-        return $return;
     }
 }
 
@@ -434,11 +467,6 @@ class OptomaCmd extends cmd
                     $value = $args[0] . "=" . $select;
                     break;
                 case 'other':
-                    if ($eqLogic->getConfiguration('API') == "/tgi/control.tgi") {
-
-                        log::add('Optoma', 'debug', "## TEST Connexion Bis tgi/control.tgi = ");
-                        Optoma::testLoginBis($eqLogic->getConfiguration('IP'), $eqLogic->getConfiguration('API'), $eqLogic->getConfiguration('password'));
-                    }
                     if ($this->getLogicalId() == 'Refresh') {
                         $result_api = $eqLogic->sendRequest($API_url);
                         preg_match('#{(.*)}#U', $result_api, $result);
@@ -453,10 +481,9 @@ class OptomaCmd extends cmd
                     }
             }
             if ($this->getLogicalId() !== 'Refresh') {
-                // $result_api = $eqLogic->sendRequest($API_url . '?' . urlencode($value));
+                $result_api = $eqLogic->sendRequest($API_url . '?' . urlencode($value));
             }
         }
         log::add('Optoma', 'debug', __("Action sur ", __FILE__) . $this->getLogicalId());
     }
 }
-?>
