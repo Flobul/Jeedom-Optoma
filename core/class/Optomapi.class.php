@@ -20,11 +20,12 @@ class Optomapi
 {
 
     /*     * *************************Attributs****************************** */
+
     /**
-     * Traduit les code d'erreurs en message
+     * Traduit les codes d'erreurs en message
      * @var string
      */
-    private static $error = array(
+    private static $_error = array(
         "0" => "Standby Mode",
         "1" => "Warming up",
         "2" => "Cooling Down",
@@ -56,7 +57,7 @@ class Optomapi
      * Traduit les clés de l'API en id logique
      * @var string
      */
-    private static $apiSource = array(
+    private static $_apiSource = array(
         "pw" => "Powerstatus",
         "a" => "Source",
         "b" => "Display Mode",
@@ -110,11 +111,12 @@ class Optomapi
         "Z" => "locking Source",
         "ISF" => "isf"
     );
+
     /**
      * Donne les minValue et maxValue des id logique
      * @var [type]
      */
-    private static $rangeOptions = array(
+    private static $_rangeOptions = array(
         'Brightness' => array(
             "range" => array(
                 -50,
@@ -206,11 +208,12 @@ class Optomapi
             )
         )
     );
+
     /**
      * Donne les listeValue des id logique
      * @var string
      */
-    private static $listOptions = array(
+    private static $_listOptions = array(
         'Source' => array(
             "id" => "source",
             "0" => "HDMI1",
@@ -360,7 +363,8 @@ class Optomapi
             )
         );
 
-    /*     * ***********************Methode static*************************** */
+    /*     * ***********************Methodes statiques*************************** */
+
     /**
      * Traduit la clé et la valeur du tableau de l'API
      * @param array $_data Tableau brut de l'API
@@ -378,6 +382,7 @@ class Optomapi
         }
         return $array;
     }
+
     /**
      * Traduit la clé de l'API
      * @param  string $_word Mot non traduit
@@ -385,9 +390,10 @@ class Optomapi
      */
     public static function getKeyName($_word)
     {
-        (array_key_exists($_word, self::$apiSource) == true) ? $_word = $apiSource[$_word] : $_word;
+        (array_key_exists($_word, self::$_apiSource) == true) ? $_word = self::$_apiSource[$_word] : $_word;
         return $_word;
     }
+
     /**
      * Traduit la valeur de l'api
      * @param  string $_key Clé non traduite
@@ -397,8 +403,8 @@ class Optomapi
     {
         $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
         $list = '';
-        if (is_array(self::$listOptions[$_key])) {
-            foreach (self::$listOptions[$_key] as $cle => $valeur) {
+        if (is_array(self::$_listOptions[$_key])) {
+            foreach (self::$_listOptions[$_key] as $cle => $valeur) {
                 if ($cle !== 'id') {
                     $list .= $valeur . "|" . $valeur . ";";
                 }
@@ -406,6 +412,7 @@ class Optomapi
         }
         return $list;
     }
+
     /**
      * Récupère les minValue et maxValue de l'id logique
      * @param  string $_key id logique
@@ -415,11 +422,12 @@ class Optomapi
     {
         $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
         $range = array();
-        if (array_key_exists('range', self::$rangeOptions[$_key]) == true) {
-            $range = self::$rangeOptions[$_key]['range'];
+        if (array_key_exists('range', self::$_rangeOptions[$_key]) == true) {
+            $range = self::$_rangeOptions[$_key]['range'];
         }
         return $range;
     }
+
     /**
      * Retourne la valeur de listValue traduite
      * @param  string $_key id logique
@@ -429,11 +437,12 @@ class Optomapi
     public static function getValueFromId($_key, $_id)
     {
         $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
-        if (array_key_exists($_id, self::$listOptions[$_key]) == true) {
-            $_id = self::$listOptions[$_key][$_id];
+        if (array_key_exists($_id, self::$_listOptions[$_key]) == true) {
+            $_id = self::$_listOptions[$_key][$_id];
         }
         return $_id;
     }
+
     /**
      * Retourne le nom de l'erreur à partir du code d'erreur
      * @param  string $_key code d'erreur
@@ -441,8 +450,8 @@ class Optomapi
      */
     public static function getError($_key = '')
     {
-        if (isset(self::$error[$_key])) {
-            $_id = self::$error[$_key];
+        if (isset(self::$_error[$_key])) {
+            $_id = self::$_error[$_key];
         } else {
             $_id = "N/A";
         }

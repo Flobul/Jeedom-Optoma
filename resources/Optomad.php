@@ -6,7 +6,7 @@
 require_once dirname(__FILE__) . '/../core/class/Optoma.class.php';
 require_once dirname(__FILE__) . '/../core/class/Optomapi.class.php';
 
-log::add('Optoma_Daemon', 'info', 'Activation du service Optoma');
+log::add('Optoma_Daemon', 'info', __('Activation du service Optoma', __FILE__));
 
 $listen = config::byKey('listenport','Optoma');
 $ipadr = config::byKey('ip','Optoma');
@@ -15,7 +15,7 @@ $telnet = new Optoma_telnet();
 $errno = '';
 $errstr = '';
 
- log::add('Optoma_Daemon', 'debug', 'Activation du daemon Optoma sur l\'IP '.$ipadr.'  port : '.$listen);
+ log::add('Optoma_Daemon', 'debug', __('Activation du daemon Optoma sur l\'IP ', __FILE__).$ipadr.' port : '.$listen);
 //echo 'Activation du daemon Optoma PARAMS :  ' . $errstr . '(IP : '.$ipadr.'  port : '.$listen.') '.date('H:i:s')."\n";
 
 $eqLogics = eqLogic::byType('Optoma');
@@ -27,14 +27,14 @@ $delain = time();
 			$telnet->telnetGetReadResponse($result);
 			$state='';
 			$info='';
-			$reponse=explode("> ",$result);
+			$reponse = explode("> ",$result);
 			if(count($reponse) == 1)
-				$value=$reponse[0];
+				$value = $reponse[0];
 			elseif(count($reponse) == 2)
-				$value=$reponse[1];
+				$value = $reponse[1];
 			elseif(count($reponse) == 3)
-				$value=$reponse[2];
-			else log::add('Optoma', 'info','L.' . __LINE__ . ' F.' . __FUNCTION__ . ' Réponse non appropriée ' . json_encode($reponse));
+				$value = $reponse[2];
+			else log::add('Optoma', 'info','L.' . __LINE__ . ' F.' . __FUNCTION__ . __(' Réponse non appropriée ', __FILE__) . json_encode($reponse));
 			if(preg_match('/[INFO]+([0-9]+)/i', $result, $matches)){
                 $state = Optomapi::getError($matches[1]);
 				/*switch($matches[1]) {
@@ -116,15 +116,17 @@ $delain = time();
 					default:
 						$state="N/A";
 				}*/
-			}
+			} else {
+				log::add('Optoma_Daemon', 'info', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . __(' Nouvelle information : ', __FILE__) . json_encode($reponse));
+            }
 			if(!empty($state)) {
 				foreach ($eqLogics as $eqLogic) {
 					if($eqLogic->getConfiguration('ip') == config::byKey('ip','Optoma')) {
-						log::add('Optoma_Daemon', 'info', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . ' Vidéoprojecteur trouvé, mise à jour de la valeur de SystemInfo');
+						log::add('Optoma_Daemon', 'info', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . __(' Vidéoprojecteur trouvé, mise à jour de la valeur de SystemInfo', __FILE__));
 						$systemInfo = $eqLogic->getCmd(null, 'SystemInfo');
 						if(is_object($systemInfo)) {
 							$systemInfo->event($state);
-							log::add('Optoma_Daemon', 'info', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . ' Valeur de SystemInfo mise à jour ' . $state);
+							log::add('Optoma_Daemon', 'info', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . __(' Valeur de SystemInfo mise à jour ', __FILE__) . $state);
 						}
 					}
 				}
@@ -140,6 +142,6 @@ $delain = time();
 			}
 	} else {
 			$telnet->telnetDisconnect();
-			log::add('Optoma_Daemon', 'error','L.' . __LINE__ . ' F.' . __FUNCTION__ . ' Erreur du démon : ' . $errstr . '(' . $errno . ')' );
+			log::add('Optoma_Daemon', 'error','L.' . __LINE__ . ' F.' . __FUNCTION__ . __(' Erreur du démon : ', __FILE__) . $errstr . '(' . $errno . ')' );
 			Optoma::deamon_stop();
 	}

@@ -143,7 +143,7 @@ if ($state == 1) {
 					<form class="form-horizontal">
 				<fieldset>
 						<div class="form-group">
-						<legend>Général</legend>
+						<legend><i class="fas fa-sitemap"></i> {{Général}}</legend>
 							<label class="col-sm-3 control-label">{{Nom du vidéoprojecteur}}</label>
 							<div class="col-sm-5">
 								<input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
@@ -185,12 +185,12 @@ if ($state == 1) {
 							</div>
 						</div>
 				</fieldset>
-						<legend>{{Paramètres du vidéoprojecteur}}
+						<legend><i class="fas fa-cogs"></i> {{Paramètres du vidéoprojecteur}}
 									<sup>
 										<i class="fa fa-question-circle tooltips" title="{{Entrez tous les paramètres demandés.
-Ils ne sont à saisir qu'une seule fois.}}" style="font-size : 1em;color:grey;"></i>
+Ils ne sont à saisir qu'une seule fois.}}"></i>
 									</sup>
-									</legend>
+						</legend>
 						<fieldset>
 						<div class="form-group">
 							<label class="col-sm-3 control-label">{{Adresse IP}}
@@ -204,6 +204,7 @@ saisissez l'adresse manuellement.}}"></i>
 								<input id="idipoptoma" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="IP" placeholder="192.168.X.XXX"/>
 							</div>
 						</div>
+
 						<div class="form-group">
 							<label class="col-sm-3 control-label">{{Adresse API}}
 									<sup>
@@ -215,6 +216,22 @@ saisissez l'adresse manuellement.}}"></i>
 									<option value="">{{Aucun}}</option>
 									<option value="/form/control_cgi">/form/control_cgi</option>
 									<option value="/tgi/control.tgi">/tgi/control.tgi (non géré actuellement)</option>
+                                </select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-3 control-label">{{Port telnet}}
+									<sup>
+										<i class="fa fa-question-circle tooltips" title="{{Sélectionnez le port telnet utilisé pour récupérer les heures de la lampe.}}"></i>
+									</sup>
+							</label>
+							<div class="col-sm-5">
+							    <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="telnetPort">
+									<option value="">{{Aucun}}</option>
+									<option value="23" disabled="disabled">23 (utilisé par le démon)</option>
+									<option value="1023">1023</option>
+									<option value="2023">2023</option>
                                 </select>
 							</div>
 						</div>
@@ -254,14 +271,15 @@ saisissez l'adresse manuellement.}}"></i>
 		<div class="col-sm-6">
             <form class="form-horizontal">
                 <fieldset>
+					<legend><i class="fa fa-wrench"></i> {{Configuration}}</legend>
 					<div class="form-group">
-						<label class="col-sm-2 control-label">{{Configuration}}</label>
 						<div class="col-sm-8">
 							<a id="bt_autoDetectModule" class="btn btn-warning" title="{{Recréer les commandes}}" style="display:none"><i class="fas fa-search"></i> {{Recréer les commandes}}</a>
 							<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="fileconf" style="display:none"></select>
 						</div>
 					</div>
-				<label class="col-sm-2 control-label">{{Informations}}</label>
+					<legend><i class="fas fa-info-circle"></i> {{Informations}}</legend>
+					<div class="form-group">
             <table id="table_infoseqlogic" class="col-sm-9 table-bordered table-condensed" style="border-radius: 10px;">
                         <thead>
                         </thead>
@@ -269,6 +287,7 @@ saisissez l'adresse manuellement.}}"></i>
                         </tbody>
                     </table>
 				</br>
+					</div>
 					<div class="form-group">
 						<div class="col-sm-10">
 							<center>
@@ -307,7 +326,7 @@ saisissez l'adresse manuellement.}}"></i>
 				<table id="table_info" class="table table-bordered table-condensed">
 					<thead>
 						<tr>
-							<th style="width: 190px;">{{Nom}}</th>
+							<th style="width: 250px;">{{Nom}}</th>
 							<th style="width: 220px;">{{Type}}</th>
 							<th>{{Valeur}}</th>
 							<th style="width: 200px;">{{Paramètres}}</th>

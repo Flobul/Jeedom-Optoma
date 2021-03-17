@@ -84,11 +84,11 @@ function amxDeviceDiscovery(_state) {
 
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
   if (init(_cmd.type) == 'info') {
-		tr += '<td style="display:inline-flex;">';
+		tr += '<td><div style="display:inline-flex;">';
 		tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
 		tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon"><i class="fas fa-flag"></i> {{Icône}}</a>';
 		tr += '<span class="cmdAttr" data-l1key="display" data-l2key="icon"></span>';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom}} style="margin-top:5px" >';
+		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom}}"></div>';
 		tr += '</td>';
 		tr += '<td>';
 		tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-top:-5px;width:40%;display:inline-block;" />';

@@ -24,13 +24,10 @@ require_once __DIR__ . '/../../../../plugins/Optoma/3rdparty/telnet.php';
 class Optoma extends eqLogic
 {
     /*     * *************************Attributs****************************** */
-<<<<<<< HEAD
-    public static $_pluginVersion = '0.92';
-=======
-    public static $_pluginVersion = '0.91';
->>>>>>> bdcadb1cb36699fea85867b972d031999264a292
+    public static $_pluginVersion = '0.93';
 
-    /*     * ***********************Methode static*************************** */
+    /*     * ***********************Methode statique*************************** */
+
     /**
      * Lancement à l'intervalle selectionné de la commande Refresh
      * si l'équipement est actif et que la commande existe
@@ -51,6 +48,23 @@ class Optoma extends eqLogic
                                 if (is_object($cmd)) {
                                     $cmd->execCmd();
                                 }
+                                foreach ($eqLogic->getCmd('info') as $infoCmd) {
+                                    if ($infoCmd->getConfiguration('telnetCmd') != '') {
+                                        $port = ($eqLogic->getConfiguration('telnetPort') != '') ? $eqLogic->getConfiguration('telnetPort') : 1023;
+                                        $telnet = new Optoma_telnet();
+                                        try {
+                                            if ($telnet->telnetConnect($eqLogic->getConfiguration('IP'), $port, $errno, $errstr)) {
+                                                try {
+                                                    $eqLogic->sendCommand($infoCmd, $telnet);
+                                                } catch (Exception $exc) {
+                                                    log::add(__CLASS__, 'debug', __("Erreur lors de l'exécution de la commande telnet ", __FILE__) . $exc->getMessage());
+                                                }
+                                            }
+                                        } catch (Exception $exc) {
+                                            log::add(__CLASS__, 'debug', __("Erreur lors de la connexion telnet ", __FILE__) . $exc->getMessage());
+                                        }
+                                    }
+                                }
                             }
                         }
                     } catch (Exception $exc) {
@@ -65,10 +79,13 @@ class Optoma extends eqLogic
         log::add(__CLASS__, 'debug', __FUNCTION__ . __(' : fin', __FILE__));
     }
 
+    /**
+     * Récupère les infos du démon dans les processus
+     * @return array Etat du démon
+     */
     public static function deamon_info()
     {
         //log::add('Optoma_Daemon', 'info', 'Etat du service Optoma');
-
         $return = array();
         $return['log'] = 'vp_telnet_Daemon';
         $return['state'] = 'nok';
@@ -86,6 +103,11 @@ class Optoma extends eqLogic
         return $return;
     }
 
+    /**
+     * Démarre le démon pendant 3 secondes, ou le redémarre si déjà démarré
+     * @param  boolean $_debug [description]
+     * @return boolean         Vrai si OK, faux si erreur.
+     */
     public static function deamon_start($_debug = false)
     {
         log::add('Optoma_Daemon', 'info', __('Lancement du service Optoma', __FILE__));
@@ -123,6 +145,10 @@ class Optoma extends eqLogic
         return true;
     }
 
+    /**
+     * Arrête le démon
+     * @return boolean Vrai si arrêté
+     */
     public static function deamon_stop()
     {
         log::add('Optoma_Daemon', 'info', __('Arrêt du service Optoma', __FILE__));
@@ -145,6 +171,7 @@ class Optoma extends eqLogic
             return true;
         }
     }
+
     /**
      * Ouvre un socket pendant 60 secondes et envoie le résultat en buffer à décoder
      * @param  bool $_state Etat du mode inclusion
@@ -182,11 +209,12 @@ class Optoma extends eqLogic
             log::add(__CLASS__, 'debug', __("Fin manuelle de l'inclusion", __FILE__));
         }
     }
+
     /**
      * Décode le message reçu par le socket (AMX Device Discovery)
      * et créé l'équipement avec le message reçu
      * @param  string $remote_ip IP relevée à la réception du buffer
-     * @param  type $buf       Message reçu contenant les infos de l'appareil
+     * @param  string $buf       Message reçu contenant les infos de l'appareil
      */
     public static function decodeAMXMessage($remote_ip, $buf)
     {
@@ -216,6 +244,7 @@ class Optoma extends eqLogic
             Optoma::addEquipement($result, $remote_ip);
         }
     }
+
     /**
      * Créé l'équipement avec les valeurs du buffer
      * @param array $_data Tableau des valeurs récupérées dans le buffer
@@ -249,6 +278,7 @@ class Optoma extends eqLogic
 
         return $Optoma;
     }
+
     /**
      * Recherche la configuration dans le dossier du modèle
      * et renvoie la configuration associée
@@ -276,6 +306,9 @@ class Optoma extends eqLogic
         return $return;
     }
 
+    /**
+     * Active et affiche avant création de l'objet
+     */
     public function preInsert()
     {
         $this->setCategory('multimedia', 1);
@@ -283,6 +316,9 @@ class Optoma extends eqLogic
         $this->setIsVisible(1);
     }
 
+    /**
+     * Charge la liste des commandes après création de l'objet
+     */
     public function postInsert()
     {
         if ($this->getIsEnable()) {
@@ -290,14 +326,9 @@ class Optoma extends eqLogic
         }
     }
 
-    public function postSave()
-    {
-    }
-
-    public function preSave()
-    {
-    }
-
+    /**
+     * Vérifie l'IP avant sauvegarde de l'objet
+     */
     public function preUpdate()
     {
         if (empty($this->getConfiguration('IP'))) {
@@ -308,12 +339,16 @@ class Optoma extends eqLogic
         }
     }
 
+    /**
+     * Recharge les commandes après mise à jour de l'objet
+     */
     public function postUpdate()
     {
         if ($this->getIsEnable()) {
             $this->loadCmdFromConf('UHD');
         }
     }
+
     /**
      * Retourne l'URL de la page Info
      * @param  string $_ip Adresse IP de l'équipement
@@ -323,6 +358,7 @@ class Optoma extends eqLogic
     {
         return "http://" . $_ip . "/Info.asp";
     }
+
     /**
      * Retourne l'URL de la page Control
      * @param  string $_ip Adresse IP de l'équipement
@@ -332,6 +368,7 @@ class Optoma extends eqLogic
     {
         return "http://" . $_ip . "/Control.asp";
     }
+
     /**
      * Retourne l'URL de l'API
      * @param  string $_ip  Adresse IP de l'équipement
@@ -342,11 +379,12 @@ class Optoma extends eqLogic
     {
         return "http://" . $_ip . $_api;
     }
+
     /**
      * Recherche la configuration dans le dossier du modèle
      * et créé les commandes si elles sont inexistantes
      * @param  string $type Nom
-     * @return bool       Renvoi 0 si fichier en erreur, 1 sinon
+     * @return boolean       Renvoi 0 si fichier en erreur, 1 sinon
      */
     public function loadCmdFromConf($type)
     {
@@ -417,7 +455,7 @@ class Optoma extends eqLogic
         }
         return true;
     }
-<<<<<<< HEAD
+
     /**
      * Envoi des requêtes vers l'url et renvoi le résultat
      * @param  string  $_url     URL des données
@@ -425,122 +463,6 @@ class Optoma extends eqLogic
      * @param  integer $_retry   Nombre de tentatives de connexions
      * @return array            Résultat de la requête (json)
      */
-=======
-    public static function testcontrolCurl()
-    {
-$curl = curl_init();
-
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'http://192.168.1.47/tgi/control.tgi',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 5,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'GET',
-  CURLOPT_HTTPHEADER => array(
-    'Upgrade-Insecure-Requests: 1',
-    'Content-Type: application/x-www-form-urlencoded',
-    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36 Edg/89.0.774.50',
-    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
-  ),
-));
-
-$response = curl_exec($curl);
-
-curl_close($curl);
-        log::add('Optoma', 'debug', 'DEBUG testCurl résultat : ' . $response);
-    }
-    public static function testCurl()
-    {
-$curl = curl_init();
-
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'http://192.168.1.47/tgi/login.tgi',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 5,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS => 'Challenge=&Password=&Response=c95158ba1da9865d4b763367caad4026&Username=1&user=0',
-  CURLOPT_HTTPHEADER => array(
-    'Upgrade-Insecure-Requests: 1',
-    'Content-Type: application/x-www-form-urlencoded',
-    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36 Edg/89.0.774.50',
-    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
-  ),
-));
-
-$response = curl_exec($curl);
-
-curl_close($curl);
-        log::add('Optoma', 'debug', 'DEBUG testCurl résultat : ' . $response);
-    }
-  
-function curl_post_test($url, $post="", $cookiejar="")
-{
-	$retstr = "";
-	
-	// output buffer b/c curl goes straight to screen
-	ob_start();
-	
-	// create a new curl resource
-	$ch = curl_init();
-	
-	// set URL and other appropriate options
-	curl_setopt($ch, CURLOPT_URL, $url);
-	
-	// post if applicable
-	if (!empty($post))
-	{
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-	} // end if post
-	
-	// handle cookies
-	if (!empty($cookiejar))
-	{
-		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiejar);
-		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiejar);
-	} // end if cookiejar
-	
-	// grab URL and pass it to the browser
-	curl_exec($ch);
-	
-	// close curl resource, and free up system resources
-	curl_close($ch);
-	
-	$retstr = ob_get_clean();
-	return $retstr;
-} // end curl_post();
-  
-    public static function testLoginBis($_url, $_page, $_pwd)
-    {
-        $session = "";
-        $login = self::curl_post_test($_url."/login.htm", "", "cookiejar");
-        preg_match('/Challenge" VALUE="(\S+?)"/', $login, $matches);
-        $challenge = $matches[1];
-        $resp = md5("admin".$_pwd . $challenge);
-        //$logincgi = self::curl_post_test($_url."/tgi/login.tgi", "Username=1&Password=".$_pwd."&Challenge=&Response=$resp", "cookiejar");
-		self::testCurl();
-		self::testcontrolCurl();
-
-        $portstats = self::curl_post_test($_url."/tgi/control.tgi", "", "cookiejar");
-        $portstat3 = self::curl_post_test($_url."/tgi/control.tgi?Challenge=&Password=&Response=c95158ba1da9865d4b763367caad4026&Username=1&user=0", "", "cookiejar");
-        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat1 : ' . $challenge);
-
-
-        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat2 : ' . $logincgi);
-
-        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat3 : ' . $portstats);
-        log::add('Optoma', 'debug', 'DEBUG testLoginBis résultat4 : ' . $portstat3);
-
-    }
-  
->>>>>>> bdcadb1cb36699fea85867b972d031999264a292
     public function sendRequest($_url, $_timeout = 2, $_retry = 5)
     {
         try {
@@ -562,6 +484,138 @@ function curl_post_test($url, $post="", $cookiejar="")
         } else {
             log::add(__CLASS__, 'debug', "L." . __LINE__ . " F." . __FUNCTION__ . __(" Données non reconnues : ", __FILE__) . $result);
             return false;
+        }
+    }
+
+    /**
+     * Envoi la commande contenue dans la config de la commande info
+     * en telnet sur le port de la config
+     * @param  object $cmd    Commande info demandant màj des infos
+     * @param  object $telnet Connexion telnet ouverte
+     */
+    public function sendCommand($cmd, $telnet)
+    {
+        $result = '';
+        $prefixCmd = '~';
+        $projectorID = '00'; //if (isset(cmd->execCmd()))
+
+        $ordre = $cmd->getConfiguration('telnetCmd'); //Lamp total : 108 1  //Lamp bright : 108 3 //Lamp Eco : 108 4
+
+        if (isset($ordre) && $ordre != '') {
+            $readCmd = $prefixCmd . $projectorID . $ordre;
+            log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '. "Cmd : " .$readCmd);
+
+            $telnet->telnetSendCommand($readCmd, $result);
+            //usleep($this->getConfiguration('waitdelay') * 1000);
+            usleep(10 * 1000);
+
+            if (!empty($result)) {
+                log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '. ' RE : '.$result);
+                $reponse=explode("> ", $result);
+                if (count($reponse) == 1) {
+                    $value=$reponse[0];
+                } elseif (count($reponse) == 2) {
+                    $value=$reponse[1];
+                } elseif (count($reponse) == 3) {
+                    $value=$reponse[2];
+                } else {
+                    log::add(__CLASS__, 'info', __FUNCTION__.' L'.__LINE__.' Detect inappropriate response !!! ');
+                }
+
+                switch (trim(substr($value, 0, 2))) {
+                    case 'F':
+                        log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."RE (F) : FAIL ");
+                        break;
+                    case 'Ok':
+                    case 'OK':
+                        $reponse=explode(" ", $value);
+                        $value = $reponse[0];
+
+                        log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."RE (Ok) : ".$reponse[1]);
+                        $info = array();
+
+                        if ($cmd->getName() == "LampTotal") {
+                            switch (trim(substr($value, 0, 2))) {
+                                case 'F':
+                                    log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."RE : FAIL ");
+                                    break;
+                                case 'Ok':
+                                case 'OK':
+                                    $reponse=explode(" ", $value);
+                                    $value=$reponse[0];
+                                    log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."RE : ".$value);
+                                    if (strlen(trim($value)) != 7) {
+                                        log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."Incorrect string : ". $value);
+                                        $info['lampTotal']=substr($value, 3, 5);
+                                        $updateCmd = $this->getCmd(null, 'LampTotal');
+                                        if ((is_numeric($info['lampTotal'])) && is_object($updateCmd)) {
+                                            $updateCmd->event($info['lampTotal']);
+                                            $updateCmd->save();
+                                            log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '.'lampTotal='.$info['lampTotal']);
+                                        }
+                                        unset($updateCmd);
+                                    }
+                                    break;
+                                default:
+                                    log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."Error LampTotal");
+                            }
+                        } elseif ($cmd->getName() == "LampBright") {
+                            switch (trim(substr($value, 0, 2))) {
+                                case 'F':
+                                    log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."RE : FAIL ");
+                                    break;
+                                case 'Ok':
+                                case 'OK':
+                                    $reponse=explode(" ", $value);
+                                    $value=$reponse[0];
+                                    log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."RE : ".$value);
+                                    if (strlen(trim($value)) != 7) {
+                                        log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."Incorrect string : ". $value);
+                                    } else {
+                                        $info['LampBright']=substr($value, 3, 5);
+                                        $updateCmd = $this->getCmd(null, 'LampBright');
+                                        if ((is_numeric($info['LampBright'])) && is_object($updateCmd)) {
+                                            $updateCmd->event($info['LampBright']);
+                                            $updateCmd->save();
+                                            log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '.'LampBright='.$info['LampBright']);
+                                        }
+                                        unset($updateCmd);
+                                    }
+                                    break;
+                                default:
+                                    log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."Error LampBright");
+                            }
+                        } elseif ($cmd->getName() == "LampEco") {
+                            switch (trim(substr($value, 0, 2))) {
+                                case 'F':
+                                    log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."RE : FAIL ");
+                                    break;
+                                case 'Ok':
+                                case 'OK':
+                                    $reponse=explode(" ", $value);
+                                    $value=$reponse[0];
+                                    log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."RE : ".$value);
+                                    if (strlen(trim($value)) != 7) {
+                                        log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."Incorrect string : ". $value);
+                                        $info['LampEco']=substr($value, 3, 5);
+                                        $updateCmd = $this->getCmd(null, 'LampEco');
+                                        if ((is_numeric($value)) && is_object($updateCmd)) {
+                                            $updateCmd->event($info['LampEco']);
+                                            $updateCmd->save();
+                                            log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '.'LampEco='.$info['LampEco']);
+                                        }
+                                        unset($updateCmd);
+                                    }
+                                    break;
+                                default:
+                                    log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."Error LampBright");
+                            }
+                        }
+                            break;
+                        default:
+                        log::add(__CLASS__, 'debug', __FUNCTION__.' L'.__LINE__.' '."RE (else) : ".$value);
+                }
+            }
         }
     }
 }
@@ -594,6 +648,7 @@ class OptomaCmd extends cmd
                         $decodedResult = json_decode(preg_replace('/([{,])(\s*)([A-Za-z0-9_\-]+?)\s*:/', '$1"$3":', $result[0]), true);
                         $API = new Optomapi();
                         $full = $API->setFullNames($decodedResult);
+                        log::add('Optoma', 'debug', __('Valeurs API traduites ', __FILE__) . json_encode($full));
                         foreach ($full as $key => $value) {
                             $eqLogic->checkAndUpdateCmd($key, $value);
                         }
@@ -608,7 +663,3 @@ class OptomaCmd extends cmd
         log::add('Optoma', 'debug', __("Action sur ", __FILE__) . $this->getLogicalId());
     }
 }
-<<<<<<< HEAD
-=======
-?>
->>>>>>> bdcadb1cb36699fea85867b972d031999264a292
