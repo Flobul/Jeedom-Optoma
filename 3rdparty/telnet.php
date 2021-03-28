@@ -20,7 +20,7 @@ class Optoma_telnet {
 	public function telnetSendCommand($command,&$response) {
 		if ($this->fp) {
 			fputs($this->fp,"$command\r");
-			usleep(200000);
+			//usleep(200000);
 			$this->telnetReadResponse($response);
 		}
 		return $this->fp?1:0;
@@ -46,6 +46,7 @@ class Optoma_telnet {
 		$response='';
 		do { 
 			$response.=fread($this->fp,1000);
+            socket_set_option($this->fp,SOL_SOCKET,SO_RCVTIMEO,array('sec'=>0,'usec'=>300000));
 			$status=socket_get_status($this->fp);
 		} while ($status['unread_bytes']);
 	}

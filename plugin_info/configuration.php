@@ -15,7 +15,7 @@
     * You should have received a copy of the GNU General Public License
     * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
     */
-   
+
    require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
    include_file('core', 'authentification', 'php');
    if (!isConnect()) {
@@ -24,7 +24,7 @@
    }
    $plugin = plugin::byId('Optoma');
    sendVarToJS('version', Optoma::$_pluginVersion);
-   
+
    ?>
 <form class="form-horizontal">
    <fieldset>
@@ -54,10 +54,10 @@
                <i><a class="btn btn-success btn-xs" target="_blank" href="<?=$plugin->getDocumentation()?>"><i class="fas fa-book"></i><strong> {{Documentation complète du plugin}}</strong></a></i>
             </div>
             <div>
-               <i> {{Les dernières actualités du plugin}} <a class="btn btn-label btn-xs" target="_blank" href="https://community.jeedom.com/t/plugin-Optoma-documentation-et-actualites/39994"><i class="icon jeedomapp-home-jeedom icon-Optoma"></i><strong> {{sur le community}}</strong></a>.</i>
+               <i> {{Les dernières actualités du plugin}}<a class="btn btn-label btn-xs" target="_blank" href="https://community.jeedom.com/t/plugin-Optoma-documentation-et-actualites/39994"><i class="icon jeedomapp-home-jeedom icon-Optoma"></i><strong>{{sur le community}}</strong></a>.</i>
             </div>
             <div>
-               <i> {{Les dernières discussions autour du plugin}} <a class="btn btn-label btn-xs" target="_blank" href="https://community.jeedom.com/tags/plugin-Optoma"><i class="icon jeedomapp-home-jeedom icon-Optoma"></i><strong> {{sur le community}}</strong></a>.</i></br>
+               <i> {{Les dernières discussions autour du plugin}}<a class="btn btn-label btn-xs" target="_blank" href="https://community.jeedom.com/tags/plugin-Optoma"><i class="icon jeedomapp-home-jeedom icon-Optoma"></i><strong>{{sur le community}}</strong></a>.</i></br>
                <i> {{Pensez à mettre le tag}} <b><font font-weight="bold" size="+1">#plugin-Optoma</font></b> {{et à fournir les log dans les balises préformatées}}.</i>
             </div>
             <style>
@@ -72,12 +72,15 @@
          <i class="fas fa-cogs"></i> {{Paramètres}}
       </legend>
       <div class="form-group">
-         <label class="col-lg-4 control-label"><strong> {{Intervalle de rafraîchissement des informations (cron)}}</strong><sup>
-         <i class="fa fa-question-circle tooltips" title="{{Sélectionnez l'intervalle auquel le plugin ira récupérer les informations sur le vidéoprojecteur.</br>Par défaut : 1 minute.}}"></i>
-         </sup></label>
+         <label class="col-lg-4 control-label"><strong> {{Intervalle de rafraîchissement des informations (cron)}}</strong>
+             <sup><i class="fas fa-question-circle" title="{{Sélectionnez l'intervalle auquel le plugin ira récupérer les informations sur le vidéoprojecteur.</br>Par défaut : 1 minute.}}"></i></sup>
+         </label>
          <div class="col-lg-4">
             <select class="configKey form-control" data-l1key="autorefresh" >
                <option value="* * * * *">{{Toutes les minutes}}</option>
+               <option value="*/2 * * * *">{{Toutes les 2 minutes}}</option>
+               <option value="*/3 * * * *">{{Toutes les 3 minutes}}</option>
+               <option value="*/4 * * * *">{{Toutes les 4 minutes}}</option>
                <option value="*/5 * * * *">{{Toutes les 5 minutes}}</option>
                <option value="*/10 * * * *">{{Toutes les 10 minutes}}</option>
                <option value="*/15 * * * *">{{Toutes les 15 minutes}}</option>
@@ -93,16 +96,17 @@
             <i class="icon loisir-darth"></i> {{Configuration optionnelle du démon}}
          </legend>
         <div class="form-group">
-          <label class="col-sm-4 control-label"><strong> {{Adresse IP du vidéoprojecteur pour le démon}}</strong> </label>
+          <label class="col-sm-4 control-label"><strong> {{Adresse IP du vidéoprojecteur pour le démon}}</strong>
+              <sup><i class="fas fa-question-circle" title="{{Entrez l'adresse IP du vidéoprojecteur.</br>Elle peut être identique à un équipement.}}"></i></sup>
+          </label>
           <div class="col-sm-2">
               <input type="text" class="configKey form-control deviceir" data-l1key="ip" ><br>
           </div>
       </div>
         <div class="form-group">
-
-         <label class="col-sm-4 control-label"><strong> {{Numéro du port d'écoute Telnet}}</strong><sup>
-         <i class="fa fa-question-circle tooltips" title="{{Le démon ne sert qu'à récupérer les trames emises automatiquement par le vidéoprojecteur.}}"></i>
-         </sup><br> <i style="font-size:0.8em;">( {{uniquement le port 23}} )<br><strong> Attention,</strong> {{c'est le seul port sur lequel les trames INFO sont envoyées par le vidéoprojecteur.}}</br>{{(Les ports 1023 et 2023 vont connecter le démon, mais aucun message ne remontera)}}</i> </label>
+         <label class="col-sm-4 control-label"> {{Numéro du port d'écoute Telnet}}
+             <sup><i class="fas fa-question-circle" title="{{Uniquement le port 23.}}</br><strong>Attention,</strong> {{c'est le seul port sur lequel les trames INFO sont envoyées par le vidéoprojecteur.}}</br>{{(Les ports 1023 et 2023 vont connecter le démon, mais aucun message ne remontera).}}</br>{{Le démon ne sert qu'à récupérer les trames emises automatiquement par le vidéoprojecteur.}}"></i></sup>
+         </label>
          <div class="col-sm-2">
             <input type="text" class="configKey form-control " data-l1key="listenport" ><br>
          </div>

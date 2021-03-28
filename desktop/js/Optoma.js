@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 $("#table_info").delegate(".listEquipementInfo", 'click', function () {
     var el = $(this);
     jeedom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
@@ -231,13 +232,14 @@ $('body').on('Optoma::includeDevice', function (_event,_options) {
 });
 
 $('#bt_healthoptoma').on('click', function () {
-  $('#md_modal').dialog({title: "{{Santé Optoma}}"});
-  $('#md_modal').load('index.php?v=d&plugin=Optoma&modal=health').dialog('open');
+    $('#md_modal').dialog({title: "{{Santé Optoma}}"});
+    $('#md_modal').load('index.php?v=d&plugin=Optoma&modal=health').dialog('open');
 });
 
 $('#bt_documentationOptoma').off('click').on('click', function() {
-  window.open($(this).attr("data-location"), "_blank", null);
+    window.open($(this).attr("data-location"), "_blank", null);
 });
+
 function getConfFile(_eqLogic) {
 
   $.ajax({
@@ -271,55 +273,71 @@ function getConfFile(_eqLogic) {
   });
 }
 
+$('.eqLogicAttr[data-l1key=configuration][data-l2key=actionMethod], .eqLogicAttr[data-l1key=configuration][data-l2key=infoMethod]').change(function () {
+    var infoMethod = $('.eqLogicAttr[data-l1key=configuration][data-l2key=infoMethod]').value();
+    var actionMethod = $('.eqLogicAttr[data-l1key=configuration][data-l2key=actionMethod]').value();
+  
+    if(infoMethod == 'API' || actionMethod == 'API' || infoMethod == 'API-TELNET' || actionMethod == 'API-TELNET') {
+        $('#APIgroup').show();
+    } else {
+        $('#APIgroup').hide();
+    }
+    if(infoMethod == 'TELNET' || actionMethod == 'TELNET' || infoMethod == 'API-TELNET' || actionMethod == 'API-TELNET') {
+        $('#TELNETgroup').show();
+    } else {
+        $('#TELNETgroup').hide();
+    }
+});
+
+
 function printEqLogic(_eqLogic) {
-  printEqLogicTab(_eqLogic); //affiche les info de l'équipement
-      $('body').setValues(_eqLogic, '.eqLogicAttr');
-      initCheckBox();
-      modifyWithoutSave = false;
+
+    printEqLogicTab(_eqLogic); //affiche les info de l'équipement
+    $('body').setValues(_eqLogic, '.eqLogicAttr');
+    initCheckBox();
+    modifyWithoutSave = false;
 }
 
 function printEqLogicTab(_eqLogic) {
 
-  $('#table_infoseqlogic tbody').empty();
+    $('#table_infoseqlogic tbody').empty();
 
-  //affichage des configurations du device
-  printEqLogicHelper("{{Type}}", "type", _eqLogic);
-  printEqLogicHelper("{{Modèle}}", "model", _eqLogic);
-  printEqLogicHelper("{{Adresse MAC}}", "MAC", _eqLogic);
-  printEqLogicHelper("{{Version LAN}}", "", _eqLogic);
-  printEqLogicHelper("{{Version Firmware}}", "", _eqLogic);
-  printEqLogicHelper("{{Découverte auto}}", "auto_discovery", _eqLogic);
+    //affichage des configurations du device
+    printEqLogicHelper("{{Type}}", "type", _eqLogic);
+    printEqLogicHelper("{{Modèle}}", "model", _eqLogic);
+    printEqLogicHelper("{{Adresse MAC}}", "MAC", _eqLogic);
+    printEqLogicHelper("{{Version LAN}}", "", _eqLogic);
+    printEqLogicHelper("{{Version Firmware}}", "", _eqLogic);
+    printEqLogicHelper("{{Découverte auto}}", "auto_discovery", _eqLogic);
+    printEqLogicHelper("{{Ports ouverts}}", "openPorts", _eqLogic);
 
-  var type = "../../plugin_info/Other";
-
-  if (isset(type) && type !== undefined) {
-    $('#img_device').attr("src", 'plugins/Optoma/core/config/img/' + type + '.png');
-  }
-  modifyWithoutSave = true;
+    if (isset(_eqLogic.configuration.model) && _eqLogic.configuration.model !== undefined) {
+        $('#img_device').attr("src", 'plugins/Optoma/core/config/devices/' + _eqLogic.configuration.model + '.png');
+    }
 }
 
 function printEqLogicHelper(_label, _name, _eqLogic) {
 
-  if (isset(_eqLogic.result)) {
-    var eqLogic = _eqLogic.result;
-  } else {
-    var eqLogic = _eqLogic;
-  }
-  if (isset(eqLogic.configuration[_name])) {
-    if (eqLogic.configuration[_name] !== undefined) {
-      var trm = '<tr>';
-      trm += '	<td class="col-sm-4">';
-      trm += '		<span style="font-size : 1em;">' + _label + '</span>';
-      trm += '	</td>';
-      trm += '	<td>';
-      trm += '		<span class="label label-default" style="font-size : 1em;white-space:unset !important">';
-      trm += '			<span class="eqLogicAttr" data-l1key="configuration" data-l2key="' + _name + '">';
-      trm += '			</span>';
-      trm += '		</span>';
-      trm += '	</td>';
-      trm += '</tr>';
-      $('#table_infoseqlogic tbody').append(trm);
-      $('#table_infoseqlogic tbody tr:last').setValues(eqLogic, '.eqLogicAttr');
+    if (isset(_eqLogic.result)) {
+        var eqLogic = _eqLogic.result;
+    } else {
+        var eqLogic = _eqLogic;
     }
-  }
+    if (isset(eqLogic.configuration[_name])) {
+        if (eqLogic.configuration[_name] !== undefined) {
+            var trm = '<tr>';
+            trm += '	<td class="col-sm-4">';
+            trm += '		<span style="font-size : 1em;">' + _label + '</span>';
+            trm += '	</td>';
+            trm += '	<td>';
+            trm += '		<span class="label label-default" style="font-size:1em;white-space:unset !important">';
+            trm += '			<span class="eqLogicAttr" data-l1key="configuration" data-l2key="' + _name + '">';
+            trm += '			</span>';
+            trm += '		</span>';
+            trm += '	</td>';
+            trm += '</tr>';
+            $('#table_infoseqlogic tbody').append(trm);
+            $('#table_infoseqlogic tbody tr:last').setValues(eqLogic, '.eqLogicAttr');
+        }
+    }
 }

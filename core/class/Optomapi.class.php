@@ -114,7 +114,7 @@ class Optomapi
 
     /**
      * Donne les minValue et maxValue des id logique
-     * @var [type]
+     * @var string
      */
     private static $_rangeOptions = array(
         'Brightness' => array(
