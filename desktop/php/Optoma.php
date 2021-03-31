@@ -47,13 +47,8 @@ if ($state == 1) {
           border-bottom-left-radius: 2px;
           width: 160px;
           margin-left: 10px;
-          position: absolute;
           left: 0px;
           top: 0px;
-        }
-
-        .fas.fa-question-circle.tooltips.tooltipstered {
-          color: var(--al-info-color) !important;
         }
 
         #TELNETgroup>label {
@@ -112,27 +107,27 @@ if ($state == 1) {
     </div>
     <div class="eqLogicThumbnailContainer">
       <?php
-                foreach ($eqLogics as $eqLogic) {
-                    $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
-                    $model = (empty($eqLogic->getConfiguration('model'))) ? 'Sans modèle' : $eqLogic->getConfiguration('model');
-                    $IP = (empty($eqLogic->getConfiguration('IP'))) ? 'Aucune IP' : $eqLogic->getConfiguration('IP');
-                    if (is_object($eqLogic->getCmd('info', 'Powerstatus'))) {
-                        $status = ($eqLogic->getCmd('info', 'Powerstatus')->execCmd() == 1) ? "{{Allumé}}" : "{{Éteint}}";
-                        $status = "État : " . $status;
-                    } else {
-                        $status = "";
-                    }
-                    echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
-                    echo '<img src="' . $plugin->getPathImgIcon() . '" height="105" width="95"
-                         title="Nom : '.$eqLogic->getName().'</br>
-                         Modèle : '.$model.'</br>
-                         IP : '.$IP.'</br>
-                         '.$status.'">';
-                    echo "<br>";
-                    echo '<span class="name" style="font-size : 14px;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $eqLogic->getHumanName(true, true) . '</span>';
-                    echo '</div>';
-                }
-            ?>
+          foreach ($eqLogics as $eqLogic) {
+              $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+              $model = (empty($eqLogic->getConfiguration('model'))) ? 'Sans modèle' : $eqLogic->getConfiguration('model');
+              $IP = (empty($eqLogic->getConfiguration('IP'))) ? 'Aucune IP' : $eqLogic->getConfiguration('IP');
+              if (is_object($eqLogic->getCmd('info', 'Powerstatus'))) {
+                  $status = ($eqLogic->getCmd('info', 'Powerstatus')->execCmd() == 1) ? "{{Allumé}}" : "{{Éteint}}";
+                  $status = "État : " . $status;
+              } else {
+                  $status = "";
+              }
+              echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+              echo '<img src="' . $plugin->getPathImgIcon() . '" height="105" width="95"
+                      title="Nom : '.$eqLogic->getName().'</br>
+                      Modèle : '.$model.'</br>
+                      IP : '.$IP.'</br>
+                      '.$status.'">';
+              echo "<br>";
+              echo '<span class="name" style="font-size : 14px;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $eqLogic->getHumanName(true, true) . '</span>';
+              echo '</div>';
+          }
+      ?>
     </div>
   </div>
 
@@ -158,14 +153,14 @@ if ($state == 1) {
             <fieldset>
               <div class="form-group">
                 <legend><i class="fas fa-sitemap"></i> {{Général}}</legend>
-                <label class="col-sm-3 control-label">{{Nom du vidéoprojecteur}}</label>
+                <label class="col-sm-4 control-label">{{Nom du vidéoprojecteur}}</label>
                 <div class="col-sm-5">
                   <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
                   <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom du vidéoprojecteur}}" />
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-3 control-label">{{Objet parent}}</label>
+                <label class="col-sm-4 control-label">{{Objet parent}}</label>
                 <div class="col-sm-5">
                   <select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
                     <option value="">{{Aucun}}</option>
@@ -179,9 +174,10 @@ if ($state == 1) {
                   </select>
                 </div>
               </div>
+
               <div class="form-group">
-                <label class="col-sm-3 control-label">{{Catégorie}}</label>
-                <div class="col-sm-9">
+                <label class="col-sm-4 control-label">{{Catégorie}}</label>
+                <div class="col-sm-8">
                   <?php
                       foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                           echo '<label class="checkbox-inline">';
@@ -191,13 +187,23 @@ if ($state == 1) {
                   ?>
                 </div>
               </div>
+
               <div class="form-group">
-                <label class="col-sm-3 control-label"></label>
-                <div class="col-sm-9">
+                <label class="col-sm-4 control-label">{{Options}}</label>
+                <div class="col-sm-8">
                   <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked />{{Activer}}</label>
                   <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked />{{Visible}}</label>
                 </div>
               </div>
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label help" data-help="{{Cocher la case pour utiliser le widget associé au type de l'appareil.}}</br>{{Laissez décoché pour laisser le core générer le widget par défaut.}}">{{Widget équipement}}
+                </label>
+                <div class="col-sm-8">
+                  <input type="checkbox" class="eqLogicAttr form-control" id="widgetTemplate" data-l1key="configuration" data-l2key="widgetTemplate" />
+                </div>
+              </div>
+
             </fieldset>
             <legend class="help" data-help="{{Entrez les paramètres demandés.
 Ils ne sont à saisir qu'une seule fois.}}"><i class="fas fa-cogs"></i> {{Paramètres du vidéoprojecteur}}
@@ -254,7 +260,7 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
               </div>
 
               <div class="form-group">
-                <label class="col-sm-4 control-label help" data-help="{{Sélectionnez la méthode d'envoi des commandes action.}}">{{Méthode de communication (action)}}
+                <label class="col-sm-5 control-label help" data-help="{{Sélectionnez la méthode d'envoi des commandes action.}}">{{Méthode de communication (action)}}
                 </label>
                 <div class="col-sm-5">
                   <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="actionMethod">
@@ -268,7 +274,7 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
               </div>
 
               <div class="form-group">
-                <label class="col-sm-4 control-label help" data-help="{{Sélectionnez la méthode de récupération des commandes informations}}">{{Méthode de communication (info)}}
+                <label class="col-sm-5 control-label help" data-help="{{Sélectionnez la méthode de récupération des commandes informations}}">{{Méthode de communication (info)}}
                 </label>
                 <div class="col-sm-5">
                   <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="infoMethod">
@@ -293,7 +299,7 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
               </div>
 
               <div class="form-group" id="TELNETgroup">
-                <label class="col-sm-4 control-label help" data-help="{{Sélectionnez le port telnet utilisé pour récupérer les heures de la lampe.}}">{{Port telnet}}
+                <label class="col-sm-4 control-label help" data-help="{{Sélectionnez le port telnet utilisé pour récupérer les informations.}}">{{Port telnet}}
                 </label>
                 <div class="col-sm-5">
                   <select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="telnetPort">
@@ -330,13 +336,6 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
                 </div>
               </div>
 
-              <div class="form-group">
-                <label class="col-sm-4 control-label help" data-help="{{Cocher la case pour utiliser le widget associé au type de l'appareil.}}</br>{{Laissez décoché pour laisser le core générer le widget par défaut.}}">{{Widget équipement}}
-                </label>
-                <div class="col-sm-3">
-                  <input type="checkbox" class="eqLogicAttr form-control" id="widgetTemplate" data-l1key="configuration" data-l2key="widgetTemplate" />
-                </div>
-              </div>
             </fieldset>
 
             <legend><i class="fas fa-info-circle"></i> {{Informations}}</legend>
@@ -408,3 +407,4 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
 include_file('desktop', 'Optoma', 'js', 'Optoma');
 include_file('core', 'plugin.template', 'js');
 ?>
+
