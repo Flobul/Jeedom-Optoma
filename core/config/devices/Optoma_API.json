@@ -14,7 +14,7 @@
     },
     {
       "name": "Power On",
-      "logicalId": "Power On::btn_powon",
+      "logicalId": "Powerstatus::btn_powon",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -25,7 +25,7 @@
     },
     {
       "name": "Power Off",
-      "logicalId": "Power Off::btn_powoff",
+      "logicalId": "Powerstatus::btn_powoff",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -45,7 +45,7 @@
     },
     {
       "name": "Brightness -",
-      "logicalId": "bright1::-",
+      "logicalId": "Brightness::-",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -56,7 +56,7 @@
     },
     {
       "name": "Brightness +",
-      "logicalId": "bright2::+",
+      "logicalId": "Brightness::+",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -67,7 +67,7 @@
     },
     {
       "name": "Set Brightness",
-      "logicalId": "bright::",
+      "logicalId": "Brightness::",
       "type": "action",
       "subtype": "slider",
       "isVisible": 1,
@@ -87,7 +87,7 @@
     },
     {
       "name": "Contrast -",
-      "logicalId": "contrast1::-",
+      "logicalId": "Contrast::-",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -98,7 +98,7 @@
     },
     {
       "name": "Contrast +",
-      "logicalId": "contrast2::+",
+      "logicalId": "Contrast::+",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -109,7 +109,7 @@
     },
     {
       "name": "Set Contrast",
-      "logicalId": "contrast::",
+      "logicalId": "Contrast::",
       "type": "action",
       "subtype": "slider",
       "isVisible": 1,
@@ -129,7 +129,7 @@
     },
     {
       "name": "Sharpness -",
-      "logicalId": "Sharp1::-",
+      "logicalId": "Sharpness::-",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -140,7 +140,7 @@
     },
     {
       "name": "Sharpness +",
-      "logicalId": "Sharp2::+",
+      "logicalId": "Sharpness::+",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -151,7 +151,7 @@
     },
     {
       "name": "Set Sharpness",
-      "logicalId": "Sharp::",
+      "logicalId": "Sharpness::",
       "type": "action",
       "subtype": "slider",
       "isVisible": 1,
@@ -171,7 +171,7 @@
     },
     {
       "name": "Phase -",
-      "logicalId": "Phase1::-",
+      "logicalId": "Phase::-",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -182,7 +182,7 @@
     },
     {
       "name": "Phase +",
-      "logicalId": "Phase2::+",
+      "logicalId": "Phase::+",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -213,7 +213,7 @@
     },
     {
       "name": "Brilliant Color -",
-      "logicalId": "brill1::-",
+      "logicalId": "Brilliant Color::-",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -224,7 +224,7 @@
     },
     {
       "name": "Brilliant Color +",
-      "logicalId": "brill2::+",
+      "logicalId": "Brilliant Color::+",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -235,7 +235,7 @@
     },
     {
       "name": "Set Brilliant Color",
-      "logicalId": "brill::",
+      "logicalId": "Brilliant Color::",
       "type": "action",
       "subtype": "slider",
       "isVisible": 1,
@@ -318,7 +318,7 @@
     },
     {
       "name": "Reset",
-      "logicalId": "Reset::reset",
+      "logicalId": "Reset::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -329,7 +329,7 @@
     },
     {
       "name": "Resync",
-      "logicalId": "Resync::resync",
+      "logicalId": "Resync::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -340,7 +340,7 @@
     },
     {
       "name": "Logo Capture",
-      "logicalId": "Logo Capture::logocapture",
+      "logicalId": "Logo Capture::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -357,12 +357,11 @@
     },
     {
       "name": "Set AV Mute",
-      "logicalId": "AV Mute::avmute",
+      "logicalId": "AV Mute::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
       "configuration": {
-        "command": "avmute",
         "cmdInfo": "AV Mute"
       },
       "generic_type": "MEDIA_MUTE"
@@ -378,7 +377,7 @@
     },
     {
       "name": "Set Freeze",
-      "logicalId": "Freeze::freeze",
+      "logicalId": "Freeze::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -398,7 +397,7 @@
     },
     {
       "name": "Set Information Hide",
-      "logicalId": "Information Hide::infohide",
+      "logicalId": "Information Hide::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -418,7 +417,7 @@
     },
     {
       "name": "Set High Altitude",
-      "logicalId": "High Altitude::altitude",
+      "logicalId": "High Altitude::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -438,7 +437,7 @@
     },
     {
       "name": "Set Keypad Lock",
-      "logicalId": "Keypad Lock::keypad",
+      "logicalId": "Keypad Lock::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -458,7 +457,7 @@
     },
     {
       "name": "Set Display Mode Lock",
-      "logicalId": "Display Mode Lock::dismdlocked",
+      "logicalId": "Display Mode Lock::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -478,7 +477,7 @@
     },
     {
       "name": "Set Direct Power On",
-      "logicalId": "Direct Power On::directpwon",
+      "logicalId": "Direct Power On::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -498,7 +497,7 @@
     },
     {
       "name": "Set 3D Sync. Invert",
-      "logicalId": "3D Sync. Invert::3Dsync",
+      "logicalId": "3D Sync. Invert::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -518,7 +517,7 @@
     },
     {
       "name": "Set 3D Modet",
-      "logicalId": "3D Mode::3Dmodet",
+      "logicalId": "3D Modet::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -538,7 +537,7 @@
     },
     {
       "name": "Set Internal Speaker",
-      "logicalId": "Internal Speaker::speaker",
+      "logicalId": "Internal Speaker::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -558,7 +557,7 @@
     },
     {
       "name": "Set Mute",
-      "logicalId": "Mute::mute",
+      "logicalId": "Mute::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -578,7 +577,7 @@
     },
     {
       "name": "Set Dynamic Black",
-      "logicalId": "Dynamic Black::dynamic",
+      "logicalId": "Dynamic Black::",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -598,7 +597,7 @@
     },
     {
       "name": "Volume Audio -",
-      "logicalId": "vol1::-",
+      "logicalId": "Volume Audio::-",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -609,7 +608,7 @@
     },
     {
       "name": "Volume Audio +",
-      "logicalId": "vol2::+",
+      "logicalId": "Volume Audio::+",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -620,7 +619,7 @@
     },
     {
       "name": "Set Volume Audio",
-      "logicalId": "vol::",
+      "logicalId": "Volume Audio::",
       "type": "action",
       "subtype": "slider",
       "isVisible": 1,
@@ -640,7 +639,7 @@
     },
     {
       "name": "Volume Micro -",
-      "logicalId": "mic1::-",
+      "logicalId": "Volume Micro::-",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -651,7 +650,7 @@
     },
     {
       "name": "Volume Micro +",
-      "logicalId": "mic2::+",
+      "logicalId": "Volume Micro::+",
       "type": "action",
       "subtype": "other",
       "isVisible": 1,
@@ -662,7 +661,7 @@
     },
     {
       "name": "Set Volume Micro",
-      "logicalId": "mic::",
+      "logicalId": "Volume Micro::",
       "type": "action",
       "subtype": "slider",
       "isVisible": 1,
@@ -682,7 +681,7 @@
     },
     {
       "name": "Set Audio Input",
-      "logicalId": "audio::",
+      "logicalId": "Audio Input::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -702,7 +701,7 @@
     },
     {
       "name": "Set Aspect Ratio",
-      "logicalId": "aspect0::",
+      "logicalId": "Aspect Ratio::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -722,7 +721,7 @@
     },
     {
       "name": "Set Screen Type",
-      "logicalId": "screen::",
+      "logicalId": "Screen Type::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -762,7 +761,7 @@
     },
     {
       "name": "Set Source",
-      "logicalId": "source::",
+      "logicalId": "Source::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -782,7 +781,7 @@
     },
     {
       "name": "Set Display Mode",
-      "logicalId": "dismode0::",
+      "logicalId": "Display Mode::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -802,7 +801,7 @@
     },
     {
       "name": "Set Projection",
-      "logicalId": "projection::",
+      "logicalId": "Projection::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -822,7 +821,7 @@
     },
     {
       "name": "Set Brightness Mode",
-      "logicalId": "lampmd::",
+      "logicalId": "Brightness Mode::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -842,7 +841,7 @@
     },
     {
       "name": "Set Power Mode",
-      "logicalId": "pwmode::",
+      "logicalId": "Power Mode::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -862,7 +861,7 @@
     },
     {
       "name": "Set Logo",
-      "logicalId": "logo::",
+      "logicalId": "Logo::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -882,7 +881,7 @@
     },
     {
       "name": "Set 3D-2D",
-      "logicalId": "3dto2d::",
+      "logicalId": "3D-2D::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -902,7 +901,7 @@
     },
     {
       "name": "Set Color Space",
-      "logicalId": "colorsp0::",
+      "logicalId": "Color Space::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -922,7 +921,7 @@
     },
     {
       "name": "Set 3D Mode",
-      "logicalId": "3dmode::",
+      "logicalId": "3D Mode::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -942,7 +941,7 @@
     },
     {
       "name": "Set Background Color",
-      "logicalId": "background::",
+      "logicalId": "Background Color::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -962,7 +961,7 @@
     },
     {
       "name": "Set Wall Color",
-      "logicalId": "wall::",
+      "logicalId": "Wall Color::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -982,7 +981,7 @@
     },
     {
       "name": "Set Gamma",
-      "logicalId": "Degamma::",
+      "logicalId": "Gamma::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -1002,7 +1001,7 @@
     },
     {
       "name": "Set Color Temperature",
-      "logicalId": "colortmp::",
+      "logicalId": "Color Temperature::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -1022,7 +1021,7 @@
     },
     {
       "name": "Set 3D Format",
-      "logicalId": "3dformat::",
+      "logicalId": "3D Format::",
       "type": "action",
       "subtype": "select",
       "isVisible": 1,
@@ -1042,7 +1041,7 @@
     },
     {
       "name": "12V Trigger On",
-      "logicalId": "12V Trigger::On",
+      "logicalId": "12V Trigger::1",
       "type": "action",
       "subtype": "other",
       "isVisible": 0,
@@ -1053,7 +1052,7 @@
     },
     {
       "name": "12V Trigger Off",
-      "logicalId": "12V Trigger::Off",
+      "logicalId": "12V Trigger::0",
       "type": "action",
       "subtype": "other",
       "isVisible": 0,
@@ -1063,62 +1062,8 @@
       "generic_type": "GENERIC_ACTION"
     },
     {
-      "name": "Lamp Hours Total",
-      "logicalId": "Lamp Hours Total",
-      "type": "info",
-      "subType": "numeric",
-      "isVisible": 1,
-      "isHistorized": 0,
-      "unite": "h",
-      "generic_type": "GENERIC_INFO",
-      "configuration": {
-        "telnetCmd": "108 1",
-        "api_telnetCmd": "108 1",
-        "group": "lamp"
-      }
-    },
-    {
-      "name": "Lamp Hours Bright",
-      "logicalId": "Lamp Hours Bright",
-      "type": "info",
-      "subType": "numeric",
-      "isVisible": 1,
-      "isHistorized": 0,
-      "unite": "h",
-      "generic_type": "GENERIC_INFO",
-      "configuration": {
-        "telnetCmd": "108 3",
-        "api_telnetCmd": "108 3",
-        "group": "lamp"
-      }
-    },
-    {
-      "name": "Lamp Hours Eco",
-      "logicalId": "Lamp Hours Eco",
-      "type": "info",
-      "subType": "numeric",
-      "isVisible": 1,
-      "isHistorized": 0,
-      "unite": "h",
-      "generic_type": "GENERIC_INFO",
-      "configuration": {
-        "telnetCmd": "108 4",
-        "api_telnetCmd": "108 4",
-        "group": "lamp"
-      }
-    },
-    {
       "name": "SystemInfo",
       "logicalId": "SystemInfo",
-      "type": "info",
-      "subType": "string",
-      "isVisible": 1,
-      "isHistorized": 0,
-      "generic_type": "GENERIC_INFO"
-    },
-    {
-      "name": "Info String",
-      "logicalId": "Info String",
       "type": "info",
       "subType": "string",
       "isVisible": 1,

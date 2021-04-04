@@ -35,6 +35,10 @@ if ($state == 1) {
           color: #ea1b39;
         }
 
+        .fas.fa-question-circle.tooltips.tooltipstered {
+          color: var(--al-info-color) !important;
+        }
+
         .eqLogicDisplayCard.cursor {
           height: 180px !important;
           text-align: center;
@@ -111,6 +115,8 @@ if ($state == 1) {
               $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
               $model = (empty($eqLogic->getConfiguration('model'))) ? 'Sans modèle' : $eqLogic->getConfiguration('model');
               $IP = (empty($eqLogic->getConfiguration('IP'))) ? 'Aucune IP' : $eqLogic->getConfiguration('IP');
+              $actionMethod = (empty($eqLogic->getConfiguration('actionMethod'))) ? 'Aucune' : $eqLogic->getConfiguration('actionMethod');
+              $infoMethod = (empty($eqLogic->getConfiguration('infoMethod'))) ? 'Aucune' : $eqLogic->getConfiguration('infoMethod');
               if (is_object($eqLogic->getCmd('info', 'Powerstatus'))) {
                   $status = ($eqLogic->getCmd('info', 'Powerstatus')->execCmd() == 1) ? "{{Allumé}}" : "{{Éteint}}";
                   $status = "État : " . $status;
@@ -119,10 +125,13 @@ if ($state == 1) {
               }
               echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
               echo '<img src="' . $plugin->getPathImgIcon() . '" height="105" width="95"
-                      title="Nom : '.$eqLogic->getName().'</br>
-                      Modèle : '.$model.'</br>
-                      IP : '.$IP.'</br>
-                      '.$status.'">';
+                      title="Nom : ' . $eqLogic->getName() . '</br>
+                      Modèle : ' . $model . '</br>
+                      IP : ' . $IP . '</br>
+                      ' . $status . '</br>
+                      Méthode action : ' . $actionMethod . '</br>
+                      Méthode info : ' . $infoMethod . '</br>
+                      ">';
               echo "<br>";
               echo '<span class="name" style="font-size : 14px;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $eqLogic->getHumanName(true, true) . '</span>';
               echo '</div>';
@@ -152,7 +161,7 @@ if ($state == 1) {
           <form class="form-horizontal">
             <fieldset>
               <div class="form-group">
-                <legend><i class="fas fa-sitemap"></i> {{Général}}</legend>
+                <legend><i class="fas fa-sitemap icon_green"></i> {{Général}}</legend>
                 <label class="col-sm-4 control-label">{{Nom du vidéoprojecteur}}</label>
                 <div class="col-sm-5">
                   <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
@@ -205,8 +214,7 @@ if ($state == 1) {
               </div>
 
             </fieldset>
-            <legend class="help" data-help="{{Entrez les paramètres demandés.
-Ils ne sont à saisir qu'une seule fois.}}"><i class="fas fa-cogs"></i> {{Paramètres du vidéoprojecteur}}
+            <legend><i class="fas fa-cogs icon_blue"></i> {{Paramètres du vidéoprojecteur}}
             </legend>
             <fieldset>
               <div class="form-group">
@@ -226,7 +234,7 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
                   <a class="btn btn-default  pull-left" id="bt_weboptoma"><i class="fa fa-cogs"></i> {{Interface web Optoma}}</a>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group" style="display:none">
                 <label class="col-sm-3 control-label help" data-help="{{Entrez l'identifiant de votre vidéoprojecteur.
  Ce champ est grisé sur certains vidéoprojecteurs.
  Par défaut : admin}}">{{Identifiant et mot de passe}}
@@ -244,7 +252,7 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
         </div>
         <div class="col-sm-6">
           <form class="form-horizontal">
-            <legend><i class="fa fa-wrench"></i> {{Configuration}}</legend>
+            <legend><i class="fa fa-wrench icon_orange"></i> {{Configuration}}</legend>
             <fieldset>
               <div class="form-group">
                 <div class="col-sm-4 control-label">
@@ -338,7 +346,7 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
 
             </fieldset>
 
-            <legend><i class="fas fa-info-circle"></i> {{Informations}}</legend>
+            <legend><i class="fas fa-info-circle icon_yellow"></i> {{Informations}}</legend>
             <fieldset>
 
               <div class="form-group">
@@ -353,7 +361,7 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
               <div class="form-group">
                 <div class="col-sm-10">
                   <center>
-                    <img src="core/img/no_image.gif" data-original=".svg" id="img_device" class="img-responsive" style="max-height:450px;min-height:300px;max-width:400px" onerror="this.src='plugins/Optoma/core/config/devices/UHD.png'" />
+                    <img src="core/img/no_image.gif" data-original=".svg" id="img_device" class="img-responsive" style="max-height:450px;min-height:300px;max-width:400px" onerror="this.src='plugins/Optoma/core/config/img/UHD.png'" />
                   </center>
                 </div>
               </div>
@@ -407,4 +415,3 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
 include_file('desktop', 'Optoma', 'js', 'Optoma');
 include_file('core', 'plugin.template', 'js');
 ?>
-

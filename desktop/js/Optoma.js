@@ -306,13 +306,14 @@ function printEqLogicTab(_eqLogic) {
     printEqLogicHelper("{{Type}}", "type", _eqLogic);
     printEqLogicHelper("{{Modèle}}", "model", _eqLogic);
     printEqLogicHelper("{{Adresse MAC}}", "MAC", _eqLogic);
-    printEqLogicHelper("{{Version LAN}}", "", _eqLogic);
-    printEqLogicHelper("{{Version Firmware}}", "", _eqLogic);
+    printEqLogicHelper("{{Version RS232}}", "RS232Version", _eqLogic);
+    printEqLogicHelper("{{Version LAN}}", "LANFirmwareVersion", _eqLogic);
+    printEqLogicHelper("{{Version Firmware}}", "SoftwareVersion", _eqLogic);
     printEqLogicHelper("{{Découverte auto}}", "auto_discovery", _eqLogic);
     printEqLogicHelper("{{Ports ouverts}}", "openPorts", _eqLogic);
 
     if (isset(_eqLogic.configuration.model) && _eqLogic.configuration.model !== undefined) {
-        $('#img_device').attr("src", 'plugins/Optoma/core/config/devices/' + _eqLogic.configuration.model + '.png');
+        $('#img_device').attr("src", 'plugins/Optoma/core/config/img/' + _eqLogic.configuration.model + '.png');
     }
 }
 

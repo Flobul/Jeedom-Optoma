@@ -114,7 +114,5 @@
       </div>
    </fieldset>
 </form>
-<script>
-   var dateVersion = $("#span_plugin_install_date").html();
-   $("#span_plugin_install_date").empty().append("v" + version + " (" + dateVersion + ")");
-</script>
+
+<?php include_file('desktop', 'configuration', 'js', 'Optoma'); ?>

@@ -20,41 +20,85 @@ class OptomaCrestron
 {
     /*     * *************************Attributs****************************** */
 
-    const ANALOG_JOIN = "\x05\x00\x08\x00\x00\x05\x00";
-    const DIGITAL__JOIN = "\x05\x00\x06\x00\x00\x03\x00";
-    const UPDATE_REQUEST = "\x05\x00\x05\x00\x00\x02\x03\x00";
+    const CRESTRON_PORT          = 41794;
+    const ANALOG_JOIN            = "\x05\x00\x08\x00\x00\x05\x00";
+    const DIGITAL_JOIN           = "\x05\x00\x06\x00\x00\x03\x00";
+    const HEARTBEAT              = "\x13\x00\x02\x00\x00";
+    const CONNECT_MESSAGE        = "\x01\x00\x07\x00\x00\x00\x00\x03\x03\x64";
+    const END_OF_QUERY_RESPONSE  = "\x05\x00\x05\x00\x00\x02\x03\x29";
+    const UPDATE_REQUEST         = "\x05\x00\x05\x00\x00\x02\x03\x30";
 
     /**
      * Tableau des logicalId et commandes action
      */
-    private static $_writeCmd = array(
-        'Power On'     => "\x00\x05", //OK
-        'Power Off'    => "\x00\x06", //OK
-        'Volume Up'    => "\xfa\x13", //OK
-        'Volume Down'  => "\xfb\x13", //OK
-        'Mute Off'     => "\xfc\x13", //OK
-        'Mute On'      => "\xfd\x13", //OK
-        'Menu'         => "\x1d\x14", //OK
-        'Up'           => "\x1e\x14", //OK
-        'Down'         => "\x1f\x14", //OK
-        'Left'         => "\x20\x14", //OK
-        'Right'        => "\x21\x14", //OK
-        'Exit'         => "\x22\x14", //OK
-        'Enter'        => "\x23\x14", //OK
-        'Resync'       => "\x33\x14",
-        'Source'       => "\x6f\x17", //OK
-        'Freeze On'    => "\xf0\x13", //OK
-        'Freeze Off'   => "\xf1\x13", //non fonctionnel
-        'Color +'      => "\xf2\x13", //non fonctionnel
-        'Color -'      => "\xf3\x13", //non fonctionnel
-        'Brightness +' => "\xf4\x13", //OK
-        'Brightness -' => "\xf5\x13", //OK
-        'Contrast +'   => "\xf6\x13", //OK
-        'Contrast -'   => "\xf7\x13", //OK
-        'Sharpness +'  => "\xf8\x13", //OK
-        'Sharpness -'  => "\xf9\x13", //OK
-        'Zoom +'       => "\x39\x14", //OK
-        'Zoom -'       => "\x3a\x14", //OK
+    private static $_sendCmd = array(
+        'Powerstatus' => array(
+            'btn_powon'  => "\x00\x05", //OK
+            'btn_powoff' => "\x00\x06"  //OK
+        ),
+        'Volume Audio' => array(
+            '+' => "\xfa\x13", //OK
+            '-' => "\xfb\x13"  //OK
+        ),
+        'Mute' => array(
+            'other' => "\xfd\x13" //OK
+        ),
+        'Mute Off' => array(
+            'other' => "\xfc\x13" //OK
+        ),
+        'Freeze' => array(
+            'other' => "\xf0\x13" //OK
+        ),
+        'Resync' => array(
+            'other' => "\x33\x14" //OK
+        ),
+        'Color' => array(
+            '+' => "\xf2\x13", // non fonctionnel
+            '-' => "\xf3\x13"  // non fonctionnel
+        ),
+        'Brightness' => array(
+            '+' => "\xf4\x13", // OK
+            '-' => "\xf5\x13"  // OK
+        ),
+        'Contrast' => array(
+            '+' => "\xf6\x13", // OK
+            '-' => "\xf7\x13"  // OK
+        ),
+        'Sharpness' => array(
+            '+' => "\xf8\x13", // OK
+            '-' => "\xf9\x13"  // OK
+        ),
+        'Zoom' => array(
+            '+' => "\x39\x14", // OK
+            '-' => "\x3a\x14"  // OK
+        ),
+        'Menu' => array(
+            'other' => "\x1d\x14" //OK
+        ),
+        'Up' => array(
+            'other' => "\x1e\x14" //OK
+        ),
+        'Down' => array(
+            'other' => "\x1f\x14" //OK
+        ),
+        'Left' => array(
+            'other' => "\x20\x14" //OK
+        ),
+        'Right' => array(
+            'other' => "\x21\x14" //OK
+        ),
+        'Exit' => array(
+            'other' => "\x22\x14" //OK
+        ),
+        'Enter' => array(
+            'other' => "\x23\x14" //OK
+        ),
+        'Source' => array(
+            'other' => "\x6f\x17" //OK
+        ),
+        'Freeze Off' => array(
+            'other' => "\xf1\x13" //non fonctionnel
+        )
     );
 
     /*     * ***********************Methodes statiques*************************** */
@@ -66,17 +110,17 @@ class OptomaCrestron
      */
     public static function getCrestronWriteCommand($_name)
     {
-        $_name = (array_key_exists($_name, self::$_writeCmd) == true) ? self::$_writeCmd[$_name] : false;
+        $_name = (array_key_exists($_name, self::$_sendCmd) == true) ? self::$_sendCmd[$_name] : false;
         return $_name;
     }
 
-    /**
-     * Renvoie la commande brute complète en hexadécimal à envoyer
-     * @param  string $_name LogicalId de la commande
-     * @return string        Commande complète
-     */
-    public static function getAnalogCmd($_name)
+    public static function getSubtypeCmdFromLogicalId($_key, $_subtype)
     {
-        return self::DIGITAL__JOIN . self::getCrestronWriteCommand($_name);
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        $_value = '';
+        if (array_key_exists($_key, self::$_sendCmd) == true) {
+            $_value = self::$_sendCmd[$_key][$_subtype];
+        }
+        return $_value;
     }
 }

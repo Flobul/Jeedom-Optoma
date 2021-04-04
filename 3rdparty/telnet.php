@@ -20,7 +20,7 @@ class Optoma_telnet {
 	public function telnetSendCommand($command,&$response) {
 		if ($this->fp) {
 			fputs($this->fp,"$command\r");
-			//usleep(200000);
+			//usleep(400000);
 			$this->telnetReadResponse($response);
 		}
 		return $this->fp?1:0;

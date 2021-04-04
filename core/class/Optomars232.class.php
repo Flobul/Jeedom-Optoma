@@ -19,6 +19,9 @@
 class OptomaRs232
 {
     /*     * *************************Attributs****************************** */
+    const PREFIX = '~';
+    const PROJECTOR_ID = '00';
+    const WAIT_DELAY = 10;
 
     /**
      * Traduit les codes d'erreurs en message
@@ -227,7 +230,7 @@ class OptomaRs232
             "19" => "Blending",
             "20" => "Sport",
             "21" => "HDR",
-            "22" => "HDR SIM."
+            "22" => "HDR SIM"
         ),
         'Projection' => array(
             "0" => "Front",
@@ -261,7 +264,24 @@ class OptomaRs232
             "9" => "Superwide",
             "11" => "Auto235_Subtitle",
             "12" => "Auto 3D"
-        )
+        ),
+        'Model Name' => array(
+            "1" => "Optoma SVGA",
+            "2" => "Optoma XGA",
+            "3" => "Optoma WXGA",
+            "4" => "Optoma 1080P",
+            "5" => "Optoma WUXGA",
+            "6" => "Optoma UHD"
+        ),
+        'Standby Power Mode' => array(
+            "1" => "Active",
+            "2" => "Eco"
+        ),
+        'Current Lamp Source' => array(
+            "1" => "Lamp1",
+            "2" => "Lamp2",
+            "3" => "Both"
+        ),
     );
 
     /**
@@ -269,6 +289,10 @@ class OptomaRs232
      * @var string
      */
     private static $_writeListOptions = array(
+        'Powerstatus' => array(
+            "0" => "btn_powoff",
+            "1" => "btn_powon"
+        ),
         'Source' => array(
             "1" => "HDMI HDMI1 HDMI/MHL HDMI1/MHL",
             "2" => "DVI-D",
@@ -309,7 +333,8 @@ class OptomaRs232
             "18" => "2D High Speed",
             "19" => "Blending",
             "20" => "Sport",
-            "21" => "HDR"
+            "21" => "HDR",
+            "22" => "HDR SIM"
         ),
         'Projection' => array(
             "1" => "Front",
@@ -410,16 +435,16 @@ class OptomaRs232
             "8" => "Off"
         ),
         '12V Trigger' => array(
-            "1" => "On",
-            "0" => "Off"
+            "0" => "Off",
+            "1" => "On"
         ),
         'Audio Input' => array(
             "0" => "Default",
-            "1" => "Audio 1 (Mini-jack)",
+            "1" => "Audio Input 1",
             "2" => "RCA",
-            "3" => "Audio 2",
-            "4" => "Audio 3",
-            "5" => "Audio 4",
+            "3" => "Audio Input 2",
+            "4" => "Audio Input 3",
+            "5" => "Audio Input 4",
             "6" => "HDMI 1",
             "7" => "HDMI 2",
             "8" => "Audio 5 Displayport",
@@ -440,6 +465,75 @@ class OptomaRs232
         'Screen Type' => array(
             "0" => "16:9",
             "1" => "16:10"
+        ),
+        'PureMotion' => array(
+            "0" => "Off",
+            "1" => "1",
+            "2" => "2",
+            "3" => "3"
+        ),
+        '2D-3D' => array(
+            "0" => "Off",
+            "1" => "1",
+            "2" => "2",
+            "3" => "3"
+        ),
+        '3D Sync. Invert' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'Direct Power On' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'High Altitude' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'Display Mode Lock' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'Keypad Lock' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'Information Hide' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'Beep' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'Freeze' => array(
+            "0" => "Unfreeze",
+            "1" => "Freeze"
+        ),
+        'Mute' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'AV Mute' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'Internal Speaker' => array(
+            "0" => "Off",
+            "1" => "On"
+        ),
+        'Brightness Power' => array(
+            "0" => "100%",
+            "1" => "95%",
+            "2" => "90%",
+            "3" => "85%",
+            "4" => "80%",
+            "5" => "75%",
+            "6" => "70%",
+            "7" => "65%",
+            "8" => "60%",
+            "9" => "55%",
+            "10" => "50%"
         )
     );
 
@@ -632,44 +726,259 @@ class OptomaRs232
      * @var string
      */
     private static $_sendCmd = array(
-        'Power On::btn_powon' => array(
-            "telnet" => "00 1",
-            "crestron" => "\x04\x00"
+        'Powerstatus' => array(
+            'other' => "00"
         ),
-        'Power Off::btn_powoff' => array(
-            "telnet" => "00 0",
-            "crestron" => "\x05\x00"
+        'Resync' => array(
+            'other' => "01 1"
         ),
-        'Resync::resync' => array(
-            "telnet" => "01 1"
+        'AV Mute' => array(
+            'other' => "02"
         ),
-        'source::' => array(
-            "telnet" => "12 X"
+        'Mute' => array(
+            'other' => "03"
         ),
-        'dismode0::' => array(
-            "telnet" => "20 X"
+        'Audio Mute' => array(
+            'other' => "80"
         ),
-        'bright::' => array(
-            "telnet" => "21 X"
+        'Audio Mic' => array(
+            'other' => "562"
         ),
-        'contrast::' => array(
-            "telnet" => "22 X"
+        'Volume Audio' => array(
+            '-' => "140 17",
+            '+' => "140 18",
+            'slider' => "81"
         ),
-        'Sharp::' => array(
-            "telnet" => "23 X"
+        'Volume Micro' => array(
+            '-' => "140 17",
+            '+' => "140 18",
+            'slider' => "93"
         ),
-        'brill::' => array(
-            "telnet" => "34 X"
+        'Audio Input' => array(
+            'select' => "89"
         ),
-        'Degamma::' => array(
-            "telnet" => "35 X"
+        'Projection' => array(
+            'select' => "71"
         ),
-        'colortmp::' => array(
-            "telnet" => "36 X"
+        'Screen Type' => array(
+            'select' => "90"
         ),
-        'colorsp0::' => array(
-            "telnet" => "37 X"
+        'Direct Power On' => array(
+            'select' => "105"
         ),
+        'Sleep Timer' => array(
+            'slider' => "107"
+        ),
+        'Power Mode' => array(
+            'slider' => "114"
+        ),
+        'Remote Code' => array(
+            '-' => "48 1",
+            '+' => "48 2",
+            'slider' => "350"
+        ),
+        'Freeze' => array( // OK
+            'other' => "04"
+        ),
+        'Internal Speaker' => array( // OK
+            'other' => "310"
+        ),
+        'Source' => array(
+            'select' => "12"
+        ),
+        'Sub Source' => array(
+            'select' => "305"
+        ),
+        'Display Mode' => array(
+            'select' => "20"
+        ),
+        'Wall Color' => array(
+            'other' => "506"
+        ),
+        'Brightness' => array(
+            '-' => "46 1",
+            '+' => "46 2",
+            'slider' => "21"
+        ),
+        'Contrast' => array(
+            '-' => "47 1",
+            '+' => "47 2",
+            'slider' => "22"
+        ),
+        'Sharpness' => array(
+            'slider' => "23"
+        ),
+        'Color' => array(
+            'slider' => "45"
+        ),
+        'Tint' => array(
+            'slider' => "44"
+        ),
+        'Brilliant Color' => array(
+            'slider' => "34"
+        ),
+        'Brightness Mode' => array(
+            'select' => "110"
+        ),
+        'Brightness Power' => array(
+            'select' => "326"
+        ),
+        'PureMotion' => array(
+            'select' => "190"
+        ),
+        '3D Mode' => array(
+            'select' => "230"
+        ),
+        '3D-2D' => array(
+            'select' => "400"
+        ),
+        '3D Format' => array(
+            'select' => "405"
+        ),
+        '3D Sync. Invert' => array(
+            'select' => "231"
+        ),
+        '2D-3D' => array(
+            'select' => "402"
+        ),
+        'Aspect Ratio' => array(
+            'select' => "60"
+        ),
+        'H.Image Shift' => array(
+            'slider' => "63"
+        ),
+        'V.Image Shift' => array(
+            'slider' => "64"
+        ),
+        'H. Keystone'=> array(
+            'slider' => "65"
+        ),
+        'V. Keystone'=> array(
+            'slider' => "66"
+        ),
+        'Gamma' => array( // OK
+            'select' => "35"
+        ),
+        'Color Temperature' => array( // OK
+            'select' => "36"
+        ),
+        'Color Space' => array(
+            'select' => "37"
+        ),
+        'Projector ID' => array(
+            'slider' => "79"
+        ),
+        '12V Trigger' => array(
+            'other' => "192"
+        ),
+        'High Altitude' => array(
+            'other' => "101"
+        ),
+        'Display Mode Lock' => array(
+            'other' => "348"
+        ),
+        'Keypad Lock' => array(
+            'other' => "103"
+        ),
+        'Information Hide' => array(
+            'other' => "102"
+        ),
+        'Logo' => array(
+            'select' => "82"
+        ),
+        'Logo Capture' => array(
+            'other' => "83 1"
+        ),
+        'Background Color' => array(
+            'select' => "104"
+        ),
+        'Beep' => array(
+            'other' => "503"
+        ),
+        'Dynamic Black' => array(
+            'select' => "191"
+        ),
+        'Phase' => array(
+            'slider' => "74"
+        ),
+        'Remote Control' => array(
+            'Power' => "140 1",
+            'Power Off' => "140 2",
+            'Remote Mouse Up' => "140 3",
+            'Remote Mouse Left' => "140 4",
+            'Remote Mouse Enter' => "140 5",
+            'Remote Mouse Right' => "140 6",
+            'Remote Mouse Down' => "140 7",
+            'Mouse Left Click' => "140 8",
+            'Mouse Right Click' => "140 9",
+            'Up' => "140 10",
+            'Left' => "140 11",
+            'Enter' => "140 12",
+            'Right' => "140 13",
+            'Down' => "140 14",
+            'V Keystone +' => "140 15",
+            'V Keystone -' => "140 16",
+            'Volume -' => "140 17",
+            'Volume +' => "140 18",
+            'Brightness' => "140 19",
+            'Menu' => "140 20",
+            'Zoom' => "140 21",
+            'DVI-D' => "140 22",
+            'VGA-1' => "140 23",
+            'AV Mute' => "140 24",
+            'S-Video' => "140 25",
+            'VGA-2' => "140 26",
+            'Video' => "140 27",
+            'Contrast' => "140 28",
+            'Freeze' => "140 30",
+            'Lens shift' => "140 31",
+            'Zoom +' => "140 32",
+            'Zoom -' => "140 33",
+            'Focus +' => "140 34",
+            'Focus -' => "140 35",
+            'Mode' => "140 36",
+            'Aspect Ratio' => "140 37",
+            '12 trigger On' => "140 38",
+            '12 trigger Off' => "140 39",
+            'Info' => "140 40",
+            'Resync' => "140 41",
+            'HDMI 1' => "140 42",
+            'HDMI 2' => "140 43",
+            'BNC' => "140 44",
+            'Component' => "140 45",
+            'Source' => "140 47",
+            '1' => "140 51",
+            '2' => "140 52",
+            '3' => "140 53",
+            '4' => "140 54",
+            '5' => "140 55",
+            '6' => "140 56",
+            '7' => "140 57",
+            '8' => "140 58",
+            '9' => "140 59",
+            '0' => "140 60",
+            'Gamma' => "140 61",
+            'PIP' => "140 63",
+            'Lens H left' => "140 64",
+            'Lens H right' => "140 65",
+            'Lens V left' => "140 66",
+            'Lens V right' => "140 67",
+            'H Keystone +' => "140 68",
+            'H Keystone -' => "140 69",
+            'Hot Key F1' => "140 70",
+            'Hot Key F2' => "140 71",
+            'Hot Key F3' => "140 72",
+            'Pattern' => "140 73",
+            'Exit' => "140 74",
+            'HDMI 3' => "140 75",
+            'Display Mode' => "140 76",
+            'Mute' => "140 77",
+            '3D' => "140 78",
+            'DB' => "140 79",
+            'Sleep Timer' => "140 80",
+            'Home' => "140 81",
+            'Return' => "140 82"
+        )
     );
 
     /*     * ***********************Methodes statiques*************************** */
@@ -768,6 +1077,25 @@ class OptomaRs232
     }
 
     /**
+     * Traduit la valeur de l'api
+     * @param  string $_key Clé non traduite
+     * @return string $list Clé traduite
+     */
+    public static function getListValue($_key)
+    {
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        $list = '';
+        if (is_array(self::$_readListOptions[$_key])) {
+            foreach (self::$_readListOptions[$_key] as $cle => $valeur) {
+                if ($cle !== 'id') {
+                    $list .= $valeur . "|" . $valeur . ";";
+                }
+            }
+        }
+        return $list;
+    }
+
+    /**
      * Récupère les minValue et maxValue de l'id logique
      * @param  string $_key id logique
      * @return array       Tableau des 2 valeurs minValue et maxValue
@@ -795,6 +1123,29 @@ class OptomaRs232
             $_id = self::$_listOptions[$_key][$_id];
         }
         return $_id;
+    }
+
+    public static function getIdFromValue($_key, $_id)
+    {
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        if (is_array(self::$_writeListOptions[$_key]) == true) {
+            foreach (self::$_writeListOptions[$_key] as $cle => $valeur) {
+                if ($valeur === $_id) {
+                    $_id = $cle;
+                }
+            }
+        }
+        return $_id;
+    }
+
+    public static function getSubtypeCmdFromLogicalId($_key, $_subtype)
+    {
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        $_value = '';
+        if (array_key_exists($_key, self::$_sendCmd) == true) {
+            $_value = self::$_sendCmd[$_key][$_subtype];
+        }
+        return $_value;
     }
 
     /**

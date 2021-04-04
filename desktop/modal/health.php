@@ -24,39 +24,53 @@ $eqLogics = Optoma::byType('Optoma');
 <table class="table table-condensed tablesorter" id="table_healthoptoma">
 	<thead>
 		<tr>
-			<th>{{Module}}</th>
-			<th>{{ID}}</th>
+			<th>{{Appareil}}</th>
+			<!--th>{{ID}}</th--!>
 			<th>{{IP}}</th>
+            <th>{{Modèle}}</th>
 			<th>{{Statut}}</th>
 			<th>{{Allumé ?}}</th>
+			<th>{{Versions}}</th>
 			<th>{{Dernière communication}}</th>
 			<th>{{Date création}}</th>
 		</tr>
 	</thead>
 	<tbody>
-	 <?php
-foreach ($eqLogics as $eqLogic) {
-    echo '<tr><td><a href="' . $eqLogic->getLinkToConfiguration() . '" style="text-decoration: none;">' . $eqLogic->getHumanName(true) . '</a></td>';
-    echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getId() . '</span></td>';
-    echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('AdrIP') . '</span></td>';
-    $status = '<span class="label label-success" style="font-size : 1em; cursor : default;">{{OK}}</span>';
-    if ($eqLogic->getStatus('state') == 'nok') {
-        $status = '<span class="label label-danger" style="font-size : 1em; cursor : default;">{{NOK}}</span>';
-    }
-    echo '<td>' . $status . '</td>';
-    $powerstatus = $eqLogic->getCmd('info', 'Powerstatus');
-    if (is_object($powerstatus)) {
-        $powervalue = $powerstatus->execCmd();
-    }
-    if ($powervalue == 1) {
-        $power = '<span class="label label-success" style="font-size : 1em;" title="{{Présent}}"><i class="fa fa-check"></i></span>';
-    } else {
-        $power = '<span class="label label-danger" style="font-size : 1em;" title="{{Absent}}"><i class="fa fa-times"></i></span>';
-    }
-    echo '<td>' . $power . '</td>';
-    echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
-    echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('createtime') . '</span></td></tr>';
-}
-?>
+      <?php
+        foreach ($eqLogics as $eqLogic) {
+          echo '<tr><td><a href="' . $eqLogic->getLinkToConfiguration() . '" style="text-decoration: none;">' . $eqLogic->getHumanName(true) . '</a></td>';
+
+          //echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getId() . '</span></td>';
+
+          echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('IP') . '</span></td>';
+
+          echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('type') . " " . $eqLogic->getConfiguration('model') . '</span></td>';
+
+          $status = '<span class="label label-success" style="font-size : 1em; cursor : default;">{{OK}}</span>';
+          if ($eqLogic->getStatus('state') == 'nok') {
+              $status = '<span class="label label-danger" style="font-size : 1em; cursor : default;">{{NOK}}</span>';
+          }
+          echo '<td>' . $status . '</td>';
+          $powerstatus = $eqLogic->getCmd('info', 'Powerstatus');
+          if (is_object($powerstatus)) {
+              $powervalue = $powerstatus->execCmd();
+          }
+          if ($powervalue == 1) {
+              $power = '<span class="label label-success" style="font-size : 1em;" title="{{Allumé}}"><i class="icon maison-cinema1"></i></span>';
+          } else {
+              $power = '<span class="label label-danger" style="font-size : 1em;" title="{{Éteint}}"><i class="fa fa-times"></i></span>';
+          }
+          echo '<td>' . $power . '</td>';
+
+          $RS232Version = $eqLogic->getConfiguration('RS232Version');
+          $SoftwareVersion = $eqLogic->getConfiguration('SoftwareVersion');
+          $LANFirmwareVersion = $eqLogic->getConfiguration('LANFirmwareVersion'); 
+          echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $LANFirmwareVersion . ' - ' . $RS232Version . ' - ' . $SoftwareVersion . '</span></td>';
+
+
+          echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
+          echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('createtime') . '</span></td></tr>';
+        }
+      ?>
 	</tbody>
 </table>

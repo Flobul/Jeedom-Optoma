@@ -18,18 +18,15 @@
 
 /* * ***************************Includes********************************* */
 require_once __DIR__ . "/../../../../core/php/core.inc.php";
-require_once __DIR__ . "/../../../../plugins/Optoma/core/class/Optomapi.class.php";
-require_once __DIR__ . "/../../../../plugins/Optoma/core/class/Optomars232.class.php";
+require_once __DIR__ . "/../../../../plugins/Optoma/core/class/OptomaApi.class.php";
+require_once __DIR__ . "/../../../../plugins/Optoma/core/class/OptomaRs232.class.php";
 require_once __DIR__ . "/../../../../plugins/Optoma/core/class/OptomaCrestron.class.php";
 require_once __DIR__ . "/../../../../plugins/Optoma/3rdparty/telnet.php";
 
 class Optoma extends eqLogic
 {
     /*     * *************************Attributs****************************** */
-    public static $_pluginVersion = '0.94';
-    const PREFIX = '~';
-    const PROJECTOR_ID = '00';
-    const WAIT_DELAY = 10;
+    public static $_pluginVersion = '0.95';
 
     /*     * ***********************Methode statique*************************** */
 
@@ -324,9 +321,6 @@ class Optoma extends eqLogic
             $Optoma->setConfiguration('actionMethod', 'TELNET');
             $Optoma->setConfiguration('infoMethod', 'TELNET');
             $Optoma->setConfiguration('telnetPort', $ports['TELNET2']);
-        } elseif (isset($ports['PJLINK'])) {
-            $Optoma->setConfiguration('actionMethod', 'PJLINK'); //default port: 4352
-            $Optoma->setConfiguration('infoMethod', 'PJLINK');
         } elseif (isset($ports['CRESTRON'])) {
             $Optoma->setConfiguration('actionMethod', 'CRESTRON'); //default port: 41794
             //$Optoma->setConfiguration('infoMethod', $nom); // crestron info ne remonte pas
@@ -371,41 +365,85 @@ class Optoma extends eqLogic
     }
 
     /**
-     * Active et affiche avant création de l'objet
+     * Méthode appellée avant la création de l'objet
+     * Active et affiche l'objet
      */
     public function preInsert()
     {
         $this->setCategory('multimedia', 1);
         $this->setIsEnable(1);
         $this->setIsVisible(1);
+        config::save('heartbeat::delay::Optoma', 720, 'Optoma');
+        config::save('heartbeat::restartDeamon::Optoma', 1, 'Optoma');
     }
 
     /**
-     * Charge la liste des commandes après création de l'objet
+     * Méthode appellée après la création de l'objet
      */
     public function postInsert()
     {
-        if ($this->getIsEnable()) {
-            $this->loadCmdFromConf('UHD');
-        }
     }
 
     /**
-     * Vérifie les ports ouverts avant la sauvegarde de l'objet
+     * Méthode appellée avant la sauvegarde (creation et mise à jour donc) de l'objet
+     * Vérifie les ports ouverts
+     * Si telnet, récupère modèle, type et versions
      */
     public function preSave()
     {
+        if ($this->getIsEnable()) {
+            //$this->loadCmdFromConf('UHD');
+
+            $type = ($this->getConfiguration('type') != '') ? $this->getConfiguration('type') : 'Optoma';
+
+            if (in_array($this->getConfiguration('infoMethod'), array('TELNET', 'API-TELNET', 'API'))) {
+                $this->loadCmdFromConf($type . "_" . $this->getConfiguration('infoMethod'), $this->getConfiguration('infoMethod'));
+            }
+            if (in_array($this->getConfiguration('actionMethod'), array('TELNET', 'API-TELNET', 'API', 'CRESTRON'))) {
+                $this->loadCmdFromConf($type . "_" . $this->getConfiguration('actionMethod'), $this->getConfiguration('actionMethod'));
+            }
+        }
         $listPorts = "";
         $ports = self::check_port($this->getConfiguration('IP'));
-
         foreach ($ports as $nom => $port) {
             $listPorts .= $nom . " (" . $port . "),</br>";
         }
         $this->setConfiguration('openPorts', substr($listPorts, 0, -6));
+
+        $telnetPort = ($this->getConfiguration('telnetPort') != '') ? $this->getConfiguration('telnetPort') : 1023;
+        if(in_array($this->getConfiguration('actionMethod'), array('TELNET','API-TELNET'))) {
+            $model = $this->getConfiguration('model');
+            $type = $this->getConfiguration('type');
+            if ((!isset($model) || $model == '') || (!isset($type) || $type == '')) {
+                $modelResult = $this->sendTelnetRequest('151 1');
+                if ($modelResult) {
+                    $this->getCurrentModel($modelResult);
+                }
+                $RS232versionResult = $this->sendTelnetRequest('152 1');
+                if ($RS232versionResult && $RS232versionResult != '') {
+                    if (trim(substr($RS232versionResult, 0, 2)) == 'OK') {
+                        $this->setConfiguration('RS232Version', trim(substr($RS232versionResult, 2, 1)));
+                    }
+                }
+                $softwareVersionResult = $this->sendTelnetRequest('122 1');
+                if ($softwareVersionResult && $softwareVersionResult != '') {
+                    if (trim(substr($softwareVersionResult, 0, 2)) == 'OK') {
+                        $this->setConfiguration('SoftwareVersion', trim(substr($softwareVersionResult, 2, 5)));
+                    }
+                }
+                $LANFirmwareVersion = $this->sendTelnetRequest('357 1');
+                if ($LANFirmwareVersion && $LANFirmwareVersion != '') {
+                    if (trim(substr($LANFirmwareVersion, 0, 2)) == 'OK') {
+                        $this->setConfiguration('LANFirmwareVersion', trim(substr($LANFirmwareVersion, 2, 5)));
+                    }
+                }
+            }
+        }
     }
 
     /**
-     * Vérifie l'IP avant mise à jour de l'objet
+     * Méthode appellée avant la mise à jour de l'objet
+     * Vérifie l'IP
      */
     public function preUpdate()
     {
@@ -418,13 +456,14 @@ class Optoma extends eqLogic
     }
 
     /**
-     * Recharge les commandes après mise à jour de l'objet
+     * Méthode appellée après la mise à jour de l'objet
+     * Recharge les commandes
      */
     public function postUpdate()
     {
-        if ($this->getIsEnable()) {
-            $this->loadCmdFromConf('UHD');
-        }
+        //if ($this->getIsEnable()) {
+        //    $this->loadCmdFromConf('UHD');
+        //}
     }
 
     /**
@@ -464,8 +503,17 @@ class Optoma extends eqLogic
      * @param  string $type Nom
      * @return boolean       Renvoi 0 si fichier en erreur, 1 sinon
      */
-    public function loadCmdFromConf($type)
+    public function loadCmdFromConf($type, $method)
     {
+        // détermine la class à utiliser pour générer listValue, minValue, maxValue
+        if (in_array($method, array('TELNET', 'API-TELNET'))) {
+            $CLASS = 'OptomaRs232';
+        } elseif ($method == 'API') {
+            $CLASS = 'Optomapi';
+        } elseif ($method == 'CRESTRON') {
+            $CLASS = 'OptomaCrestron';
+        }
+
         $return = array();
         if (!is_file(dirname(__FILE__) . '/../../core/config/devices/' . $type . '.json')) {
             log::add(__CLASS__, 'debug', __("Fichier introuvable : ", __FILE__) . dirname(__FILE__) . '/config/devices/' . $type . '.json');
@@ -499,9 +547,13 @@ class Optoma extends eqLogic
 
             // attribuer les valeurs min et max des commandes numeric et slider
             if (isset($command['subtype']) && $command['subtype'] == 'numeric') {
-                $range = Optomapi::getRangeValue($command['logicalId']);
+                $range = $CLASS::getRangeValue($command['logicalId']);
+                if (is_array($range)) {
+                    $cmd->setConfiguration('minValue', $range[0]);
+                    $cmd->setConfiguration('maxValue', $range[1]);
+                }
             } elseif (isset($command['subtype']) && $command['subtype'] == 'slider') {
-                $range = Optomapi::getRangeValue($command['configuration']['cmdInfo']);
+                $range = $CLASS::getRangeValue($command['configuration']['cmdInfo']);
                 if (is_array($range)) {
                     $cmd->setConfiguration('minValue', $range[0]);
                     $cmd->setConfiguration('maxValue', $range[1]);
@@ -510,7 +562,7 @@ class Optoma extends eqLogic
 
             // attribuer les listes de valeurs des commandes select
             if (isset($command['configuration']['cmdInfo']) && $command['subtype'] == 'select') {
-                $listValue = Optomapi::getListValue($command['configuration']['cmdInfo']);
+                $listValue = $CLASS::getListValue($command['configuration']['cmdInfo']);
                 if ($listValue != '') {
                     $cmd->setConfiguration('listValue', substr($listValue, 0, -1));
                 }
@@ -540,6 +592,52 @@ class Optoma extends eqLogic
         return true;
     }
 
+    public function getCurrentModel($_data)
+    {
+        if (!empty($_data)) {
+            $reponse = explode("> ", $_data);
+            if (count($reponse) == 1) {
+                $value = $reponse[0];
+            } elseif (count($reponse) == 2) {
+                $value = $reponse[1];
+            } elseif (count($reponse) == 3) {
+                $value = $reponse[2];
+            } else {
+                log::add(__CLASS__, 'debug', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . ' Detect inappropriate response !!! ');
+            }
+
+            switch (trim(substr($value, 0, 2))) {
+                case 'F':
+                    log::add(__CLASS__, 'debug', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . ' '."RE (F) : FAIL ");
+                    break;
+                case 'Ok':
+                case 'OK':
+                    $value = OptomaRs232::getReadListValue('Model Name', trim(substr($value, 2, 1)));
+            }
+            if ($value != '' && strpos($value, 'Optoma') !== false)  {
+                $modelType = explode(" ", $value);
+                $this->setConfiguration('type', $modelType[0]);
+                $this->setConfiguration('model', $modelType[1]);
+            }
+        }
+    }
+
+    public function sendTelnetRequest($_telnetCode)
+    {
+        $result = '';
+        $projectorID = ($this->getConfiguration('ID') != '') ? $this->getConfiguration('ID') : OptomaRs232::PROJECTOR_ID;
+        $telnetPort = ($this->getConfiguration('telnetPort') != '') ? $this->getConfiguration('telnetPort') : 1023;
+        $readCmd = OptomaRs232::PREFIX . $projectorID . $_telnetCode;
+
+        $telnet = new Optoma_telnet();
+        if ($telnet->telnetConnect($this->getConfiguration('IP'), $telnetPort, $errno, $errstr)) {
+            $telnet->telnetSendCommand($readCmd, $result);
+            $telnet->telnetDisconnect();
+            return $result;
+        }
+        return false;
+    }
+
     /**
      * Envoi des requêtes vers l'url et renvoi le résultat
      * @param  string  $_url     URL des données
@@ -547,7 +645,7 @@ class Optoma extends eqLogic
      * @param  integer $_retry   Nombre de tentatives de connexions
      * @return array            Résultat de la requête (json)
      */
-    public function sendRequest($_url, $_timeout = 2, $_retry = 5)
+    public function sendAPIRequest($_url, $_timeout = 2, $_retry = 5)
     {
         try {
             $request = new com_http($_url, $this->getConfiguration('username'), $this->getConfiguration('password'));
@@ -587,10 +685,11 @@ class Optoma extends eqLogic
                 try {
                     if ($telnet->telnetConnect($this->getConfiguration('IP'), $port, $errno, $errstr)) {
                         try {
-                            $this->sendCommand($infoCmd, $telnet, $rawCmd);
+                            $this->sendRS232RequestCommand($infoCmd, $telnet, $rawCmd);
                         } catch (Exception $exc) {
                             log::add(__CLASS__, 'debug', __("Erreur lors de l'exécution de la commande telnet ", __FILE__) . $exc->getMessage());
                         }
+              	        $telnet->telnetDisconnect();
                     }
                 } catch (Exception $exc) {
                     log::add(__CLASS__, 'debug', __("Erreur lors de la connexion telnet ", __FILE__) . $exc->getMessage());
@@ -612,10 +711,11 @@ class Optoma extends eqLogic
                 try {
                     if ($telnet->telnetConnect($this->getConfiguration('IP'), $port, $errno, $errstr)) {
                         try {
-                            $this->sendCommand($infoCmd, $telnet);
+                            $this->sendRS232RequestCommand($infoCmd, $telnet);
                         } catch (Exception $exc) {
                             log::add(__CLASS__, 'debug', __("Erreur lors de l'exécution de la commande telnet ", __FILE__) . $exc->getMessage());
                         }
+              	        $telnet->telnetDisconnect();
                     }
                 } catch (Exception $exc) {
                     log::add(__CLASS__, 'debug', __("Erreur lors de la connexion telnet ", __FILE__) . $exc->getMessage());
@@ -631,15 +731,17 @@ class Optoma extends eqLogic
      * @param  object $telnet Connexion telnet ouverte
      * @param  boolean $rawCmd Commande brute si getAllRs232Info
      */
-    public function sendCommand($cmd, $telnet, $rawCmd = false)
+    public function sendRS232RequestCommand($cmd, $telnet, $rawCmd = false)
     {
         $result = '';
-        $delay = ($this->getConfiguration('waitdelay') != '') ? $this->getConfiguration('waitdelay') : self::WAIT_DELAY;
+        $delay = ($this->getConfiguration('waitdelay') != '') ? $this->getConfiguration('waitdelay') : OptomaRs232::WAIT_DELAY;
         $ordre = ($cmd->getConfiguration('telnetCmd') != '') ? $cmd->getConfiguration('telnetCmd') : $rawCmd; //Lamp total : 108 1  //Lamp bright : 108 3 //Lamp Eco : 108 4
-        $projectorID = ($cmd->getConfiguration('ID') != '') ? $cmd->getConfiguration('ID') : self::PROJECTOR_ID;
-        $readCmd = self::PREFIX . $projectorID . $ordre;
+        $projectorID = ($cmd->getConfiguration('ID') != '') ? $cmd->getConfiguration('ID') : OptomaRs232::PROJECTOR_ID;
+        $readCmd = OptomaRs232::PREFIX . $projectorID . $ordre;
         log::add(__CLASS__, 'debug', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . " LogicalId : " . $cmd->getLogicalId() . " Cmd : " . $readCmd);
         $telnet->telnetSendCommand($readCmd, $result);
+      
+      
         usleep($delay * 2000);
         log::add(__CLASS__, 'debug', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . " LogicalId result: " . $result);
 
@@ -746,31 +848,102 @@ class Optoma extends eqLogic
      * en récupérant la commande d'après le logicalId
      * @param  object $cmd Objet de la commande envoyée
      */
-    public function sendCrestronCommand($cmd)
+    public function sendCrestronCommand($_cmd)
     {
-        log::add('Optoma', 'debug', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . " debut " . $cmd->getName());
-        $_msg = OptomaCrestron::getAnalogCmd('Help');
-
-        $port = 41794;
+        $port = OptomaCrestron::CRESTRON_PORT;
         $resp = '';
         $telnet = new Optoma_telnet();
         try {
             if ($telnet->telnetConnect("tcp://" . $this->getConfiguration('IP'), $port, $errno, $errstr)) {
                 try {
-                    fwrite($telnet->fp, $_msg);
+                    fwrite($telnet->fp, $_cmd);
                     $telnet->telnetGetReadResponse($resp);
                     $telnet->telnetDisconnect();
                 } catch (Exception $exc) {
                     log::add(__CLASS__, 'debug', __("Erreur lors de l'exécution de la commande telnet ", __FILE__) . $exc->getMessage());
                 }
+              	$telnet->telnetDisconnect();
             }
         } catch (Exception $exc) {
             log::add(__CLASS__, 'debug', __("Erreur lors de la connexion telnet ", __FILE__) . $exc->getMessage());
         }
         log::add(__CLASS__, 'debug', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . " if OK " .$resp);
     }
-}
 
+    public function toHtml($_version = 'dashboard') {
+
+        if ($this->getConfiguration('widgetTemplate') != 1) {
+            return parent::toHtml($_version);
+        }
+        $replace = $this->preToHtml($_version);
+        if (!is_array($replace)) {
+            return $replace;
+        }
+		$_version = jeedom::versionAlias($_version);
+
+        // informations de l'equipement 
+        $replace['#device_type#'] = ($this->getConfiguration('type') != '') ? $this->getConfiguration('model') : "N/A";
+        $replace['#device_model#'] = ($this->getConfiguration('model') != '') ? $this->getConfiguration('model') : "N/A";
+        $replace['#info_method#'] = ($this->getConfiguration('infoMethod') != '') ? $this->getConfiguration('infoMethod') : "N/A";
+        $replace['#action_method#'] = ($this->getConfiguration('actionMethod') != '') ? $this->getConfiguration('actionMethod') : "N/A";
+
+		// POWER
+		$powerStatus = $this->getCmd('info', 'Powerstatus');
+		$replace['#power_status#'] = (is_object($powerStatus)) ? $powerStatus->execCmd() : '';
+		$replace['#collect_power#'] = (is_object($powerStatus)) ? $powerStatus->getCollectDate() : '';
+
+		$powerOn = $this->getCmd('action', 'Powerstatus::btn_powon');
+		$replace['#power_on_id#'] = (is_object($powerOn)) ? $powerOn->getId() : '';
+		$powerOff = $this->getCmd('action', 'Powerstatus::btn_powoff');
+		$replace['#power_off_id#'] = (is_object($powerOff)) ? $powerOff->getId() : '';
+
+		// INPUT
+		$inputSource = $this->getCmd('info', 'Source');
+		$replace['#input_source#'] = (is_object($inputSource)) ? $inputSource->execCmd() : '';
+
+		$setInputSource = $this->getCmd('action', 'Source::');
+		$replace['#setinput_source_id#'] = (is_object($setInputSource)) ? $setInputSource->getId() : '';
+		$replace['#setinput_source_listvalue#'] = (is_object($setInputSource)) ? $setInputSource->getConfiguration('listValue') : '';
+
+		// VOLUME
+		$volume = $this->getCmd('info', 'Volume Audio');
+		$replace['#volume#'] = (is_object($volume)) ? $volume->execCmd() : '';
+
+        $volumeUp = $this->getCmd('action', 'Volume Audio::+');
+		$replace['#volumeup_id#'] = (is_object($volumeUp)) ? $volumeUp->getId() : '';
+		$volumeDown = $this->getCmd('action', 'Volume Audio::-');
+		$replace['#volumedown_id#'] = (is_object($volumeDown)) ? $volumeDown->getId() : '';
+
+		//MUTE
+		//$MuteStatus = $this->getCmd(null,'MuteStatus');
+		//$replace['#mute_status#'] = (is_object($MuteStatus)) ? $MuteStatus->execCmd() : '';
+		//$replace['#collect_mute#'] = (is_object($PowerStatus)) ? $MuteStatus->getCollectDate() : '';
+		$MuteOn = $this->getCmd(null,'MuteOn');
+		$replace['#id_mute_on#'] = (is_object($MuteOn)) ? $MuteOn->getId() : '';
+		$MuteOff = $this->getCmd(null,'MuteOff');
+		$replace['#id_mute_off#'] = (is_object($MuteOff)) ? $MuteOff->getId() : '';
+
+      //test fonction
+/*		foreach($this->getCmd('action') as $val) {
+			if ($val->getConfiguration('group') == "input") {
+				//log::add('vp_telnet', 'debug','DEBUGGGGGG CMD ' . $val->getConfiguration('group'));
+				foreach($this->getConfiguration('inputs') as $key => $value) {
+                  if (str_replace("/","",$value) == str_replace("/","",$val->getName())) {
+					log::add('vp_telnet', 'debug','DEBUGGGGGG INPUTS ' . $value . ' ' . $val->getName());
+                  }
+                }
+      		}
+		}*/
+
+		$RefreshAction = $this->getCmd(null,'RefreshAction');
+		$replace['#refresh_id#'] = (is_object($RefreshAction)) ? $RefreshAction->getId() : '';
+
+		$html = template_replace($replace, getTemplate('core', $_version, 'Optoma.template',__CLASS__));
+
+        return $html;
+    }
+}
+  
 class OptomaCmd extends cmd
 {
     public function execute($_options = array())
@@ -778,14 +951,11 @@ class OptomaCmd extends cmd
         $eqLogic = $this->getEqLogic();
         if ($this->getLogicalId() !== "") {
             $API_url = Optoma::getAPIUrl($eqLogic->getConfiguration('IP'), $eqLogic->getConfiguration('API'));
-            if (strpos($this->getLogicalId(), "::") !== false) {
-                $args = explode("::", $this->getLogicalId());
-            }
             if ($this->getLogicalId() == 'Refresh') {
                 // selection de la méthode de récupération des infos
                 if ($eqLogic->getConfiguration('infoMethod') == 'API' || $eqLogic->getConfiguration('infoMethod') == 'API-TELNET') {
                     //API get informations (all)
-                    $result_api = $eqLogic->sendRequest($API_url);
+                    $result_api = $eqLogic->sendAPIRequest($API_url);
                     preg_match('#{(.*)}#U', $result_api, $result);
                     $decodedResult = json_decode(preg_replace('/([{,])(\s*)([A-Za-z0-9_\-]+?)\s*:/', '$1"$3":', $result[0]), true);
                     $API = new Optomapi();
@@ -803,27 +973,94 @@ class OptomaCmd extends cmd
                     $eqLogic->getAllRs232Info();
                 }
             } else {
-                if ($eqLogic->getConfiguration('actionMethod') == 'API') {
+                if (strpos($this->getLogicalId(), "::") !== false) {
+                    $args = explode("::", $this->getLogicalId());
+                }
+                if ($eqLogic->getConfiguration('actionMethod') == 'API' || $eqLogic->getConfiguration('actionMethod') == 'API-TELNET') {
                     switch ($this->getSubType()) {
                         case 'message':
-                            $value = $args[0] . "=" . $_options['message'];
+                            $rawValueSelect = Optomapi::getSubtypeCmdFromLogicalId($args[0], 'select');
+                            $value = $rawValueSelect . "=" . $_options['message'];
                             break;
                         case 'slider':
-                            $value = $args[0] . "=" . $_options['slider'];
+                            $rawIdSelect = Optomapi::getSubtypeCmdFromLogicalId($args[0], 'slider');
+                            $value = $rawIdSelect . "=" . $_options['slider'];
                             break;
                         case 'select':
-                            $select = Optomapi::getValueFromId($this->getConfiguration('cmdInfo'), $_options['select']);
-                            $value = $args[0] . "=" . $select;
+                            $rawIdSelect = Optomapi::getSubtypeCmdFromLogicalId($args[0], 'select');
+                            $rawValueSelect = Optomapi::getIdFromValue($args[0], $_options['select']);
+                            $value = $rawIdSelect . "=" . $rawValueSelect;
                             break;
                         case 'other':
-                            $value = $args[0] . "=" . $args[1];
+                            if ($args[1] != '') {
+                                $rawIdSelect = Optomapi::getSubtypeCmdFromLogicalId($args[0], $args[1]);
+                                $value = $rawIdSelect . "=" . $args[1];
+                            } else {
+                                $rawValueSelect = Optomapi::getCmdFromLogicalId($args[0]);
+                                $value = $args[0] . "=" . $rawValueSelect;
+                            }
                     }
-                    $result_api = $eqLogic->sendRequest($API_url . '?' . urlencode($value));
+                    if ($value != '') {
+                    	log::add('Optoma', 'debug', __FUNCTION__ . " RAW COMMANDE API === " . $value);
+                        $result_api = $eqLogic->sendAPIRequest($API_url . '?' . urlencode($value));
+                    }
                 } elseif ($eqLogic->getConfiguration('actionMethod') == 'TELNET') {
+                    switch ($this->getSubType()) {
+                        case 'message':
+                            $rawValueSelect = OptomaRs232::getSubtypeCmdFromLogicalId($args[0], 'select');
+                            $value = $rawValueSelect . " " . $_options['message'];
+                            break;
+                        case 'slider':
+                            $command = OptomaRs232::getSubtypeCmdFromLogicalId($args[0], 'slider');
+                            $value = $command . " " . $_options['slider'];
+                            break;
+                        case 'select':
+                            $rawIdSelect = OptomaRs232::getSubtypeCmdFromLogicalId($args[0], 'select');
+                            $rawValueSelect = OptomaRs232::getIdFromValue($args[0], $_options['select']);
+                            $value = $rawIdSelect . " " . $rawValueSelect;
+                            break;
+                        case 'other':
+                            if ($args[1] != '') {
+                                if (in_array($args[1], array('-','+'))) {
+                                    $rawIdSelect = OptomaRs232::getSubtypeCmdFromLogicalId($args[0], $args[1]);
+                                    $value = $rawIdSelect;
+                                } else {
+                                    $rawIdSelect = OptomaRs232::getSubtypeCmdFromLogicalId($args[0], 'other');
+                                    $rawValueSelect = OptomaRs232::getIdFromValue($args[0], $args[1]);
+                                    $value = $rawIdSelect . " " . $rawValueSelect;
+                                }
+                            } else {
+                                $rawIdSelect = OptomaRs232::getSubtypeCmdFromLogicalId($args[0], 'other');
+                                $value = $rawIdSelect;
+                            }
+                    }
+                    if ($value != '') {
+                        $eqLogic->sendTelnetRequest($value);
+                    	log::add('Optoma', 'debug', __FUNCTION__ . " RAW COMMANDE TELNET === " . $value);
+                    }
                 } elseif ($eqLogic->getConfiguration('actionMethod') == 'CRESTRON') {
-                    log::add('Optoma', 'debug', __FUNCTION__ . " debut != refresh " . $this->getName());
+                    switch ($this->getSubType()) {
+                        case 'message':
+                            break;
+                        case 'slider':
 
-                    $eqLogic->sendCrestronCommand($this);
+                            break;
+                        case 'select':
+
+                            break;
+                        case 'other':
+                            if ($args[1] != '') {
+                                $value = OptomaCrestron::getSubtypeCmdFromLogicalId($args[0], $args[1]);
+                            } else {
+                                $value = OptomaCrestron::getSubtypeCmdFromLogicalId($args[0], 'other');
+                            }
+                        log::add('Optoma', 'debug', __FUNCTION__ . " RAW COMMANDE CRESTRON1 === " . $value);
+
+                    }
+                    if ($value != '') {
+                        log::add('Optoma', 'debug', __FUNCTION__ . " RAW COMMANDE CRESTRON === " . $value);
+                        $eqLogic->sendCrestronCommand(OptomaCrestron::DIGITAL_JOIN . $rawIdSelect);
+                    }
                 }
             }
         }
