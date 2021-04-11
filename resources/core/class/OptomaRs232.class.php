@@ -397,11 +397,11 @@ class OptomaRs232
         'Wall Color' => array(
             "0" => "Off",
             "1" => "BlackBoard",
+            "7" => "Light Yellow",
             "3" => "Light Green",
             "4" => "Light Blue",
             "5" => "Pink",
-            "6" => "Gray",
-            "7" => "Light Yellow"
+            "6" => "Gray"
         ),
         'Gamma' => array(
             "1" => "Film",
@@ -435,8 +435,8 @@ class OptomaRs232
             "8" => "Off"
         ),
         '12V Trigger' => array(
-            "0" => "Off",
-            "1" => "On"
+            "1" => "On",
+            "0" => "Off"
         ),
         'Audio Input' => array(
             "0" => "Default",
@@ -465,153 +465,6 @@ class OptomaRs232
         'Screen Type' => array(
             "0" => "16:9",
             "1" => "16:10"
-        ),
-        'PureMotion' => array(
-            "0" => "Off",
-            "1" => "1",
-            "2" => "2",
-            "3" => "3"
-        ),
-        '2D-3D' => array(
-            "0" => "Off",
-            "1" => "1",
-            "2" => "2",
-            "3" => "3"
-        ),
-        '3D Sync. Invert' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'Direct Power On' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'High Altitude' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'Display Mode Lock' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'Keypad Lock' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'Information Hide' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'Beep' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'Freeze' => array(
-            "0" => "Unfreeze",
-            "1" => "Freeze"
-        ),
-        'Mute' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'AV Mute' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'Internal Speaker' => array(
-            "0" => "Off",
-            "1" => "On"
-        ),
-        'Brightness Power' => array(
-            "0" => "100%",
-            "1" => "95%",
-            "2" => "90%",
-            "3" => "85%",
-            "4" => "80%",
-            "5" => "75%",
-            "6" => "70%",
-            "7" => "65%",
-            "8" => "60%",
-            "9" => "55%",
-            "10" => "50%"
-        ),
-        'Remote Control' => array(
-            '1' => "Power",
-            '2' => "Power Off",
-            '3' => "Remote Mouse Up",
-            '4' => "Remote Mouse Left",
-            '5' => "Remote Mouse Enter",
-            '6' => "Remote Mouse Right",
-            '7' => "Remote Mouse Down",
-            '8' => "Mouse Left Click",
-            '9' => "Mouse Right Click",
-            '10' => "Up",
-            '11' => "Left",
-            '12' => "Enter",
-            '13' => "Right",
-            '14' => "Down",
-            '15' => "V Keystone +",
-            '16' => "V Keystone -",
-            '17' => "Volume -",
-            '18' => "Volume +",
-            '19' => "Brightness",
-            '20' => "Menu",
-            '21' => "Zoom",
-            '22' => "DVI-D",
-            '23' => "VGA-1",
-            '24' => "AV Mute",
-            '25' => "S-Video",
-            '26' => "VGA-2",
-            '27' => "Video",
-            '28' => "Contrast",
-            '30' => "Freeze",
-            '31' => "Lens shift",
-            '32' => "Zoom +",
-            '33' => "Zoom -",
-            '34' => "Focus +",
-            '35' => "Focus -",
-            '36' => "Mode",
-            '37' => "Aspect Ratio",
-            '38' => "12 trigger On",
-            '39' => "12 trigger Off",
-            '40' => "Info",
-            '41' => "Resync",
-            '42' => "HDMI 1",
-            '43' => "HDMI 2",
-            '44' => "BNC",
-            '45' => "Component",
-            '47' => "Source",
-            '51' => "1",
-            '52' => "2",
-            '53' => "3",
-            '54' => "4",
-            '55' => "5",
-            '56' => "6",
-            '57' => "7",
-            '58' => "8",
-            '59' => "9",
-            '60' => "0",
-            '61' => "Gamma",
-            '63' => "PIP",
-            '64' => "Lens H left",
-            '65' => "Lens H right",
-            '66' => "Lens V left",
-            '67' => "Lens V right",
-            '68' => "H Keystone +",
-            '69' => "H Keystone -",
-            '70' => "Hot Key F1",
-            '71' => "Hot Key F2",
-            '72' => "Hot Key F3",
-            '73' => "Pattern",
-            '74' => "Exit",
-            '75' => "HDMI 3",
-            '76' => "Display Mode",
-            '77' => "Mute",
-            '78' => "3D",
-            '79' => "DB",
-            '80' => "Sleep Timer",
-            '81' => "Home",
-            '82' => "Return"
         )
     );
 
@@ -797,18 +650,6 @@ class OptomaRs232
         'Projector ID' => array(
             "telnet" => "558 1"
         ),
-        'H. Keystone' => array(
-            "telnet" => "543 4"
-        ),
-        'V. Keystone' => array(
-            "telnet" => "543 3"
-        ),
-        'H.Image Shift' => array(
-            "telnet" => "543 1"
-        ),
-        'V.Image Shift' => array(
-            "telnet" => "543 2"
-        )
     );
 
     /**
@@ -819,29 +660,25 @@ class OptomaRs232
         'Powerstatus' => array(
             'other' => "00"
         ),
-        'Resync' => array(
+        'Resync' => array( // OK
             'other' => "01 1"
         ),
-        'AV Mute' => array(
+        'AV Mute' => array( // OK
             'other' => "02"
         ),
-        'Mute' => array(
+        'Mute' => array( // OK
             'other' => "03"
         ),
-        'Audio Mute' => array(
+        'Audio Mute' => array( // OK
             'other' => "80"
         ),
-        'Audio Mic' => array(
+        'Audio Mic' => array( // OK
             'other' => "562"
         ),
-        'Volume Audio' => array(
-            '-' => "140 17",
-            '+' => "140 18",
+        'Volume Audio' => array( // OK
             'slider' => "81"
         ),
-        'Volume Micro' => array(
-            '-' => "140 17",
-            '+' => "140 18",
+        'Volume Micro' => array( // OK
             'slider' => "93"
         ),
         'Audio Input' => array(
@@ -879,18 +716,18 @@ class OptomaRs232
         'Sub Source' => array(
             'select' => "305"
         ),
-        'Display Mode' => array(
+        'Display Mode' => array( // OK
             'select' => "20"
         ),
-        'Wall Color' => array(
+        'Wall Color' => array( // OK
             'other' => "506"
         ),
-        'Brightness' => array(
+        'Brightness' => array( // OK
             '-' => "46 1",
             '+' => "46 2",
             'slider' => "21"
         ),
-        'Contrast' => array(
+        'Contrast' => array( // OK
             '-' => "47 1",
             '+' => "47 2",
             'slider' => "22"
@@ -904,13 +741,13 @@ class OptomaRs232
         'Tint' => array(
             'slider' => "44"
         ),
-        'Brilliant Color' => array(
+        'Brilliant Color' => array( // OK
             'slider' => "34"
         ),
         'Brightness Mode' => array(
             'select' => "110"
         ),
-        'Brightness Power' => array(
+        'Power' => array(
             'select' => "326"
         ),
         'PureMotion' => array(
@@ -933,12 +770,6 @@ class OptomaRs232
         ),
         'Aspect Ratio' => array(
             'select' => "60"
-        ),
-        'H.Image Shift' => array(
-            'slider' => "63"
-        ),
-        'V.Image Shift' => array(
-            'slider' => "64"
         ),
         'H. Keystone'=> array(
             'slider' => "65"
@@ -977,22 +808,10 @@ class OptomaRs232
             'select' => "82"
         ),
         'Logo Capture' => array(
-            'other' => "83 1"
+            'other' => "83"
         ),
         'Background Color' => array(
             'select' => "104"
-        ),
-        'Beep' => array(
-            'other' => "503"
-        ),
-        'Dynamic Black' => array(
-            'select' => "191"
-        ),
-        'Phase' => array(
-            'slider' => "74"
-        ),
-        'Remote Control' => array(
-            'select' => "140"
         )
     );
 
@@ -1091,26 +910,6 @@ class OptomaRs232
         return $_value;
     }
 
-    /**
-     * Traduit la valeur de l'api
-     * @param  string $_key Clé non traduite
-     * @return string $list Clé traduite
-     */
-    public static function getListValue($_key)
-    {
-        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
-        $list = '';
-        if (is_array(self::$_writeListOptions[$_key])) {
-            foreach (self::$_writeListOptions[$_key] as $cle => $valeur) {
-                if ($cle !== 'id') {
-                    $list .= $valeur . "|" . $valeur . ";";
-                }
-            }
-        }
-        return $list;
-    }
-  
-//$_readListOptions
     /**
      * Récupère les minValue et maxValue de l'id logique
      * @param  string $_key id logique

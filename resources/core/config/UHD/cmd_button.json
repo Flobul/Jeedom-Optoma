@@ -1,0 +1,22 @@
+/*Commands listed here can be found on Optoma web site : https://www.optoma.fr/product-details/uhd51#downloads
+Download PDF : https://www.optoma.fr/ContentStorage/Documents/286c27f6-93f7-4274-acf9-67b225f99e34.pdf
+*/
+{
+  "btn_powon":"Power On",
+  "btn_powoff":"Power Off",
+  "resync":"Resync",
+  "reset":"Reset",
+  "logocapture":"Logo Capture",
+  "avmute":"AV Mute",
+  "freeze":"Freeze",
+  "infohide":"Information hide",
+  "altitude":"High Altitude",
+  "keypad":"Keypad Lock",
+  "dismdlocked":"Display Mode Lock",
+  "directpwon":"Direct Power On",
+  "3Dsync":"3D Sync. Invert",
+  "3Dmodet":"3D Mode",
+  "speaker":"Internal Speaker",
+  "mute":"Mute",
+  "dynamic":"Dynamic Black"
+}

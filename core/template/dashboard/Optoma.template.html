@@ -6,10 +6,8 @@
 		<span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
 			<i class="fas fa-sync"></i>
 		</span>
-	<div class="row">
+	<div class="text-center" style="width:50%;display:inline-block">
 		<center>
-          <div class="cmdName">#device_type#</div>
-          <div class="cmdName">#device_model#</div>
 		<div class="col-sm-6">
 			<div class="power">
 				<a class="cmd" data-cmd_id="#power_on_id#" title="#collect_power#"></a>
@@ -27,62 +25,87 @@
 				<a class="cursor" id="#id#_volumedown_action"><img src='plugins/Optoma/core/template/images/minus.png'/></a>
 			</div>
 		</div>
-		</center>
+	<div>
+      <form class="form-inline">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon cmdName">Entrée vidéo</div>
+            <select class="form-control inputSelectCmd"></select>
+          </div>
+          <div class="input-group">
+            <div class="input-group-addon cmdName">Mode de luminosité</div>
+            <select class="form-control brightnessModeSelectCmd"></select>
+          </div>
+          <div class="input-group">
+            <div class="input-group-addon cmdName">Mode d'affichage</div>
+            <select class="form-control displayModeSelectCmd"></select>
+          </div>
+          <div class="input-group">
+            <div class="input-group-addon cmdName">Aspect Ratio</div>
+            <select class="form-control aspectRatioSelectCmd"></select>
+          </div>
+        </div>
+      </form>
+    </div>
+    </center>
 	</div>
-	<div class="row">
+	<div class="text-center" style="width:30%;display:inline-block;vertical-align:top">
 	<center>
-		<div class="col-sm-12">
+      <div class="input-group deviceType">
+        <div class="input-group-addon cmdName">Type :</div>
+          <div class="cmdName">#device_type#</div>
+        </div>
+      <div class="input-group deviceModel">
+        <div class="input-group-addon cmdName">Modèle :</div>
+          <div class="cmdName">#device_model#</div>
+        </div>
+      <div class="input-group lampHourTotal">
+          <div class="input-group-addon cmdName">Heure de lampe :</div>
+          <div class="cmdName">#lampHourTotal_value#</div>
+      </div>
+      <div>
 			<svg id="#id#svg" alt="" style="width:100%;max-height:90px;">
 				<use xlink:href="plugins/Optoma/core/template/images/Optoma_icon.svg#VP_icon"></use>
      		</svg>
-		</div>
+      </div>
 	</center>
 	</div>
-    <form class="form-inline">
-        <div class="form-group">
-          <div class="form-group-addon cmdName">Entrée vidéo</div>
-          <select class="form-control selectCmd" data-cmd_id="#setinput_id#"></select>
-        </div>
-    </form>
-            
-	<script>
-        var eqLogic = $('.eqLogic[data-eqLogic_uid=#uid#]');
-		var image_sound = 'plugins/Optoma/core/template/images/sound.png';
-		var image_mute = 'plugins/Optoma/core/template/images/mute.png';
-		var image_power_on = 'plugins/Optoma/core/template/images/power_on.png';
-		var image_power_off = 'plugins/Optoma/core/template/images/power_off.png';
-      
-		var inputList = '#setinput_source_listvalue#';
-		var actualInputValue = ('#input_source#' != '#' + 'input_source#') ? '#input_source#' : '';
-        var inputValue = '';
-		var selectList = '';
-		var options = inputList.split(/[;|]+/);
-		for (var i = 0; i < options.length; i++) {
-			if (i % 2 === 0) {
-				inputValue = options[i];
-			} else {
-				if (options[i] == actualInputValue) {
-					selectList += '<option value="' + inputValue + '" selected>' + options[i] + '</option>';
-				} else {
-					selectList += '<option value="' + inputValue + '">' + options[i] + '</option>';
-				}
-			}
-		}
-		eqLogic.find('.selectCmd').append(selectList);
 
-		if('#power_status#' == 0) {
-			$('.cmd[data-cmd_id=#power_on_id#]').append("<img src='" + image_power_on + "'/>");
-			$('.cmd[data-cmd_id=#power_off_id#]').hide();
-			$('##id#svg').attr({"fill":"#AD0C37",'title':'OFF'});
+
+	<script>
+        var eqLogic          = $('.eqLogic[data-eqLogic_uid=#uid#]');
+		var image_sound      = 'plugins/Optoma/core/template/images/sound.png';
+		var image_mute       = 'plugins/Optoma/core/template/images/mute.png';
+		var image_power_on   = 'plugins/Optoma/core/template/images/power_on.png';
+		var image_power_off  = 'plugins/Optoma/core/template/images/power_off.png';
+      
+        if ('#setinput_source_listvalue#' != '#' + 'setinput_source_listvalue#' && '#input_source#' != '#' + 'input_source#') {
+            printListValue('#setinput_source_listvalue#', '#input_source#', "inputSelectCmd");
+        }
+        if ('#setbrightness_mode_listvalue#' != '#' + 'setbrightness_mode_listvalue#' && '#brightness_mode#' != '#' + 'brightness_mode#') {
+            printListValue('#setbrightness_mode_listvalue#', '#brightness_mode#', "brightnessModeSelectCmd");
+        }
+        if ('#setdisplay_mode_listvalue#' != '#' + 'setdisplay_mode_listvalue#' && '#display_mode#' != '#' + 'display_mode#') {
+            printListValue('#setdisplay_mode_listvalue#', '#display_mode#', "displayModeSelectCmd");
+        }
+        if ('#setaspect_ratio_listvalue#' != '#' + 'setaspect_ratio_listvalue#' && '#aspect_ratio#' != '#' + 'aspect_ratio#') {
+            printListValue('#setaspect_ratio_listvalue#', '#aspect_ratio#', "aspectRatioSelectCmd");
+        }
+
+      
+        if('#power_status#' == 0) {
+			eqLogic.find('.cmd[data-cmd_id=#power_on_id#]').append("<img src='" + image_power_on + "'/>");
+			eqLogic.find('.cmd[data-cmd_id=#power_off_id#]').hide();
+			eqLogic.find('##id#svg').attr({"fill":"#AD0C37",'title':'OFF</br>Depuis #collect_power#'});
 		} else {
-			$('.cmd[data-cmd_id=#power_on_id#]').hide();
-			$('.cmd[data-cmd_id=#power_off_id#]').append("<img src='" + image_power_off + "'/>");
-			$('##id#svg').attr({"fill":"#39BE11",'title':'ON'});
+			eqLogic.find('.cmd[data-cmd_id=#power_on_id#]').hide();
+			eqLogic.find('.cmd[data-cmd_id=#power_off_id#]').append("<img src='" + image_power_off + "'/>");
+			eqLogic.find('##id#svg').attr({"fill":"#39BE11",'title':'ON</br>Depuis #collect_power#'});
 		}
 		if('#mute_status#' == 0) {
-			$('##id#_mute_action').append("<img src='" + image_sound + "'/>");
+			eqLogic.find('##id#_mute_action').append("<img src='" + image_sound + "'/>");
 		} else {
-			$('##id#_mute_action').append("<img src='" + image_mute + "'/>");
+			eqLogic.find('##id#_mute_action').append("<img src='" + image_mute + "'/>");
 		}
 		$('##id#_mute_action').on('click', function(){
 			if('#mute_status#' == 0) {
@@ -92,29 +115,57 @@
 			}
 		});
 		$('##id#_power_action').on('click', function(){
-		switch ('#power_status#') {
-			case '0':
-				jeedom.cmd.execute({id: '#id_power_on#'});
-				break;
-			case '1':
+            switch ('#power_status#') {
+                case '0':
+                    jeedom.cmd.execute({id: '#id_power_on#'});
+                    break;
+                case '1':
+                    jeedom.cmd.execute({id: '#id_power_off#'});
+                    break;
+            }
+            if ('#power_status#' == 0) {
+                jeedom.cmd.execute({id: '#id_power_on#'});
+            } else {
                 jeedom.cmd.execute({id: '#id_power_off#'});
-				break;
-		}
-		if('#power_status#' == 0) {
-			jeedom.cmd.execute({id: '#id_power_on#'});
-		} else {
-			jeedom.cmd.execute({id: '#id_power_off#'});
-		}
-		});
+            }
+  		});
+      	if ('#lampHourTotal_value#' != '#' + 'lampHourTotal_value#'){
+            eqLogic.find('.lampHourTotal').hide();
+        }
+      	if ('#device_type#' != '#' + 'device_type#'){
+            eqLogic.find('.deviceType').hide();
+        }
+      	if ('#device_model#' != '#' + 'device_model#'){
+            eqLogic.find('.deviceModel').hide();
+        }
+
 		$('##id#_volumeup_action').on('click', function(){
-			jeedom.cmd.execute({id: '#id_volumeup#'});
+			jeedom.cmd.execute({id: '#volume_up_id#'});
 		});
 		$('##id#_volumedown_action').on('click', function(){
-			jeedom.cmd.execute({id: '#id_volumedown#'});
+			jeedom.cmd.execute({id: '#volume_down_id#'});
 		});
 		$('.eqLogic[data-eqLogic_id=#id#] .refresh').on('click', function () {
 			jeedom.cmd.execute({id: '#refresh_id#'});
 		});
 
+      //fonctions
+    function printListValue(inputList, value, cmd){
+        var inputValue = '';
+		var selectList = '';
+		var options = inputList.split(/[;|]+/);
+		for (var i = 0; i < options.length; i++) {
+			if (i % 2 === 0) {
+				inputValue = options[i];
+			} else {
+				if (options[i] == value) {
+					selectList += '<option value="' + inputValue + '" selected>' + options[i] + '</option>';
+				} else {
+					selectList += '<option value="' + inputValue + '">' + options[i] + '</option>';
+				}
+			}
+		}
+		eqLogic.find('.' + cmd).append(selectList);
+    }
 	</script>
 </div>

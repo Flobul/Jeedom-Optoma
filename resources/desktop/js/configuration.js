@@ -25,21 +25,23 @@
 
        // liste de tous les log autres que id du plugin
        $('.bt_plugin_conf_view_log').each(function () {
-           // remplacer log::level::Optoma par log::level::Optooma_Daemon
-           logPluginLeveltoStr = logPluginLeveltoStr.replace("log::level::" + plugin, "log::level::" + $(this).attr('data-log'));
-           // converti en objet
-           newLogPluginLevel = JSON.parse(logPluginLeveltoStr);
-           // save dans la config jeedom
-           jeedom.config.save({
-               configuration: newLogPluginLevel,
-               error: function(error) {
+           if($(this).attr('data-log') != plugin) {
+               // remplacer log::level::Optoma par log::level::Optooma_Daemon
+               logPluginLeveltoStr = logPluginLeveltoStr.replace("log::level::" + plugin, "log::level::" + $(this).attr('data-log'));
+               // converti en objet
+               newLogPluginLevel = JSON.parse(logPluginLeveltoStr);
+               // save dans la config jeedom
+               jeedom.config.save({
+                 configuration: newLogPluginLevel,
+                 error: function(error) {
                    alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'})
-               },
-               success: function() {
-                   alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde de la configuration des logs dev effectuée}}', level: 'success'})
-                   modifyWithoutSave = false
-               }
-           });
+                   },
+                   success: function() {
+                     alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde de la configuration des logs dev effectuée}}', level: 'success'})
+                       modifyWithoutSave = false
+                   }
+               });
+           }
        });
    });
     

@@ -125,12 +125,12 @@ if ($state == 1) {
               }
               echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
               echo '<img src="' . $plugin->getPathImgIcon() . '" height="105" width="95"
-                      title="{{Nom}} : ' . $eqLogic->getName() . '</br>
-                      {{Modèle}} : ' . $model . '</br>
+                      title="Nom : ' . $eqLogic->getName() . '</br>
+                      Modèle : ' . $model . '</br>
                       IP : ' . $IP . '</br>
                       ' . $status . '</br>
-                      {{Méthode action}} : ' . $actionMethod . '</br>
-                      {{Méthode info}} : ' . $infoMethod . '</br>
+                      Méthode action : ' . $actionMethod . '</br>
+                      Méthode info : ' . $infoMethod . '</br>
                       ">';
               echo "<br>";
               echo '<span class="name" style="font-size : 14px;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $eqLogic->getHumanName(true, true) . '</span>';
@@ -218,8 +218,8 @@ if ($state == 1) {
             </legend>
             <fieldset>
               <div class="form-group">
-                <label class="col-sm-3 control-label help" data-help="{{Entrez l'adresse IP de votre vidéoprojecteur.}}
-{{Si vous n'avez pas activé la fonction AMX Device Discovery,
+                <label class="col-sm-3 control-label help" data-help="{{Entrez l'adresse IP de votre vidéoprojecteur.
+Si vous n'avez pas activé la fonction AMX Device Discovery,
 saisissez l'adresse manuellement.}}">{{Adresse IP}}
 
                 </label>
@@ -235,9 +235,9 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
                 </div>
               </div>
               <div class="form-group" style="display:none">
-                <label class="col-sm-3 control-label help" data-help="{{Entrez l'identifiant de votre vidéoprojecteur.}}
-{{Ce champ est grisé sur certains vidéoprojecteurs.}}
-{{Par défaut : admin}}">{{Identifiant et mot de passe}}
+                <label class="col-sm-3 control-label help" data-help="{{Entrez l'identifiant de votre vidéoprojecteur.
+ Ce champ est grisé sur certains vidéoprojecteurs.
+ Par défaut : admin}}">{{Identifiant et mot de passe}}
                 </label>
 
                 <div class="col-sm-3">
@@ -324,9 +324,9 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
                       for ($a=0; $a< 10; $a++) {
                           for ($b=0; $b< 10; $b++) {
                               if ($a == 0 && $b == 0) {
-                                  echo '<option value="' . $a . $b . '" selected>' . $a . $b . ' (tous)</option>';
+                                  echo '<option value="' . $a.$b . '" selected>' . $a.$b . ' (tous)</option>';
                               } else {
-                                  echo '<option value="' . $a . $b . '">' . $a . $b . '</option>';
+                                  echo '<option value="' . $a.$b . '">' . $a.$b . '</option>';
                               }
                           }
                       }
@@ -361,7 +361,7 @@ saisissez l'adresse manuellement.}}">{{Adresse IP}}
               <div class="form-group">
                 <div class="col-sm-10">
                   <center>
-                    <img src="core/img/no_image.gif" data-original=".svg" id="img_device" class="img-responsive" style="max-height:450px;max-width:400px" onerror="this.src='plugins/Optoma/core/config/img/UHD.png'" />
+                    <img src="core/img/no_image.gif" data-original=".svg" id="img_device" class="img-responsive" style="max-height:450px;min-height:300px;max-width:400px" onerror="this.src='plugins/Optoma/core/config/devices/UHD.png'" />
                   </center>
                 </div>
               </div>
