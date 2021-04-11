@@ -286,7 +286,7 @@ class Optomapi
             "id" => "background",
             "0" => "Reserved",
             "1" => "Blue",
-            "2" => "Blaack",
+            "2" => "Black",
             "3" => "Red",
             "4" => "Green",
             "5" => "White"
@@ -363,6 +363,189 @@ class Optomapi
             )
         );
 
+    /**
+     * Donne la commande send associée au protocole
+     * @var string
+     */
+    private static $_sendCmd = array(
+        'Powerstatus' => array(
+            'btn_powon' => 'Power On',
+            'btn_powoff' => 'Power Off'
+        ),
+        '12V Trigger' => array(
+            '1' => 'trigger',
+            '0' => 'trigger'
+        ),
+        'Brightness' => array(
+            '-' => 'bright1',
+            '+' => 'bright2',
+            'slider' => 'bright'
+        ),
+        'Contrast' => array(
+            '-' => 'constrast1',
+            '+' => 'constrast2',
+            'slider' => 'constrast'
+        ),
+        'Sharpness' => array(
+            '-' => 'Sharp1',
+            '+' => 'Sharp2',
+            'slider' => 'Sharp'
+        ),
+        'Phase' => array(
+            '-' => 'Phase1',
+            '+' => 'Phase2',
+            '' => 'Phase'
+        ),
+        'Brilliant Color' => array(
+            '-' => 'brill1',
+            '+' => 'brill2',
+            'slider' => 'brill'
+        ),
+        'Volume Audio' => array(
+            '-' => 'vol1',
+            '+' => 'vol2',
+            'slider' => 'vol'
+        ),
+        'Volume Micro' => array(
+            '-' => 'mic1',
+            '+' => 'mic2',
+            'slider' => 'mic'
+        ),
+        'H. Keystone' => array(
+            '-' => 'hkeys1',
+            '+' => 'hkeys2',
+            'slider' => 'hkeys'
+        ),
+        'V. Keystone' => array(
+            '-' => 'vkeys1',
+            '+' => 'vkeys2',
+            'slider' => 'vkeys'
+        ),
+        'H.Image Shift' => array(
+            '-' => 'hpos1',
+            '+' => 'hpos2',
+            'slider' => 'hpos'
+        ),
+        'V.Image Shift' => array(
+            '-' => 'vpos1',
+            '+' => 'vpos2',
+            'slider' => 'vpos'
+        ),
+        'Sleep Timer' => array(
+            '-' => 'sleep1',
+            '+' => 'sleep2',
+            'slider' => 'sleep'
+        ),
+        'Projector ID' => array(
+            '-' => 'projid1',
+            '+' => 'projid2',
+            'slider' => 'projid'
+        ),
+        'Remote Code' => array(
+            '-' => 'remote1',
+            '+' => 'remote2',
+            'slider' => 'remote'
+        ),
+        'Reset' => array(
+            'reset' => 'Reset'
+        ),
+        'Resync' => array(
+            'resync' => 'Resync'
+        ),
+        'Logo Capture' => array(
+            'logocapture' => 'Logo Capture'
+        ),
+        'AV Mute' => array(
+            'avmute' => 'AV Mute'
+        ),
+        'Freeze' => array(
+            'freeze' => 'Freeze'
+        ),
+        'Information Hide' => array(
+            'infohide' => 'Information Hide'
+        ),
+        'High Altitude' => array(
+            'altitude' => 'High Altitude'
+        ),
+        'Keypad Lock' => array(
+            'keypad' => 'Keypad Lock'
+        ),
+        'Display Mode Lock' => array(
+            'dismdlocked' => 'Display Mode Lock'
+        ),
+        'Direct Power On' => array(
+            'directpwon' => 'Direct Power On'
+        ),
+        '3D Sync. Invert' => array(
+            '3Dsync' => '3D Sync. Invert'
+        ),
+        '3D Modet' => array(
+            '3Dmodet' => '3D Mode'
+        ),
+        'Internal Speaker' => array(
+            'speaker' => 'Internal Speaker'
+        ),
+        'Mute' => array(
+            'mute' => 'Mute'
+        ),
+        'Dynamic Black' => array(
+            'dynamic' => 'Dynamic Black'
+        ),
+        'Audio Input' => array(
+            'select' => 'audio'
+        ),
+        'Aspect Ratio' => array(
+            'select' => 'aspect0'
+        ),
+        'Screen Type' => array(
+            'select' => 'screen'
+        ),
+        'Power' => array(
+            'select' => 'Power'
+        ),
+        'Source' => array(
+            'select' => 'source'
+        ),
+        'Display Mode' => array(
+            'select' => 'dismode0'
+        ),
+        'Projection' => array(
+            'select' => 'projection'
+        ),
+        'Brightness Mode' => array(
+            'select' => 'lampmd'
+        ),
+        'Power Mode' => array(
+            'select' => 'pwmode'
+        ),
+        'Logo' => array(
+            'select' => 'logo'
+        ),
+        '3D-2D' => array(
+            'select' => '3dto2d'
+        ),
+        'Color Space' => array(
+            'select' => 'colorsp0'
+        ),
+        '3D Mode' => array(
+            'select' => '3dmode'
+        ),
+        'Background Color' => array(
+            'select' => 'background'
+        ),
+        'Wall Color' => array(
+            'select' => 'wall'
+        ),
+        'Gamma' => array(
+            'select' => 'Degamma'
+        ),
+        'Color Temperature' => array(
+            'select' => 'colortmp'
+        ),
+        '3D Format' => array(
+            'select' => '3dformat'
+        )
+    );
     /*     * ***********************Methodes statiques*************************** */
 
     /**
@@ -454,6 +637,58 @@ class Optomapi
             $_id = self::$_error[$_key];
         } else {
             $_id = "N/A";
+        }
+        return $_id;
+    }
+
+    /**
+     * Retourne le numéro de cmd à envoyer par rapport au nom correspondant
+     * @param  [type] $_key Id logique
+     * @return [type] $_key  Valeur traduite depuis le tableau $_writeListOptions
+     */
+    public static function getCmdFromLogicalId($_key)
+    {
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        if (is_array(self::$_sendCmd[$_key]) == true) {
+            foreach (self::$_sendCmd[$_key] as $cle => $valeur) {
+                if ($valeur == $_key) {
+                    $_key = $cle;
+                }
+            }
+        }
+        return $_key;
+    }
+
+    /**
+     * Retourne le nom (id) de la commande à envoyer
+     * @param  [type] $_key Id logique
+     * @param  [type] $_subtype Type de commande
+     * @return [type] $_value  Valeur traduite depuis le tableau $_sendCmd
+     */
+    public static function getSubtypeCmdFromLogicalId($_key, $_subtype)
+    {
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        if (array_key_exists($_key, self::$_sendCmd) == true) {
+            $_value = self::$_sendCmd[$_key][$_subtype];
+        }
+        return $_value;
+    }
+
+    /**
+     * Retourne le nom de cmd par rapport au numéro correspondant
+     * @param  [type] $_key Id logique
+     * @param  [type] $_id  Numéro correspondant au nom
+     * @return [type] $_id  Valeur traduite depuis le tableau $_writeListOptions
+     */
+    public static function getIdFromValue($_key, $_id)
+    {
+        $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
+        if (is_array(self::$_listOptions[$_key]) == true) {
+            foreach (self::$_listOptions[$_key] as $cle => $valeur) {
+                if ($valeur == $_id) {
+                    $_id = $cle;
+                }
+            }
         }
         return $_id;
     }

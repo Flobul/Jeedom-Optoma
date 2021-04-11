@@ -48,11 +48,6 @@ $delai = time();
         usleep(500);
         if ((time() - $delai) > $refreshtime) {
             log::add('Optoma_Daemon', 'info', 'L.' . __LINE__ . ' F.' . __FUNCTION__ . __(' Délai dépassé ', __FILE__) . time() . " " . $delai);
-
-            // forcer actualisation
-        //		echo "forcer actualisation : ".date('H:i:s')."\n";
-        //		foreach ($eqLogics as $eqLogic) {}
-        //			$eqLogics[0]->executeTelnet();
         }
     } else {
         $telnet->telnetDisconnect();

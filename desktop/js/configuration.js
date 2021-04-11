@@ -23,7 +23,7 @@
        // string du level des log du nom de l'id
        var logPluginLeveltoStr = JSON.stringify(logPluginLevel);
 
-       // liste de tous les log autres que id du plugin
+       // liste de tous les log de l'id du plugin
        $('.bt_plugin_conf_view_log').each(function () {
            // remplacer log::level::Optoma par log::level::Optooma_Daemon
            logPluginLeveltoStr = logPluginLeveltoStr.replace("log::level::" + plugin, "log::level::" + $(this).attr('data-log'));
@@ -42,7 +42,7 @@
            });
        });
    });
-    
+
    // afficher juste avant la version, la véritable version contenue dans le plugin
    var dateVersion = $("#span_plugin_install_date").html();
    $("#span_plugin_install_date").empty().append("v" + version + " (" + dateVersion + ")");

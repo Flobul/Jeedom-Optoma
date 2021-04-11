@@ -25,7 +25,7 @@ $eqLogics = Optoma::byType('Optoma');
 	<thead>
 		<tr>
 			<th>{{Appareil}}</th>
-			<!--th>{{ID}}</th--!>
+			<!--th>{{ID}}</th!-->
 			<th>{{IP}}</th>
             <th>{{Modèle}}</th>
 			<th>{{Statut}}</th>
@@ -64,9 +64,8 @@ $eqLogics = Optoma::byType('Optoma');
 
           $RS232Version = $eqLogic->getConfiguration('RS232Version');
           $SoftwareVersion = $eqLogic->getConfiguration('SoftwareVersion');
-          $LANFirmwareVersion = $eqLogic->getConfiguration('LANFirmwareVersion'); 
+          $LANFirmwareVersion = $eqLogic->getConfiguration('LANFirmwareVersion');
           echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $LANFirmwareVersion . ' - ' . $RS232Version . ' - ' . $SoftwareVersion . '</span></td>';
-
 
           echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getStatus('lastCommunication') . '</span></td>';
           echo '<td><span class="label label-info" style="font-size : 1em; cursor : default;">' . $eqLogic->getConfiguration('createtime') . '</span></td></tr>';

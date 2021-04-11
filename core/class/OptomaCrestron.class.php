@@ -33,71 +33,71 @@ class OptomaCrestron
      */
     private static $_sendCmd = array(
         'Powerstatus' => array(
-            'btn_powon'  => "\x00\x05", //OK
-            'btn_powoff' => "\x00\x06"  //OK
+            'btn_powon'  => "\x00\x05",
+            'btn_powoff' => "\x00\x06"
         ),
         'Volume Audio' => array(
-            '+' => "\xfa\x13", //OK
-            '-' => "\xfb\x13"  //OK
+            '+' => "\xfa\x13",
+            '-' => "\xfb\x13"
         ),
         'Mute' => array(
-            'other' => "\xfd\x13" //OK
+            'other' => "\xfd\x13"
         ),
         'Mute Off' => array(
-            'other' => "\xfc\x13" //OK
+            'other' => "\xfc\x13"
         ),
         'Freeze' => array(
-            'other' => "\xf0\x13" //OK
+            'other' => "\xf0\x13"
         ),
         'Resync' => array(
-            'other' => "\x33\x14" //OK
+            'other' => "\x33\x14"
         ),
         'Color' => array(
-            '+' => "\xf2\x13", // non fonctionnel
-            '-' => "\xf3\x13"  // non fonctionnel
+            '+' => "\xf2\x13",
+            '-' => "\xf3\x13"
         ),
         'Brightness' => array(
-            '+' => "\xf4\x13", // OK
-            '-' => "\xf5\x13"  // OK
+            '+' => "\xf4\x13",
+            '-' => "\xf5\x13"
         ),
         'Contrast' => array(
-            '+' => "\xf6\x13", // OK
-            '-' => "\xf7\x13"  // OK
+            '+' => "\xf6\x13",
+            '-' => "\xf7\x13"
         ),
         'Sharpness' => array(
-            '+' => "\xf8\x13", // OK
-            '-' => "\xf9\x13"  // OK
+            '+' => "\xf8\x13",
+            '-' => "\xf9\x13"
         ),
         'Zoom' => array(
-            '+' => "\x39\x14", // OK
-            '-' => "\x3a\x14"  // OK
+            '+' => "\x39\x14",
+            '-' => "\x3a\x14"
         ),
         'Menu' => array(
-            'other' => "\x1d\x14" //OK
+            'other' => "\x1d\x14"
         ),
         'Up' => array(
-            'other' => "\x1e\x14" //OK
+            'other' => "\x1e\x14"
         ),
         'Down' => array(
-            'other' => "\x1f\x14" //OK
+            'other' => "\x1f\x14"
         ),
         'Left' => array(
-            'other' => "\x20\x14" //OK
+            'other' => "\x20\x14"
         ),
         'Right' => array(
-            'other' => "\x21\x14" //OK
+            'other' => "\x21\x14"
         ),
         'Exit' => array(
-            'other' => "\x22\x14" //OK
+            'other' => "\x22\x14"
         ),
         'Enter' => array(
-            'other' => "\x23\x14" //OK
+            'other' => "\x23\x14"
         ),
         'Source' => array(
-            'other' => "\x6f\x17" //OK
+            'other' => "\x6f\x17"
         ),
         'Freeze Off' => array(
-            'other' => "\xf1\x13" //non fonctionnel
+            'other' => "\xf1\x13"
         )
     );
 
@@ -114,6 +114,12 @@ class OptomaCrestron
         return $_name;
     }
 
+    /**
+     * Retourne le nom (id) de la commande à envoyer
+     * @param  [type] $_key Id logique
+     * @param  [type] $_subtype Type de commande
+     * @return [type] $_value  Valeur traduite depuis le tableau $_sendCmd
+     */
     public static function getSubtypeCmdFromLogicalId($_key, $_subtype)
     {
         $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);

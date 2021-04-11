@@ -73,12 +73,12 @@
 
 
 	<script>
-        var eqLogic          = $('.eqLogic[data-eqLogic_uid=#uid#]');
+		var eqLogic          = $('.eqLogic[data-eqLogic_uid=#uid#]');
 		var image_sound      = 'plugins/Optoma/core/template/images/sound.png';
 		var image_mute       = 'plugins/Optoma/core/template/images/mute.png';
 		var image_power_on   = 'plugins/Optoma/core/template/images/power_on.png';
 		var image_power_off  = 'plugins/Optoma/core/template/images/power_off.png';
-      
+
         if ('#setinput_source_listvalue#' != '#' + 'setinput_source_listvalue#' && '#input_source#' != '#' + 'input_source#') {
             printListValue('#setinput_source_listvalue#', '#input_source#', "inputSelectCmd");
         }
@@ -92,8 +92,8 @@
             printListValue('#setaspect_ratio_listvalue#', '#aspect_ratio#', "aspectRatioSelectCmd");
         }
 
-      
-        if('#power_status#' == 0) {
+
+		if('#power_status#' == 0) {
 			eqLogic.find('.cmd[data-cmd_id=#power_on_id#]').append("<img src='" + image_power_on + "'/>");
 			eqLogic.find('.cmd[data-cmd_id=#power_off_id#]').hide();
 			eqLogic.find('##id#svg').attr({"fill":"#AD0C37",'title':'OFF</br>Depuis #collect_power#'});
@@ -152,9 +152,9 @@
       //fonctions
     function printListValue(inputList, value, cmd){
         var inputValue = '';
-		var selectList = '';
-		var options = inputList.split(/[;|]+/);
-		for (var i = 0; i < options.length; i++) {
+        var selectList = '';
+        var options = inputList.split(/[;|]+/);
+        for (var i = 0; i < options.length; i++) {
 			if (i % 2 === 0) {
 				inputValue = options[i];
 			} else {

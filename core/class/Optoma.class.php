@@ -26,7 +26,7 @@ require_once __DIR__ . "/../../../../plugins/Optoma/3rdparty/telnet.php";
 class Optoma extends eqLogic
 {
     /*     * *************************Attributs****************************** */
-    public static $_pluginVersion = '0.95';
+    public static $_pluginVersion = '0.96';
 
     /*     * ***********************Methode statique*************************** */
 
@@ -68,11 +68,11 @@ class Optoma extends eqLogic
     {
         $return = array();
         $ports = array(
-            'TELNET' => 23,
-            'API' => 80,
-            'TELNET1' => 1023,
-            'TELNET2' => 2023,
-            'PJLINK' => 4352,
+            'TELNET'   => 23,
+            'API'      => 80,
+            'TELNET1'  => 1023,
+            'TELNET2'  => 2023,
+            'PJLINK'   => 4352,
             'CRESTRON' => 41794
             );
         exec(system::getCmdSudo() . 'nc -zv ' . $_IP . ' -p ' . implode(' ', $ports) . ' 2>&1 > /dev/null', $res, $return_val);
@@ -400,7 +400,7 @@ class Optoma extends eqLogic
             if ($this->getConfiguration('telnetPort') == '') {
                 throw new Exception(__('Le port Telnet ne peut pas être vide', __FILE__));
             }
-        }    
+        }
         if ($this->getIsEnable()) {
             $type = ($this->getConfiguration('type') != '') ? $this->getConfiguration('type') : 'Optoma';
             if (in_array($this->getConfiguration('infoMethod'), array('TELNET', 'API-TELNET', 'API'))) {
@@ -873,7 +873,7 @@ class Optoma extends eqLogic
         }
 		$_version = jeedom::versionAlias($_version);
 
-        // informations de l'equipement 
+        // informations de l'equipement
         $replace['#device_type#'] = ($this->getConfiguration('type') != '') ? $this->getConfiguration('model') : "";
         $replace['#device_model#'] = ($this->getConfiguration('model') != '') ? $this->getConfiguration('model') : "";
         $replace['#info_method#'] = ($this->getConfiguration('infoMethod') != '') ? $this->getConfiguration('infoMethod') : "";
@@ -941,7 +941,7 @@ class Optoma extends eqLogic
 
 		$lampHourTotal = $this->getCmd('info','Lamp Hours Total');
         $replace['#lampHourTotal_value#'] = (is_object($lampHourTotal)) ? $lampHourTotal->execCmd() : '';
-      
+
 		$refresh = $this->getCmd('action','Refresh');
 		$replace['#refresh_id#'] = (is_object($refresh)) ? $refresh->getId() : '';
 
@@ -950,7 +950,7 @@ class Optoma extends eqLogic
         return $html;
     }
 }
-  
+
 class OptomaCmd extends cmd
 {
     public function execute($_options = array())

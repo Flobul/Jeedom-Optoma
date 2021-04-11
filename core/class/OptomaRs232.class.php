@@ -1109,8 +1109,7 @@ class OptomaRs232
         }
         return $list;
     }
-  
-//$_readListOptions
+
     /**
      * Récupère les minValue et maxValue de l'id logique
      * @param  string $_key id logique
@@ -1130,7 +1129,7 @@ class OptomaRs232
      * Retourne la valeur de listValue traduite
      * @param  string $_key id logique
      * @param  string $_id  Valeur non traduite
-     * @return string $_id  Valeur traduite
+     * @return string $_id  Valeur traduite depuis le tableau $_listOptions
      */
     public static function getValueFromId($_key, $_id)
     {
@@ -1141,6 +1140,12 @@ class OptomaRs232
         return $_id;
     }
 
+    /**
+     * Retourne le nom de cmd par rapport au numéro correspondant
+     * @param  [type] $_key Id logique
+     * @param  [type] $_id  Numéro correspondant au nom
+     * @return [type] $_id  Valeur traduite depuis le tableau $_writeListOptions
+     */
     public static function getIdFromValue($_key, $_id)
     {
         $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
@@ -1154,6 +1159,12 @@ class OptomaRs232
         return $_id;
     }
 
+    /**
+     * Retourne le nom (id) de la commande à envoyer
+     * @param  [type] $_key Id logique
+     * @param  [type] $_subtype Type de commande
+     * @return [type] $_value  Valeur traduite depuis le tableau $_sendCmd
+     */
     public static function getSubtypeCmdFromLogicalId($_key, $_subtype)
     {
         $_key = str_replace(array('&', '#', ']', '[', '%', "'", "/"), '', $_key);
@@ -1163,7 +1174,7 @@ class OptomaRs232
         }
         return $_value;
     }
-  
+
     /**
      * Retourne le nom de l'erreur à partir du code d'erreur
      * @param  string $_key code d'erreur
