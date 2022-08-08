@@ -276,7 +276,7 @@ function getConfFile(_eqLogic) {
 $('.eqLogicAttr[data-l1key=configuration][data-l2key=actionMethod], .eqLogicAttr[data-l1key=configuration][data-l2key=infoMethod]').change(function () {
     var infoMethod = $('.eqLogicAttr[data-l1key=configuration][data-l2key=infoMethod]').value();
     var actionMethod = $('.eqLogicAttr[data-l1key=configuration][data-l2key=actionMethod]').value();
-  
+
     if(infoMethod == 'API' || actionMethod == 'API' || infoMethod == 'API-TELNET' || actionMethod == 'API-TELNET') {
         $('#APIgroup').show();
     } else {
@@ -294,7 +294,7 @@ function printEqLogic(_eqLogic) {
 
     printEqLogicTab(_eqLogic); //affiche les info de l'équipement
     $('body').setValues(_eqLogic, '.eqLogicAttr');
-    initCheckBox();
+    //initCheckBox();
     modifyWithoutSave = false;
 }
 

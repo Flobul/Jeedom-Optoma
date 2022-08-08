@@ -26,7 +26,7 @@ require_once __DIR__ . "/../../../../plugins/Optoma/3rdparty/telnet.php";
 class Optoma extends eqLogic
 {
     /*     * *************************Attributs****************************** */
-    public static $_pluginVersion = '0.96';
+    public static $_pluginVersion = '0.97';
 
     /*     * ***********************Methode statique*************************** */
 
@@ -369,6 +369,9 @@ class Optoma extends eqLogic
      */
     public function preInsert()
     {
+                  log::add('Optoma', 'debug', __FUNCTION__ );
+
+
         $this->setCategory('multimedia', 1);
         $this->setIsEnable(1);
         $this->setIsVisible(1);
@@ -381,6 +384,8 @@ class Optoma extends eqLogic
      */
     public function postInsert()
     {
+            log::add('Optoma', 'debug', __FUNCTION__ );
+
     }
 
     /**
@@ -388,8 +393,10 @@ class Optoma extends eqLogic
      * Vérifie les ports ouverts
      * Si telnet, récupère modèle, type et versions
      */
-    public function preSave()
+    public function postUpdate()
     {
+            log::add('Optoma', 'debug', __FUNCTION__ );
+
         if (empty($this->getConfiguration('IP'))) {
             throw new Exception(__('L\'adresse IP ne peut pas être vide', __FILE__));
         }
@@ -454,11 +461,13 @@ class Optoma extends eqLogic
      */
     public function preUpdate()
     {
+            log::add('Optoma', 'debug', __FUNCTION__ );
+
         if (empty($this->getConfiguration('IP'))) {
-            throw new Exception(__('L\'adresse IP ne peut pas être vide', __FILE__));
+            //throw new Exception(__('L\'adresse IP ne peut pas être vide', __FILE__));
         }
         if (!filter_var($this->getConfiguration('IP'), FILTER_VALIDATE_IP)) {
-            throw new Exception(__('Le format de l\'adresse IP est incorrect', __FILE__));
+            //throw new Exception(__('Le format de l\'adresse IP est incorrect', __FILE__));
         }
     }
 
@@ -466,12 +475,14 @@ class Optoma extends eqLogic
      * Méthode appellée après la mise à jour de l'objet
      * Recharge les commandes
      */
-    public function postUpdate()
-    {
+    //public function postUpdate()
+    //{
+      //      log::add('Optoma', 'debug', __FUNCTION__ );
+
         //if ($this->getIsEnable()) {
         //    $this->loadCmdFromConf('UHD');
         //}
-    }
+    //}
 
     /**
      * Retourne l'URL de la page Info

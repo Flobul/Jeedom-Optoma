@@ -14,7 +14,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-   // attribuer le même niveau de log à tous les logs du plugin
+/*   // attribuer le même niveau de log à tous les logs du plugin
    $('#bt_savePluginLogConfig').off('click').on('click', function () {
        // id du plugin
        var plugin = $('#span_plugin_id').text();
@@ -41,7 +41,7 @@
                }
            });
        });
-   });
+   });*/
 
    // afficher juste avant la version, la véritable version contenue dans le plugin
    var dateVersion = $("#span_plugin_install_date").html();
